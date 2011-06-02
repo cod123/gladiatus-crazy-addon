@@ -290,7 +290,7 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_selectMethod='Choisissez la méthode';
 		var L_selectEnemy='Choisissez l\'adversaire';
 		var L_byName='Joueur, par son pseudo';
-		var L_byID='Joueur, par son id';
+		var L_byID='Joueur, par son ID';
 		var L_go='GO!';
 		var L_winnigChance='Chance de gagner';
 		var L_PlayerAAvDamage='Dégâts moyens du joueur A';
