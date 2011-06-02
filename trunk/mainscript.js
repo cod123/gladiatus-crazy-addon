@@ -1,8 +1,8 @@
- // ==UserScript==
+// ==UserScript==
 // @name           Gladiatus Crazy AddOn New Server
 // @namespace      http://www.epiratiko.webs.com/ 
 // @description    The craziest add-on for gladiatus ever!
-// @include        *.gladiatus.*
+// @include        *.gladiatus.fr*
 // @exclude        *board.gladiatus.*
 // ==/UserScript==
 //Copyright (C) 2010 - 2011, Apo59m, DarkThanos and djor
@@ -680,7 +680,7 @@ function Main(){
 				c(msgButtons());
 			}
 		}else if(GCAO_submod=='messageNew'){
-			if(document.getElementById('message')){location.href="javascript:document.getElementById('message').setCaretPosition(0);void(0);";}
+			if(document.getElementById('message')){location.href="javascript:document.getElementById('message').setCaretPosition(0);void(0);"}
 		}
 	}
 	else if(GCAO_mod=='auction'){
@@ -763,7 +763,7 @@ function HealthBar(){
 	document.getElementById('header_game').appendChild(BgImageFix);
 	var HealthBarDiv = document.createElement('div');
 	HealthBarDiv.setAttribute('id', 'HealthBarDiv');
-	HealthBarDiv.innerHTML='<div style="left:0px;top:58px;cursor:pointer;" class="cooldown_bar"><div id="cooldown_bar_fill_life" class="cooldown_bar_fill cooldown_bar_fill_progress" style="width: 100%;"></div><div id="cooldown_bar_text_life" class="cooldown_bar_text"><img style="margin-top:6px;margin-left:2px;opacity:0.5;" src="'+loadingImage+'"/></div></div>';
+	HealthBarDiv.innerHTML='<div style="left:0px;top:58px;cursor:pointer;" class="cooldown_bar"><div id="cooldown_bar_fill_life" class="cooldown_bar_fill cooldown_bar_fill_progress" style="width: 100%;"></div><div id="cooldown_bar_text_life" class="cooldown_bar_text"><img style="margin-top:6px;margin-left:2px;opacity:0.5;" src="'+loadingImage+'"/></div></div>'
 	document.getElementById('header_values_ressources').appendChild(HealthBarDiv);
 }
 
@@ -966,7 +966,7 @@ function GetOverviewStats(){
 				document.getElementById('mainmenu').getElementsByTagName('a')[0].innerHTML+=' <img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/exclamation.png" style="position:absolute;margin-left:10px;margin-top:1px;opacity: 0.65;" onmouseout="this.style.opacity=\'0.65\';document.getElementById(\'warningWeapon\').style.display=\'none\';" onmouseover="this.style.opacity=\'1\';document.getElementById(\'warningWeapon\').style.display=\'block\';">';
 				var warningTip = document.createElement('div');
 				warningTip.setAttribute('id', 'warningWeapon');
-				warningTip.setAttribute('style', 'opacity: 0.75;display:none;width:180px;z-index:502;position:absolute;top:179px;left:345px;border:1px solid grey;background-color:black;color:#c0c0c0;font-weight:bold;height:24px;line-height:24px;padding-left:5px;padding-right:5px;');
+				warningTip.setAttribute('style', 'opacity: 0.75;display:none;width:180px;z-index:502;position:absolute;top:179px;left:345px;border:1px solid grey;background-color:black;color:#c0c0c0;font-weight:bold;height:24px;line-height:24px;padding-left:5px;padding-right:5px;')
 				warningTip.innerHTML = L_weaponAlert;
 				document.getElementById('header_game').appendChild(warningTip);
 			}
@@ -1108,7 +1108,7 @@ function PlayerImageSave(){
 	}
 	
 	var newPlImg = document.createElement('span');
-	newPlImg.setAttribute('id', 'ChangePlImg');
+	newPlImg.setAttribute('id', 'ChangePlImg')
 	newPlImg.innerHTML = '<br><b>'+L_changePlayerImage+':</b><p><input id="ImageUrl" size="73" value="' + link + '"></p>';
 	document.getElementById('content').getElementsByTagName('div')[10].appendChild(newPlImg);
 	
@@ -1123,7 +1123,7 @@ function PlayerImageSave(){
 	var tran_Char=document.getElementById('content').innerHTML.match(/\(\d+ ([^)]+)\)/i)[1];
 	var charNum=document.getElementById('rpg').innerHTML.length+document.getElementById('ImageUrl').value.length;
 	var charCounter = document.createElement('div');
-	charCounter.setAttribute('id', 'charCounterDiv');
+	charCounter.setAttribute('id', 'charCounterDiv')
 	charCounter.innerHTML='<span id="charCounter">'+charNum+'</span>/4000 '+tran_Char+' <span id="ImageProblem" style="display:none;color:red;">'+L_Overfloated+':<br> - '+L_plImageWillBeLost+'.<br> - '+L_plDecriptionWillBeCut+'.</span>';
 	var location = document.getElementById('rpg');
 	location.parentNode.insertBefore(charCounter, location);
@@ -1238,7 +1238,7 @@ function GuildImageSave(){
 	}
 	else{var link = '';}
 	var newGImg = document.createElement('span');
-	newGImg.setAttribute('id', 'ChangeGImg');
+	newGImg.setAttribute('id', 'ChangeGImg')
 	newGImg.innerHTML = '<br><br><b>'+L_changeGuildImage+':</b><p><input id="ImageUrl" size="73" value="' + link + '"></p>';
 	insertAfter(newGImg,document.getElementById('description'));
 	document.getElementsByTagName('form')[0].setAttribute('onsubmit',"if(document.getElementById('ImageUrl').value!=''){document.getElementById('description').value = document.getElementById('description').value + '[f c=#DED2AD][f s=10]##GTGI=' + document.getElementById('ImageUrl').value + '##[/f][/f]';document.getElementById('description').innerHTML = document.getElementById('description').value + '[f c=#DED2AD][f s=10]##GTGI=' + document.getElementById('ImageUrl').value + '##[/f][/f]';}");	
@@ -1568,9 +1568,9 @@ function simulator(){
 		var myRemainingLife = results[5];
 		var hisRemainingLife = results[6];
 		
-		if(wonP>80){var color="green";}
-		else if(wonP>=70){var color="black";}
-		else{var color="red";}	
+		if(wonP>80){var color="green"}
+		else if(wonP>=70){var color="black"}
+		else{var color="red"}	
 		var imgposition = -(101-wonP)*2;
 		if(won==lost){var FightResulte='Draw';}
 		else{var FightResulte=wonP+'%';}
@@ -1656,7 +1656,7 @@ function simulate(skill, agility, charisma, block, resistance, ARMOR, damageMin,
 		if(opponentBlock[0]==">") opponentBlock = opponentBlock[1];
 		
 		var opponentLife = document.getElementById('char_leben_tt').getAttribute('onmouseover');
-		opponentLife = opponentLife.split("</td><td style=\\'padding-left:20px;text-align:right; color:#BA9700; font-weight: bold; font-size:9pt\\' nowrap=\\'nowrap\\'>");
+		opponentLife = opponentLife.split("</td><td style=\\'padding-left:20px;text-align:right; color:#BA9700; font-weight: bold; font-size:9pt\\' nowrap=\\'nowrap\\'>")
 		opponentLife = opponentLife[1].split("<");
 		opponentLife = opponentLife[0].split(" / ");
 		opponentLife = opponentLife[0];
@@ -1758,9 +1758,9 @@ function simulate(skill, agility, charisma, block, resistance, ARMOR, damageMin,
 	myAverageDamages = Math.floor(myAverageDamages/fights);
 	hisAverageDamages = Math.floor(hisAverageDamages/fights);
 	myRemainingLife = life - hisAverageDamages;
-	if(myRemainingLife<=0){myRemainingLife=1;}
+	if(myRemainingLife<=0){myRemainingLife=1}
 	hisRemainingLife = opponentLife -myAverageDamages;
-	if(hisRemainingLife<=0){hisRemainingLife=1;}
+	if(hisRemainingLife<=0){hisRemainingLife=1}
 
 	return new Array(win,lose,draw,myAverageDamages,hisAverageDamages, myRemainingLife, hisRemainingLife);
 }
@@ -1872,6 +1872,7 @@ function messages(){
 			var nameline = messagesHTML.match(/<td class="tdn">([^:]+): ([^>]+)<br>/i);
 			var firstsentence = nameline[1];
 			var AuthorName = nameline[2];
+			var name = nameline[2];
 			//START guildmates link from Tomas
 			if(guildMates[AuthorName] != null) { // if mate was found make a link
 				AuthorName = "<a href=\""+GCAO_siteurl+"mod=player&p="+guildMates[AuthorName]+"&sh="+GCAO_secureCode+"\">"+AuthorName+'</a>';
@@ -1888,20 +1889,24 @@ function messages(){
 		messagesHTML = messagesHTML.replace(/<td class="tdn">/gi, "<td class=\"tdn\" style=\"border:1px solid #af8e50;background-color:#ded8c6;padding:5px;width:449px;\">");
 		if(navigator.userAgent.toLowerCase().match(/chrome/i)){var pre='span';}else{var pre='pre';}
 		messagesHTML = messagesHTML.replace(/<textarea.cols..\d+..rows..\d+..class..input.>/gi, '<img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/msg.png" style="position:absolute;margin-left:-29px;margin-top:-17px;"><div style="background:#DBCBA5;border-top:1px solid #AF8E50;border-bottom:1px solid #AF8E50;padding:5px;margin:5px -5px 5px -5px;"><'+pre+' width="60" style="margin:0px;line-height:15px;">').replace(/<\/textarea>/gi,'</'+pre+'></div>');
+	
+		
+		
+		
 		
 		//Message tags
 		if(GM_getValue('bb', false) == true){
 			while(messagesHTML.match(/\[img\](.+)\[#img\]/i)){
 				var imagecode = messagesHTML.match(/\[img\](.+)\[#img\]/i);
 				var img = imagecode[1].replace(/ /i, '');
-				if(!img.match(/http:\/\//i)){img = 'http://' + img;}
+				if(!img.match(/http:\/\//i)){img = 'http://' + img}
 				messagesHTML = messagesHTML.replace(/\[img\](.+)\[#img\]/i, '<img src="' + img + '" />');
 			}
 			while(messagesHTML.match(/\[l\](.+)\[#l\]/i)){
 				var linkcode = messagesHTML.match(/\[l\](.+)\[#l\]/i);
 				var link = linkcode[1].replace(/ /g, '');
 				var linkb = link;
-				if(!link.match(/http:\/\//i)){link = 'http://' + link;}
+				if(!link.match(/http:\/\//i)){link = 'http://' + link}
 				if(!link.match(/</i)){
 					messagesHTML = messagesHTML.replace(/\[l\](.+)\[#l\]/i, '<a href="' + link + '" trget="_blank"/>' + linkb + '</a>');
 				}else if(!link.match(/\[l\]/i)){
@@ -1925,6 +1930,22 @@ function messages(){
 		}
 		document.getElementById('content').getElementsByTagName('table')[0].innerHTML = messagesHTML;
 	}
+	
+	
+		
+		var arrayName = new Array();
+		var arrayId = new Array();
+		if(Get_Cookie("GCAOguildMates")){
+			var temp = Get_Cookie("GCAOguildMates").split("#");
+			var mate;
+			for(var i=1; i < temp.length; i++){
+				mate = temp[i].split("<");
+				// arrayName[arrayName.length] = mate[0];
+				// arrayId[arrayId.length] = mate[1];
+				// var regexp = new RegExp(mate[0],"gi");
+				// document.getElementById('content').innerHTML = document.getElementById('content').innerHTML.replace(regexp,"<a href=\""+GCAO_siteurl+"mod=player&p="+mate[1]+"&sh="+GCAO_secureCode+"\">"+mate[0]+'</a>');//"<a href=\""+GCAO_siteurl+"mod=player&p="+mate[1]+"&sh="+GCAO_secureCode+"\">"+mate[0]+'</a>');
+			}
+		}
 }
 
 function msgButtons(){
@@ -1979,7 +2000,7 @@ function reAfford(){
 	unsafeWindow.SetToolTip = function (updateTooltip){
 		if(updateTooltip){setTimeout(afford, 900);}
 		return oldSetToolTip(updateTooltip);
-	};
+	}
 }
 
 //################################################################################################################################
@@ -2032,7 +2053,7 @@ function resetStorageInfo(){
 	unsafeWindow.SetToolTip = function (updateTooltip){
 		if(updateTooltip){setTimeout(getStorageInfo, 900);}
 		return oldSetToolTip(updateTooltip);
-	};
+	}
 }
 
 //################################################################################################################################
@@ -2097,12 +2118,12 @@ function auctionbgcolor() {
 			for (i = 0; i <rows; i++){
 				itemcode = itemboxa[i].match(/auction_\d+/gi);
 				color = colorbox[i].match(/color:..../gi);
-				if (color=='color:lime'){RGBcolor = '0, 255, 0, 0.1';}
-				else if (color=='color:#515'){RGBcolor = '0, 70, 255, 0.2';}
-				else if (color=='color:#E30'){RGBcolor = '227, 3, 224, 0.2';}
-				else if (color=='color:#FF6'){RGBcolor = '255, 106, 0, 0.2';}
-				else if (color=='color:whit'){RGBcolor = '255, 255, 255, 0.2';}
-				else{RGBcolor = '90, 156, 255, 0.2';}
+				if (color=='color:lime'){RGBcolor = '0, 255, 0, 0.1'}
+				else if (color=='color:#515'){RGBcolor = '0, 70, 255, 0.2'}
+				else if (color=='color:#E30'){RGBcolor = '227, 3, 224, 0.2'}
+				else if (color=='color:#FF6'){RGBcolor = '255, 106, 0, 0.2'}
+				else if (color=='color:whit'){RGBcolor = '255, 255, 255, 0.2'}
+				else{RGBcolor = '90, 156, 255, 0.2'}
 		
 				colorcss = colorcss + '#' + itemcode + '{background: rgba(' + RGBcolor + ');}';
 			}
@@ -2137,9 +2158,9 @@ function auctionitemlevel() {
 			if(document.getElementsByName('fl')[1]){
 				var selectedlevel = document.getElementsByName('fl')[1].value;
 			}
-			if(selectedlevel == null){selectedlevel = minlevel;}
-			if(fnumber==selectedlevel){var OptSelect = 'selected="selected"';}
-			else{var OptSelect = "";}
+			if(selectedlevel == null){selectedlevel = minlevel}
+			if(fnumber==selectedlevel){var OptSelect = 'selected="selected"'}
+			else{var OptSelect = ""}
 			option = option + '<option value="' + fnumber + '" ' + OptSelect + '>' + fnumber + '+</option>' ;
 		}
 		document.getElementsByName('fl')[0].innerHTML = option ;
@@ -2189,11 +2210,13 @@ function howToHideGoldInAuctions(){
 					var rubis = divs.snapshotItem(i).innerHTML.split('&nbsp;')[1].split('<a')[0];
 					if (color=='color:#515'){var rubisMin = 46;}
 					else if (color=='color:lime'){var rubisMin = 40;}
+					else if (color=='color:#E30'){var rubisMin = 52;}//purple
 					else if (color=='color:whit'){var rubisMin = 40;}
 
 					if(parseInt(rubis)>=rubisMin)
 						divs.snapshotItem(i).getElementsByTagName('input')[0].style.backgroundColor="#FFCC66";
 				}
+				// alert(color+'   '+rubisMin);
 			}
 		}
 	}
@@ -2353,7 +2376,7 @@ function itemList(){
             document.getElementById('content').getElementsByTagName('tr')[8].getElementsByTagName('td')[1].innerHTML += clearButton;
             createElemenWithID("tr","Item_Name_Search",document.getElementById('content').getElementsByTagName('tr')[9]);
 			document.getElementById('Item_Name_Search').innerHTML = '<td style="width: 50%; text-align: center;">'+L_Items+':</td><td style="width: 50%;">\n<select id="SelectItem" name="SelectItem"><option value="SI">- '+L_selectItem+' -</option>\n' + makeOpitonsFromItemList(prefixList) + '</select></td>';
-			document.getElementById('content').getElementsByTagName('input')[6].setAttribute('onclick',"if(document.getElementById('SelectItem').value!='SI'){document.getElementById('content').getElementsByTagName('input')[5].value=document.getElementById('SelectItem').value;}");
+			document.getElementById('content').getElementsByTagName('input')[6].setAttribute('onclick',"if(document.getElementById('SelectItem').value!='SI'){document.getElementById('content').getElementsByTagName('input')[5].value=document.getElementById('SelectItem').value;}")
 		}
 	}
 }
@@ -2423,7 +2446,7 @@ function sentAuctionGuildMessage(){
 			'Keep-Alive': '115',
 			'Connection': 'keep-alive',
 			'Referer': GCAO_siteurl.replace('game/index.php?',''),
-			'Content-Type': 'application/x-www-form-urlencoded'
+			'Content-Type': 'application/x-www-form-urlencoded',
 			},
 			data : code,
 			onload: function(response){
@@ -2441,7 +2464,7 @@ function  onlineGuildmates(){
 	var onlinePlayersDiv = document.createElement('div');
 	onlinePlayersDiv.setAttribute('id', 'OnlinePlayers');
 	onlinePlayersDiv.innerHTML = '<style type="text/css">a#wio{ cursor:pointer;display: block;width: 25px;height: 25px;background-repeat: no-repeat;}a.wio{background-image: url(' + img_online + '); background-position: -25px 0px; }a.wio:hover { background-image: url(' + img_online + '); background-position: 0px 0px; }</style>';
-	onlinePlayersDiv.innerHTML += '<a id="wio" class="wio" title="'+L_OnlinePlayers+'" style="position:absolute;margin-top:99px;margin-left:552px;;width:25px;height:25px;z-index:501;"></a>';
+	onlinePlayersDiv.innerHTML += '<a id="wio" class="wio" title="'+L_OnlinePlayers+'" style="position:absolute;margin-top:99px;margin-left:552px;;width:25px;height:25px;z-index:501;"></a>'
 	document.getElementById('header_game').appendChild(onlinePlayersDiv);
 }
 
@@ -2537,7 +2560,7 @@ function OnlineBox(text){
 				}
 			}
 			else{
-				stop = true;
+				stop = true
 				document.getElementById('OnlineList').getElementsByTagName('tr')[c-1].style.display = 'none';
 				document.getElementById('OnlineList').getElementsByTagName('tr')[c-2].style.display = 'none';
 			}
@@ -2707,8 +2730,8 @@ function guildWarMoreStats(){
 	
 	var tableHTML = document.getElementById('content').getElementsByTagName('div')[i].innerHTML;
 
-	if(tableHTML.match(/gid=(\d+)/i)){var guilds = document.getElementById('content').getElementsByTagName('div')[i].getElementsByTagName('a').length/2;}
-	else{var guilds = document.getElementById('content').getElementsByTagName('div')[i].getElementsByTagName('a').length;}
+	if(tableHTML.match(/gid=(\d+)/i)){var guilds = document.getElementById('content').getElementsByTagName('div')[i].getElementsByTagName('a').length/2}
+	else{var guilds = document.getElementById('content').getElementsByTagName('div')[i].getElementsByTagName('a').length}
 	
 	document.getElementById('content').getElementsByTagName('div')[i].innerHTML = tableHTML.replace(/<\/th>/i, ' (' + guilds + ')<span style="float:right;margin-right:7px;"><b>LvL &#216;</b></span><span style="float:right;margin-right:13px;"><b>'+L_gold+'</b></span></th>');
 
@@ -2742,8 +2765,8 @@ function getGuildGold(id,i){
 			}
 			showGuildGold(gold,id,i,mesoLevel);
 		}
-	};
-	xmlhttp.send(null);
+	}
+	xmlhttp.send(null)
 	}
 }
 
@@ -2805,7 +2828,7 @@ function guildSafeLog(){
 				}
 			}
 		}
-		document.getElementById('content').getElementsByTagName('div')[2].innerHTML+= ' <font style="float:right;padding-right:10px;">('+L_total+': '+dottedNumber(sum)+' <img border="0" align="absmiddle" src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif">)</font>';
+		document.getElementById('content').getElementsByTagName('div')[2].innerHTML+= ' <font style="float:right;padding-right:10px;">('+L_total+': '+dottedNumber(sum)+' <img border="0" align="absmiddle" src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif">)</font>'
 	}
 	if(document.getElementById('content').getElementsByTagName('table')[1]){
 		var num2=document.getElementById('content').getElementsByTagName('table')[1].getElementsByTagName('tr').length;
@@ -2833,7 +2856,7 @@ function packetCounters(){
 	var counterBar2=document.createElement("tr");
 	counterBar2.setAttribute('id','searchTotPakBox');
 	counterBar2.innerHTML='<td><div class="title2_box"><div class="title2_inner"><table><tr><td valign="top" width="150px">'+
-	'<input id="searchTotPakValue" type="button" class="button3" value="'+L_total+'"></td> <td width="150"><span align="center" id="total_pak_value" value="0"></span>  <img id="totalImage" style="display:none;" src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif"/></td> <td text-align="right"> <span align="right" style="display:none;" id="total_page"><input type="hidden" id="currentPage" value="0"><input type="hidden" id="maxPage" value="0"></span> ' +
+	'<input id="searchTotPakValue" type="button" class="button3" value="'+L_total+'"><input id="hasBeenLaunched" type="hidden" value="0"></td> <td width="150"><span align="center" id="total_pak_value" value="0"></span>  <img id="totalImage" style="display:none;" src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif"/></td> <td text-align="right"> <span align="right" style="display:none;" id="total_page"><input type="hidden" id="currentPage" value="0"><input type="hidden" id="maxPage" value="0"></div></span> ' +
 	'</td></tr></table></div></div></td>';
 	
 	document.getElementById('content').getElementsByTagName('table')[1].appendChild(counterBar);
@@ -2891,25 +2914,29 @@ function packetCounters(){
 		document.getElementById('searchTotPakBox').style.display='none';
 	}
 	var bar = document.createElement('div');
-	bar.innerHTML = '<div class="cooldown_bar" style="left:580px;top:822px;cursor:pointer;"><div id="pageBar" style="width: 0%;" class="cooldown_bar_fill cooldown_bar_fill_progress"></div><div class="cooldown_bar_text" id="cooldown_bar_fill_page">0</div></div>';
+	bar.innerHTML = '<div class="cooldown_bar" style="left:580px;top:847px;cursor:pointer;"><div id="pageBar" style="width: 0%;" class="cooldown_bar_fill cooldown_bar_fill_progress"></div><div class="cooldown_bar_text" id="cooldown_bar_fill_page">0</div></div>';
 	document.getElementById('total_page').appendChild(bar);
 }
 
 function searchTotPakValue(){
-	var last = false;
-	var divs = document.evaluate(".//div[@class='paging_numbers']",document.getElementById('content'),null,XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,null);
-	divs = document.evaluate("(.//a)|(.//span)",divs.snapshotItem(0),null,XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,null);
-	var pageMax = parseInt(divs.snapshotItem(divs.snapshotLength-1).innerHTML);
-	document.getElementById('maxPage').value=pageMax;
-	
-	document.getElementById('currentPage').value=0;
-	document.getElementById('total_pak_value').innerHTML = 0;
-	document.getElementById('totalImage').setAttribute('style','');
-	document.getElementById('total_page').setAttribute('style','');
-	document.getElementById('cooldown_bar_fill_page').innerHTML='0 / '+pageMax+' (0%)';
-	document.getElementById('pageBar').style.width='0%';
-	for(var j=1;j<pageMax+1;j++){
-		totalPackValue(j);
+	if(document.getElementById('hasBeenLaunched').value == 0){
+
+		var last = false;
+		document.getElementById('hasBeenLaunched').value = 1;
+		var divs = document.evaluate(".//div[@class='paging_numbers']",document.getElementById('content'),null,XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,null);
+		divs = document.evaluate("(.//a)|(.//span)",divs.snapshotItem(0),null,XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,null);
+		var pageMax = parseInt(divs.snapshotItem(divs.snapshotLength-1).innerHTML);
+		document.getElementById('maxPage').value=pageMax;
+		
+		document.getElementById('currentPage').value=0;
+		document.getElementById('total_pak_value').innerHTML = 0;
+		document.getElementById('totalImage').setAttribute('style','');
+		document.getElementById('total_page').setAttribute('style','');
+		document.getElementById('cooldown_bar_fill_page').innerHTML='0 / '+pageMax+' (0%)';
+		document.getElementById('pageBar').style.width='0%';
+		for(var j=1;j<pageMax+1;j++){
+			totalPackValue(j);
+		}
 	}
 }
 
@@ -3180,7 +3207,7 @@ function newForumMessage(){
 				var newMessage = response.responseText.split('<div class="info deletable" id="pmOutstandingNotifications">')[1].split('</div>')[0];
 			}else if(response.responseText.match('<div class="info" id="pmOutstandingNotifications">')){
 				var newMessage = response.responseText.split('<div class="info" id="pmOutstandingNotifications">')[1].split('</div>')[0];
-			}else{var newMessage = '<p>Error</p>';}
+			}else{var newMessage = '<p>Error</p>'}
 			var line = newMessage.split('<p>')[1].split('</p>')[0].replace(/[^0-9]/g,'');
 			newMessage = newMessage.split('<p>')[1].split('</p>')[0] + newMessage.split('<p>')[1].split('</p>')[1];
 			
@@ -3189,7 +3216,7 @@ function newForumMessage(){
 				document.getElementById('header_game').getElementsByTagName('a')[3].parentNode.innerHTML+=' <img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/exclamation.png" style="position:absolute;margin-left:4px;margin-top:1px;opacity: 0.65;" onmouseover="this.style.opacity=\'1\';document.getElementById(\'NewForumMessage\').style.display=\'block\';" onClick="if(this.style.opacity==\'0.65\'){this.style.opacity=\'1\';document.getElementById(\'NewForumMessage\').style.display=\'block\';} else {this.style.opacity=\'0.65\';document.getElementById(\'NewForumMessage\').style.display=\'none\';}">';
 				var forumNewMessageTip = document.createElement('div');
 				forumNewMessageTip.setAttribute('id', 'NewForumMessage');
-				forumNewMessageTip.setAttribute('style', 'opacity: 0.75; display: none; width: 300px; z-index: 502; position: absolute; top: 30px; left: 550px; border: 1px solid grey; background-color: black; color: rgb(192, 192, 192); font-weight: bold; height: '+heigth+'px; line-height: 24px; padding-left: 5px; padding-right: 5px;text-align:left;');
+				forumNewMessageTip.setAttribute('style', 'opacity: 0.75; display: none; width: 300px; z-index: 502; position: absolute; top: 30px; left: 550px; border: 1px solid grey; background-color: black; color: rgb(192, 192, 192); font-weight: bold; height: '+heigth+'px; line-height: 24px; padding-left: 5px; padding-right: 5px;text-align:left;')
 				forumNewMessageTip.innerHTML = newMessage;//L_newMail;
 				for(var i =0;i<forumNewMessageTip.getElementsByTagName('a').length;i++){
 					forumNewMessageTip.getElementsByTagName('a')[i].setAttribute('target','_blank');
@@ -3308,7 +3335,7 @@ function guildMailChanges(){
 			if(thisTd!=prevTd){
 				document.getElementById('buttons').innerHTML+=' | <input type="checkbox" id="'+thisTd+'" checked="checked"><label for="'+thisTd+'">'+thisTd+'</label>';
 				document.getElementById(thisTd).setAttribute('onclick',"var countTheChecked=0;for(i=2;i<"+num+";i++){if(document.getElementById('mainbox').getElementsByTagName('tr')[i].getElementsByTagName('td')[2].innerHTML==this.getAttribute('id')){document.getElementById('mainbox').getElementsByTagName('tr')[i].getElementsByTagName('td')[0].getElementsByTagName('input')[0].checked=this.checked;}if(document.getElementById('mainbox').getElementsByTagName('tr')[i].getElementsByTagName('td')[0].getElementsByTagName('input')[0].checked){countTheChecked=countTheChecked+1;}}countTheChecked=countTheChecked+2;if(countTheChecked!="+num+"){document.getElementById('Check All').checked=false;}else{document.getElementById('Check All').checked=true;}");
-				changeThemToo+="document.getElementById('"+thisTd+"').checked=this.checked;";
+				changeThemToo+="document.getElementById('"+thisTd+"').checked=this.checked;"
 			}
 		}
 		document.getElementById("Check All").setAttribute('onclick',"for(i=2;i<"+num+";i++){document.getElementById('mainbox').getElementsByTagName('tr')[i].getElementsByTagName('td')[0].getElementsByTagName('input')[0].checked=this.checked;}"+changeThemToo);
@@ -3530,10 +3557,10 @@ function newComment(name,message,time){
 	var checkname=name.toLowerCase();
 	if(checkname.match(/gif.>(\w+)/i)){checkname=checkname.match(/gif.>(\w+)/i)[1];}
 	else if(checkname.match(/>(\w+)<.a/i)){checkname=checkname.match(/>(\w+)<.a/i)[1];}
-	if(checkname=="greatapo"){var image="http://board.gladiatus.fr/wcf/images/avatars/avatar-2288.jpg";}
-	else if(checkname=="djor"){var image="http://board.gladiatus.fr/wcf/images/avatars/avatar-2336.jpg";}
-	else if(checkname=="darkthanos"){var image="http://board.gladiatus.fr/wcf/images/avatars/avatar-2287.jpg";}
-	else{var image="http://images.webs.com/static/global/profile_images/noProfilePic_male_100x100.gif";}
+	if(checkname=="greatapo"){var image="http://board.gladiatus.fr/wcf/images/avatars/avatar-2288.jpg"}
+	else if(checkname=="djor"){var image="http://board.gladiatus.fr/wcf/images/avatars/avatar-2336.jpg"}
+	else if(checkname=="darkthanos"){var image="http://board.gladiatus.fr/wcf/images/avatars/avatar-2287.jpg"}
+	else{var image="http://images.webs.com/static/global/profile_images/noProfilePic_male_100x100.gif"}
 	name=name.replace(/<img[^>]+>/g,'');
 	return '<table class="commentTable fw-even" title="posted '+time+'"><tbody><tr>'
 	+'<td style="border:1px solid #af8e50;background-color:#ded8c6;padding:5px;width:449px;"><b><img border="0" align="left" src="'+image+'" class="blogCommentProfileImage" valign="top" style="margin-right:10px; width:40px;">'
@@ -3565,7 +3592,7 @@ function showNewsAlert(){
 	document.getElementById('mainmenu').getElementsByTagName('a')[2].innerHTML+=' <img id="NewsAlertImage" src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/exclamation.png" style="position:absolute;margin-left:10px;margin-top:1px;opacity: 0.65;" onmouseout="document.getElementById(\'mainmenu\').getElementsByTagName(\'a\')[2].setAttribute(\'href\',\''+GCAO_result[1]+'mod=guild&sh='+GCAO_secureCode+'\');this.style.opacity=\'0.65\';document.getElementById(\'newsAlert\').style.display=\'none\';" onmouseover="document.getElementById(\'mainmenu\').getElementsByTagName(\'a\')[2].removeAttribute(\'href\');this.style.opacity=\'1\';document.getElementById(\'newsAlert\').style.display=\'block\';">';
 	var alertTip = document.createElement('div');
 	alertTip.setAttribute('id', 'newsAlert');
-	alertTip.setAttribute('style', 'opacity: 0.75;display:none;width:300px;z-index:502;position:absolute;top:237px;left:345px;border:1px solid grey;background-color:black;color:#c0c0c0;font-weight:bold;height:24px;line-height:24px;padding-left:5px;padding-right:5px;');
+	alertTip.setAttribute('style', 'opacity: 0.75;display:none;width:300px;z-index:502;position:absolute;top:237px;left:345px;border:1px solid grey;background-color:black;color:#c0c0c0;font-weight:bold;height:24px;line-height:24px;padding-left:5px;padding-right:5px;')
 	alertTip.innerHTML = L_newsAlert;
 	document.getElementById('header_game').appendChild(alertTip);
 	document.getElementById('NewsAlertImage').addEventListener('click', function(){seeGCANews();}, true); 
@@ -3765,15 +3792,18 @@ function getObject(divsIMG,array,uurl,i){
 function saveGuildmatesIDs(){
     var mates = new Array();
 	var c=1;
-	while(document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[0]){
-		if(document.getElementById('mainbox').getElementsByTagName('tr')[c]){
-			var mateID=document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[0].innerHTML.match(/&amp;p=(\d+)/i)[1];
-			var mateNAME=document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[0].innerHTML.match(/>([^<]+)</i)[1];
-			mates[c]=mateNAME+"<"+mateID;
-			c++;
+	if(document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td').length==5){
+		while(document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[0]){
+			// alert(document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[0].innerHTML);
+			if(document.getElementById('mainbox').getElementsByTagName('tr')[c]){
+				var mateID=document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[0].innerHTML.match(/&amp;p=(\d+)/i)[1];
+				var mateNAME=document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[0].innerHTML.match(/>([^<]+)</i)[1];
+				mates[c]=mateNAME+"<"+mateID;
+				c++;
+			}
 		}
+		Set_Cookie("GCAOguildMates",mates.join("#"),365);
 	}
-    Set_Cookie("GCAOguildMates",mates.join("#"),365);
 }
 
 
@@ -4072,7 +4102,7 @@ function mouEperikseTaArxidia(loc,pos){
 						/**Time of attack**/
 						var time=xmlhttp.responseText.match(/<td style="min-width:90px">[^.]+\d+.\d+.\d+ (\d+:\d+:\d+)[^<]+<\/td>[^<]+<td>[^<]+<img src="[^s]+shield-passive.gif"/i)[1];
 						/**Date of attack**/
-						var sdate=xmlhttp.responseText.match(/<td style="min-width:90px">[^.]+\d+.\d+.\d+ \d+:\d+:\d+[^<]+<\/td>[^<]+<td>[^<]+<img src="[^s]+shield-passive.gif"/i)[0].match(/(\d+)\./i)[1];
+						var sdate=xmlhttp.responseText.match(/<td style="min-width:90px">[^.]+\d+.\d+.\d+ \d+:\d+:\d+[^<]+<\/td>[^<]+<td>[^<]+<img src="[^s]+shield-passive.gif"/i)[0].match(/(\d+)\./i)[1]
 						/**Time of attack in Seconds**/
 						var time=time.match(/\d+/g)[0]*60*60+time.match(/\d+/g)[1]*60+time.match(/\d+/g)[2]*1;
 						
@@ -4084,7 +4114,7 @@ function mouEperikseTaArxidia(loc,pos){
 						
 						/**Server Day**/
 						var serverDate=document.getElementById('header_game').getElementsByTagName('span')[6].innerHTML.match(/(\d+).\d+/i)[1];
-						if(serverDate.match(/0\d/i)){serverDate.replace('0','');}
+						if(serverDate.match(/0\d/i)){serverDate.replace('0','')}
 						/**Server Time in Second**/
 						var serverTime=document.getElementById('header_game').getElementsByTagName('span')[6].innerHTML.match(/(\d+):(\d+)/i);
 						serverTime=serverTime[1]*60*60+serverTime[2]*60;
@@ -4128,7 +4158,7 @@ function mouEperikseTaArxidia(loc,pos){
 					}
 				}
 			}
-		};
+		}
 		xmlhttp.send(null);
 	}
 }
@@ -4201,7 +4231,7 @@ function dottedNumber(nbr){
 	}
 	if(number.length>0)
 	returned = number+returned;
-	if(x){var returned='-'+returned;}
+	if(x){var returned='-'+returned}
 	return returned;
 }
 
@@ -4511,7 +4541,7 @@ function addMonstersElements(name,id,where){
 }
 
 function findPlayerStats(id){
-	if(!id || id=='' || id==null){id=document.getElementById('player').value;}
+	if(!id || id=='' || id==null){id=document.getElementById('player').value}
 	document.getElementById('player_sim_results').innerHTML=L_searchData;
 	GM_xmlhttpRequest({
 		method: "GET",
