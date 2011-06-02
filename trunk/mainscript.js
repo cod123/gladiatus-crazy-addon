@@ -1,9 +1,9 @@
-﻿// ==UserScript==
+ // ==UserScript==
 // @name           Gladiatus Crazy AddOn New Server
 // @namespace      http://www.epiratiko.webs.com/ 
 // @description    The craziest add-on for gladiatus ever!
 // @include        *.gladiatus.*
-// @exclude        *.board.gladiatus.*
+// @exclude        *board.gladiatus.*
 // ==/UserScript==
 //Copyright (C) 2010 - 2011, Apo59m, DarkThanos and djor
 
