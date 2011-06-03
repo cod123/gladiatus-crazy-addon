@@ -2915,7 +2915,11 @@ function packetCounters(){
 		document.getElementById('searchTotPakBox').style.display='none';
 	}
 	var bar = document.createElement('div');
-	bar.innerHTML = '<div class="cooldown_bar" style="left:580px;top:847px;cursor:pointer;"><div id="pageBar" style="width: 0%;" class="cooldown_bar_fill cooldown_bar_fill_progress"></div><div class="cooldown_bar_text" id="cooldown_bar_fill_page">0</div></div>';
+	if(document.getElementById('banner_top') && document.getElementById('banner_event'))
+		var top = 847;
+	else
+		var top = 847-25;
+	bar.innerHTML = '<div class="cooldown_bar" style="left:580px;top:'+top+'px;cursor:pointer;"><div id="pageBar" style="width: 0%;" class="cooldown_bar_fill cooldown_bar_fill_progress"></div><div class="cooldown_bar_text" id="cooldown_bar_fill_page">0</div></div>';
 	document.getElementById('total_page').appendChild(bar);
 }
 
