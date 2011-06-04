@@ -1,0 +1,64 @@
+﻿//################################################################################################################################
+//## GUILD MAIL CHANGES
+//################################################################################################################################
+function guildMailChanges(){
+	var toolbar = document.createElement('span');
+	toolbar.setAttribute('id', 'ToolBar');
+	toolbar.setAttribute('style', '');
+	var p2 = document.getElementById('message');
+	p2.parentNode.insertBefore(toolbar,p2);
+
+	if(GM_getValue('bb', false) == true){
+		var bbCode = '<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/bbcode_bold.gif" title="Bold selected text" class="bbcode_button" onclick="var textArea = $(\'message\');var startTag = \'[b]\';var closeTag = \'[#b]\';var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');var selectedText = textArea.getSelectedText();textArea.set(\'value\', text.substring(0, pos.start) + startTag + selectedText + closeTag + text.substring(pos.end, text.length));"></li>' +
+		'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/bbcode_italic.gif" title="Italic selected text" class="bbcode_button" onclick="var textArea = $(\'message\');var startTag = \'[i]\';var closeTag = \'[#i]\';var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');var selectedText = textArea.getSelectedText();textArea.set(\'value\', text.substring(0, pos.start) + startTag + selectedText + closeTag + text.substring(pos.end, text.length));"></li>' +
+		'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/bbcode_center.png" title="Put selected text at the center" class="bbcode_button" onclick="var textArea = $(\'message\');var startTag = \'[c]\';var closeTag = \'[#c]\';var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');var selectedText = textArea.getSelectedText();textArea.set(\'value\', text.substring(0, pos.start) + startTag + selectedText + closeTag + text.substring(pos.end, text.length));"></li>' +
+		'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/bbcode_link.png" title="Selected text is a link" class="bbcode_button" onclick="var textArea = $(\'message\');var startTag = \'[l]\';var closeTag = \'[#l]\';var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');var selectedText = textArea.getSelectedText();textArea.set(\'value\', text.substring(0, pos.start) + startTag + selectedText + closeTag + text.substring(pos.end, text.length));"></li>' +
+		'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/bbcode_img.png" title="Selected text is an image" class="bbcode_button" onclick="var textArea = $(\'message\');var startTag = \'[img]\';var closeTag = \'[#img]\';var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');var selectedText = textArea.getSelectedText();textArea.set(\'value\', text.substring(0, pos.start) + startTag + selectedText + closeTag + text.substring(pos.end, text.length));"></li>' +
+		'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/bbcode_video.png" title="Selected text is a video" class="bbcode_button" onclick="var textArea = $(\'message\');var startTag = \'[v]\';var closeTag = \'[#v]\';var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');var selectedText = textArea.getSelectedText();textArea.set(\'value\', text.substring(0, pos.start) + startTag + selectedText + closeTag + text.substring(pos.end, text.length));"></li>';
+	}else{var bbCode='<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/bbcodedisabledimage.png"/></li>';}
+	
+	document.getElementById('ToolBar').innerHTML = '<style type="text/css">textarea, .inputText {border-width: 1px;width: 98.5%;}textarea {padding-left: 3px;}.subTabMenu {border: 1px;margin-bottom: -1px;margin-top: -2px;padding: 1px;position: relative;z-index: 0;}.subTabMenu:after {content: "";clear: both;display: block;height: 0;}.subTabMenu .containerHead {margin: 0;padding: 2px;min-height: 5px;}.subTabMenu .containerHead h2, .subTabMenu .containerHead h3 {padding: 2px 5px;}.subTabMenu .containerHead:after {content: "";clear: both;display: block;height: 0;}.subTabMenu ul {list-style: none;margin: 0;padding: 0;}.subTabMenu li {float: left;}.subTabMenu li a {text-decoration: none;white-space: nowrap;margin: 1px;padding: 2px 6px;display: block;}.subTabMenu li.activeSubTabMenu a, .subTabMenu li a:hover {border-width: 1px;padding: 1px 5px;}.subTabMenu .containerHead div {font-size: 5px;height: 5px;}.mceToolbar {height: auto !important; display: block;}.mceToolbar ul {margin: 0 3px;padding: 0;width: 99.5%; display: block;float: left;}.mceToolbar li {display: block;position: relative;}.mceToolbar li a {margin: 1px;padding: 1px;}.mceToolbar li a:hover {margin: 1px;padding: 0;}.mceToolbar li.activeSubTabMenu a {margin: 1px;padding: 0;}.subTabMenu{background-color:#C6B08B}.subTabMenu div.containerHead{border-color:#C6B08B}.subTabMenu{border-style:solid}.containerHead{background-color:#8B7355}textarea{background-color:#fff;border-color:#8da4b7;border-style:solid;font-family:\'Trebuchet MS\', Arial, sans-serif;color:#333;font-size:.85em}textarea:focus{background-color:#fff9f4;border-color:#fa2;border-width:1px;color:#000}</style>' +
+	'<div class="subTabMenu" width="400px"><div class="containerHead"><div class="mceToolbar" id="mce_editor_0_toolBar"><ul>' +
+	'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/bbcode_smiles.png" title="Open smileys bar" class="bbcode_button" onclick="if(document.getElementById(\'smiles\').style.display==\'none\'){document.getElementById(\'smiles\').style.display=\'block\';}else{document.getElementById(\'smiles\').style.display=\'none\';}"></li>' +
+	bbCode+'</ul>'+
+	'<br><ul style="display:none;margin-top:3px;" id="smiles">'+
+	'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/smile.png" style="cursor:pointer;margin:3px;" onclick="var textArea = $(\'message\');var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');textArea.set(\'value\', text.substring(0, pos.start) + \' :) \' + text.substring(pos.end, text.length));"></li>' +
+	'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/sad.png" style="cursor:pointer;margin:3px;" onclick="var textArea = $(\'message\');var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');textArea.set(\'value\', text.substring(0, pos.start) + \' :( \' + text.substring(pos.end, text.length));"></li>' +
+	'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/biggrin.png" style="cursor:pointer;margin:3px;" onclick="var textArea = $(\'message\');var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');textArea.set(\'value\', text.substring(0, pos.start) + \' :D \' + text.substring(pos.end, text.length));"></li>' +
+	'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/wink.png" style="cursor:pointer;margin:3px;" onclick="var textArea = $(\'message\');var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');textArea.set(\'value\', text.substring(0, pos.start) + \' ;) \' + text.substring(pos.end, text.length));"></li>' +
+	'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/w00t.png" style="cursor:pointer;margin:3px;" onclick="var textArea = $(\'message\');var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');textArea.set(\'value\', text.substring(0, pos.start) + \' 8o \' + text.substring(pos.end, text.length));"></li>' +
+	'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/unsure.png" style="cursor:pointer;margin:3px;" onclick="var textArea = $(\'message\');var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');textArea.set(\'value\', text.substring(0, pos.start) + \' :S \' + text.substring(pos.end, text.length));"></li>' +
+	'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/tongue.png" style="cursor:pointer;margin:3px;" onclick="var textArea = $(\'message\');var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');textArea.set(\'value\', text.substring(0, pos.start) + \' :P \' + text.substring(pos.end, text.length));"></li>' +
+	'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/squint.png" style="cursor:pointer;margin:3px;" onclick="var textArea = $(\'message\');var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');textArea.set(\'value\', text.substring(0, pos.start) + \' ^^ \' + text.substring(pos.end, text.length));"></li>' +
+	'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/mellow.png" style="cursor:pointer;margin:3px;" onclick="var textArea = $(\'message\');var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');textArea.set(\'value\', text.substring(0, pos.start) + \' :| \' + text.substring(pos.end, text.length));"></li>' +
+	'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/crying.png" style="cursor:pointer;margin:3px;" onclick="var textArea = $(\'message\');var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');textArea.set(\'value\', text.substring(0, pos.start) + \' ;( \' + text.substring(pos.end, text.length));"></li>' +
+	'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/cool.png" style="cursor:pointer;margin:3px;" onclick="var textArea = $(\'message\');var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');textArea.set(\'value\', text.substring(0, pos.start) + \' 8) \' + text.substring(pos.end, text.length));"></li>' +
+	'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/confused.png" style="cursor:pointer;margin:3px;margin-top:-4px;" onclick="var textArea = $(\'message\');var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');textArea.set(\'value\', text.substring(0, pos.start) + \' ?( \' + text.substring(pos.end, text.length));"></li>' +
+	'<li><img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/blink.png" style="cursor:pointer;margin:3px;" onclick="var textArea = $(\'message\');var pos = textArea.getSelectedRange();var text = textArea.get(\'value\');textArea.set(\'value\', text.substring(0, pos.start) + \' 8| \' + text.substring(pos.end, text.length));"></li>' +
+	'</ul>'+
+	'</div></div></div>';
+	
+	document.getElementsByTagName('textarea')[0].style.width='474px';
+	
+	var buttons = document.createElement('tr');
+	buttons.innerHTML='<td colspan="4"><div id="buttons" style="background:#DBCBA5;border-top:1px solid #AF8E50;border-bottom:1px solid #AF8E50;padding:5px;margin:10px -5px 0px -10px;">'+
+	'<input type="checkbox" id="Check All" checked="checked" > <label for="Check All">'+L_checkAll+'</label></div></td>';
+	var p2 = document.getElementById('ToolBar').parentNode.parentNode;
+	p2.parentNode.insertBefore(buttons,p2);
+	
+	if(document.getElementById('mainbox').getElementsByTagName('tr')[0]){
+		var num=document.getElementById('mainbox').getElementsByTagName('tr').length-4;
+		var changeThemToo='';
+		for(i=2;i<num;i++){
+			var prevTd=document.getElementById('mainbox').getElementsByTagName('tr')[i-1].getElementsByTagName('td')[2].innerHTML;
+			var thisTd=document.getElementById('mainbox').getElementsByTagName('tr')[i].getElementsByTagName('td')[2].innerHTML;
+			if(thisTd!=prevTd){
+				document.getElementById('buttons').innerHTML+=' | <input type="checkbox" id="'+thisTd+'" checked="checked"><label for="'+thisTd+'">'+thisTd+'</label>';
+				document.getElementById(thisTd).setAttribute('onclick',"var countTheChecked=0;for(i=2;i<"+num+";i++){if(document.getElementById('mainbox').getElementsByTagName('tr')[i].getElementsByTagName('td')[2].innerHTML==this.getAttribute('id')){document.getElementById('mainbox').getElementsByTagName('tr')[i].getElementsByTagName('td')[0].getElementsByTagName('input')[0].checked=this.checked;}if(document.getElementById('mainbox').getElementsByTagName('tr')[i].getElementsByTagName('td')[0].getElementsByTagName('input')[0].checked){countTheChecked=countTheChecked+1;}}countTheChecked=countTheChecked+2;if(countTheChecked!="+num+"){document.getElementById('Check All').checked=false;}else{document.getElementById('Check All').checked=true;}");
+				changeThemToo+="document.getElementById('"+thisTd+"').checked=this.checked;"
+			}
+		}
+		document.getElementById("Check All").setAttribute('onclick',"for(i=2;i<"+num+";i++){document.getElementById('mainbox').getElementsByTagName('tr')[i].getElementsByTagName('td')[0].getElementsByTagName('input')[0].checked=this.checked;}"+changeThemToo);
+		
+	}
+}
