@@ -1,9 +1,9 @@
-﻿//################################################################################################################################
+ //################################################################################################################################
 //## Add raided gold in the war camp member reports list
 //################################################################################################################################
 function warCampMemberGold(){
 	var p = document.evaluate(".//p[@class='buildingDesc']",document.getElementById('content'),null,XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,null);
-	p.snapshotItem(0).innerHTML += '<br/><br/><input id="launchRaidedGold" type="button" class="button2" value="Trouver l\'or" style="position:absolute;left:500px;top:399px;"><input id="hasBeenLaunched" type="hidden" value="0">   ';
+	p.snapshotItem(0).innerHTML += '<br/><br/><input id="launchRaidedGold" type="button" class="button2" value="'+L_findGold+'" style="position:absolute;left:500px;top:399px;"><input id="hasBeenLaunched" type="hidden" value="0">   ';
 	
 	// the bar
 	var bar = document.createElement('div');
