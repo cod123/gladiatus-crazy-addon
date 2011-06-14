@@ -1,4 +1,4 @@
- //################################################################################################################################
+//################################################################################################################################
 //## OPTIONS / ΡΥΘΜΙΣΕΙΣ
 //################################################################################################################################
 function settings(){
@@ -59,12 +59,13 @@ function settings(){
 	'<input type="checkbox" name="hi" id="GCAO_s13">'+L_enHighlight+'<br>'+
 	'<input type="checkbox" name="lp" id="GCAO_s42">'+L_foodBackColor+'<br>'+
 	'<input type="checkbox" name="fi" id="GCAO_s14">'+L_enStyleFixes+'<br>'+
+	'<input type="checkbox" name="nm" id="GCAO_s47">'+L_showNewMessages+'<br>'+
 	'<font style="margin-left:5px;">'+L_customCursor+': <select name="cu" id="GCAO_cu"><option value="0" id="cu_0">Default</option><option value="1" id="cu_1">WoW</option><option value="2" id="cu_2">Oxygen Black</option><option value="3" id="cu_3">Oxygen White</option><option value="4" id="cu_4">Sword</option></select></font><br>'+
 	'<br><b>- '+L_speedSettings+':</b><br>'+
 	'<input type="checkbox" name="sp" id="GCAO_s15">'+L_stopPulling+'<br><b style="margin-left:20px;">'+L_willStop+'</b>:<br><font style="margin-left:20px;">Life Bar, Simulator, new quest alert, new forum message alert, weapon down alert</font><br>'+
-	'<br><b>- Bug Settings:</b><br>'+
-	'<input type="checkbox" name="sb" id="GCAO_s45">Show bug reports<br>'+
-	'<input type="checkbox" name="rs" id="GCAO_s46">Automatic report bugs to server<br>'+
+	'<br><b>- '+L_bugSettings+':</b><br>'+
+	'<input type="checkbox" name="sb" id="GCAO_s45">'+L_showBugReports+'<br>'+
+	'<input type="checkbox" name="rs" id="GCAO_s46">'+L_autoReportBugs+'<br>'+
 	''+
 	'<br><br><input class="button2" value="'+L_Save+'" type="button" id="saveGCAOstats"/>' +
 	'<input style="margin-left:44px;" type="button" class="button1" onclick="document.getElementById(\'title\').innerHTML=\''+L_aboutTitle+'\';document.getElementById(\'Settings\').style.display=\'none\';document.getElementById(\'AboutUs\').style.display=\'block\';" value="'+L_AboutUs+'"/>'+
@@ -149,8 +150,9 @@ function settings(){
 	if(GM_getValue('lp', true) == true){document.getElementById('GCAO_s42').checked=true;}
 	if(GM_getValue('kt', false) == true){document.getElementById('GCAO_s43').checked=true;}
 	if(GM_getValue('pa', false) == true){document.getElementById('GCAO_s44').checked=true;}
-	if(GM_getValue('sb', true) == true){document.getElementById('GCAO_s45').checked=true;}
+	if(GM_getValue('sb', false) == true){document.getElementById('GCAO_s45').checked=true;}
 	if(GM_getValue('rs', true) == true){document.getElementById('GCAO_s46').checked=true;}
+	if(GM_getValue('nm', true) == true){document.getElementById('GCAO_s47').checked=true;}
 	
 	document.getElementById('cu_'+GM_getValue('cu', 0)).setAttribute('selected','selected');
 }
@@ -191,7 +193,7 @@ function saveMePlease(){
 	
 	var s="&sf="+numberOfFights;
 	s+="&cu="+document.getElementById('GCAO_cu').value;
-	for(i=1;i<47;i++){
+	for(i=1;i<48;i++){
 		var x=document.getElementById('GCAO_s'+i);
 		s+="&"+x.name+"="+x.checked;
 	}
