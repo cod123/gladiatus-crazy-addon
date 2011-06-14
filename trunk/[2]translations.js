@@ -1,4 +1,4 @@
-﻿//################################################################################################################################
+ //################################################################################################################################
 //## COUNTRY / LANGUAGE - ΧΩΡΑ / ΓΛΩΣΣΑ
 //################################################################################################################################
 if(document.location.href.match(/gladiatus\.(\w+)/)){
@@ -86,6 +86,7 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_lostLife='Χαμένοι πόντοι ζωής';
 		var L_healLife='Πόντοι από θεραπεία';
 		var L_afterLife='Πόντοι μετά την θεραπεία';
+		var L_findGold='Βρές τον χρυσό';
 		//Auction
 		var L_bidNum='Αριθμός πλειοδοτήσεων';
 		var L_Items='Αντικείμενα';
@@ -109,7 +110,7 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_gold='Χρυσός';
 		var L_Packages='Πακέτα';
 		var L_invItems='Αποθηκευμένα αντικείμενα';
-		var L_packedValue='Αξία πακεταρισμένων αντικειμένων';
+		var L_packedValue='Αξία αντικειμένων';
 		var L_invValue='Αξία αποθηκευμένων αντικεμένων';
 		var L_total='Σύνολο';
 		var L_PackedGold='Πακεταρισμένος χρυσός';
@@ -203,6 +204,10 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_guildMedicChanges='Εμφάνιση περισσότερων πληροφοριών στο Ιατρικό κέντρο';
 		var L_foodBackColor='Κόκκινο χρώμα πίσω από τα φαγητά που δίνουν περίσσότερους πόντους ζωής από ότι χρειάζεται (στην προεπισκόπηση)';
 		var L_packageAlertOpt='Ειδοποίηση για την λήξη των πακέτων (12 ώρες πριν)';
+		var L_bugSettings='Ρυθμίσεις προβλημάτων (Bugs)';
+		var L_showBugReports='Εμφάνιση αναφορών προβλημάτων';
+		var L_autoReportBugs='Αυτόματη αναφορά των προβλήματων στον server';
+		var L_showNewMessages='Εμφάνιση των νέων μηνυμάτων';
 	}else if(GCAO_lang=='fr'){
 		//Shurtcut Buttons
 		var L_guildMailTitle='Ecrire un message à la guilde';
@@ -281,6 +286,7 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_lostLife= 'Points de vie manquants';
 		var L_healLife= 'Points de vie restaurés';
 		var L_afterLife= 'Points de vie après un soin';
+		var L_findGold='Trouver l\'or';
 		//Auction
 		var L_bidNum='Nombre d\'enchérissement';
 		var L_Items='Objets';
@@ -398,6 +404,10 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_guildMedicChanges='Afficher plus d\'information à la Villa Medici';
 		var L_foodBackColor= 'Mettre un fond rouge pour les consommables qui restaurent plus de points de vie que nécessaire (dans la vue générale)';
 		var L_packageAlertOpt='M\'informer si mes paquets vont expirer (12 heures à l\'avance environ)';
+		var L_bugSettings='Bug Settings';
+		var L_showBugReports='Show bug reports';
+		var L_autoReportBugs='Automatic report bugs to server';
+		var L_showNewMessages='Show new messages';
 	}else if(GCAO_lang=='de'){
 		var L_guildMailTitle='Gildenmessage texten/spammen';
 		var L_guildMedicTitle='Zum Notarzt schleichen';
@@ -474,6 +484,7 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_lostLife='Verlorene Lebenspunkte';
 		var L_healLife='Zu heilende Lebenspunkte';
 		var L_afterLife='Leben nach Heilung';
+		var L_findGold='Find gold';
 
 		var L_bidNum='Anzahl von Geboten';
 		var L_Items='Items';
@@ -591,6 +602,10 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_guildMedicChanges='Zeig mehr Informationen in der Villa Medici';
 		var L_foodBackColor='Zeige einen Roten Hintergrund bei Nahrungsmitteln, die mehr Lebenspunkte geben als benötigt';
 		var L_packageAlertOpt='Informiere mich, wenn meine Pakete auslaufen sollten (12 Stunden zuvor)';
+		var L_bugSettings='Bug Settings';
+		var L_showBugReports='Show bug reports';
+		var L_autoReportBugs='Automatic report bugs to server';
+		var L_showNewMessages='Show new messages';
 	}else if(GCAO_lang=='lv'){
 		var L_guildMailTitle='Rakstīt ģildei vēstuli';
 		var L_guildMedicTitle='Iet uz dziednīcu';
@@ -667,6 +682,7 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_lostLife='Zaudētā dzīvība';
 		var L_healLife='Tiks izdziedēts';
 		var L_afterLife='Dzīvība pēc dziedināšanas';
+		var L_findGold='Find gold';
 		
 		var L_bidNum='Solītāju skaits';
 		var L_Items='Priekšmeti';
@@ -784,6 +800,10 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_guildMedicChanges='Rādīt papildus info pie Dziednieka';
 		var L_foodBackColor='Sarkans fons ēdienam, kas dod vairāk dzīvības punktu, nekā nepieciešams (pārskatā)';
 		var L_packageAlertOpt='Informēt mani, ja pakas drīz tiks dzēstas (12 stundas iepriekš)';
+		var L_bugSettings='Bug Settings';
+		var L_showBugReports='Show bug reports';
+		var L_autoReportBugs='Automatic report bugs to server';
+		var L_showNewMessages='Show new messages';
 	}else{
 		//Shurtcut Buttons
 		var L_guildMailTitle='Write guild message';
@@ -861,6 +881,7 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_lostLife='Lost life points';
 		var L_healLife='Heal life points';
 		var L_afterLife='Life after heal';
+		var L_findGold='Find gold';
 		//Auction
 		var L_bidNum='Number of bids';
 		var L_Items='Items';
@@ -978,5 +999,9 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_guildMedicChanges='Show more info at the Medic center';
 		var L_foodBackColor='Red background for the food items that gives more life points that needed (at overview)';
 		var L_packageAlertOpt='Inform me if my packages are going to expire (12 hours before)';
+		var L_bugSettings='Bug Settings';
+		var L_showBugReports='Show bug reports';
+		var L_autoReportBugs='Automatic report bugs to server';
+		var L_showNewMessages='Show new messages';
 	}
 }
