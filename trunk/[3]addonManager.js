@@ -1,4 +1,4 @@
-﻿//################################################################################################################################
+ //################################################################################################################################
 //## START (everything runs from here) / ΑΡΧΗ (από εδώ τρέχουν όλα)
 //################################################################################################################################
 if(document.getElementById('icon_rubies')){
@@ -56,8 +56,8 @@ function Main(){
 				c(msgButtons());
 			}
 		}else if(GCAO_submod=='messageNew'){
-			if(document.getElementById('message')){
-				document.getElementById('message').focus();
+			if(doc.getElementById('message')){
+				doc.getElementById('message').focus();
 			}
 		}
 	}
@@ -68,6 +68,7 @@ function Main(){
 		if(GM_getValue('af', true) == true){c(autoFillAuctionFields());}
 		if(GM_getValue('ca', true) == true){c(confirmRubies());}
 		if(GM_getValue('ea', false) == true){c(auctionExtendTable());}
+		if(GM_getValue('dv', true) == true){c(detailView());}
 		if(GM_getValue('hg', true) == true){c(howToHideGoldInAuctions());}
 		if(GM_getValue('il', true) == true){c(itemList());}
 	}
@@ -95,7 +96,10 @@ function Main(){
 	}
 	else if(GCAO_mod=='guild_warcamp'){
 		if(GCAO_submod=='guild_member_reports') c(warCampMemberGold());
-		else if(GCAO_submod=='guild_combatreports' && GCAO_allresult.match(/gcid=\d+/i) && GM_getValue('pi', true) == true){c(reportGuildImage());}
+		else if(GCAO_submod=='guild_combatreports'){ 
+			if(GCAO_allresult.match(/gcid=\d+/i) && GM_getValue('pi', true) == true){c(reportGuildImage());}
+			else{c(betterGuildWarIcons());}
+		}
 		else if(GCAO_submod=='noSubmod' && GM_getValue('gg', true) == true){c(guildWarMoreStats());}
 	}
 	else if(GCAO_mod=='guild_training'){
@@ -123,4 +127,5 @@ function Main(){
 	if(GM_getValue('cu', 0)!=0){c(changeTheCursor());}
 	if(GM_getValue('dayChecked', 0)!=day.getDate()){c(checkForNews());}
 	if(GM_getValue('ShowNewsAlert', false)==true){c(showNewsAlert());}
+	if(GM_getValue('nm', true) == true){c(seeNewMessage());}
 }
