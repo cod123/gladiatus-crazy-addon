@@ -1,4 +1,4 @@
-﻿//################################################################################################################################
+ //################################################################################################################################
 //## PACKAGE COUNTERS
 //################################################################################################################################
 function packetCounters(){
@@ -72,11 +72,7 @@ function packetCounters(){
 		document.getElementById('searchTotPakBox').style.display='none';
 	}
 	var bar = document.createElement('div');
-	if(document.getElementById('banner_top') && document.getElementById('banner_event'))
-		var top = 847;
-	else
-		var top = 847-25;
-	bar.innerHTML = '<div class="cooldown_bar" style="left:580px;top:'+top+'px;cursor:pointer;"><div id="pageBar" style="width: 0%;" class="cooldown_bar_fill cooldown_bar_fill_progress"></div><div class="cooldown_bar_text" id="cooldown_bar_fill_page">0</div></div>';
+	bar.innerHTML = '<div style="margin-left:-20px;margin-top:-10px;cursor:pointer;background-image:url(\'http://s1.gladiatus.gr/game/img/ui/bar.jpg\');height:21px;overflow:hidden;position:absolute;width:140px;"><div id="pageBar" style="width: 0%;" class="cooldown_bar_fill cooldown_bar_fill_progress"></div><div style="color: #C8B38A;font-size: 12px;font-weight: bold;height: 100%;left: 0;padding-top: 1px;position: absolute;text-align: center;width: 100%;" id="cooldown_bar_fill_page">0</div></div>';
 	document.getElementById('total_page').appendChild(bar);
 }
 
