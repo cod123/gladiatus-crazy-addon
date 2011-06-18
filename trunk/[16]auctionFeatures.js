@@ -1,4 +1,4 @@
-﻿//################################################################################################################################
+ //################################################################################################################################
 //## AUCTION / ΔΗΜΟΠΡΑΤΗΡΙΟ
 //################################################################################################################################
 
@@ -56,8 +56,6 @@ function auctionbgcolor() {
 //More levels at search / Αναλυτικότερα επίπεδα στην αναζήτηση
 function auctionitemlevel() {
 		var minlevel = document.getElementById('auction_filter').innerHTML.match(/option value\="(\d+)/i)[1];
-		var OL2result = document.getElementsByName('fl')[0].innerHTML.match(/option value\="(\d+)/g);
-		var found = false;
 		
 		var lvl = document.getElementById('icon_level').parentNode.getElementsByTagName('div')[1].innerHTML*1;
 		var addedLevel = lvl * 0.25;
