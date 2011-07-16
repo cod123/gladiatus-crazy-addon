@@ -641,7 +641,7 @@ function Main(){
 	if(GM_getValue('lb', true) == true && GM_getValue('sp', false) == false){c(HealthBar());}
 	if(GM_getValue('bu', true) == true){c(Buttons());}
 	if(GM_getValue('au', true) == true){c(AuctionStatus());}
-	if(GM_getValue('sp', false) == false){c(GetOverviewStats());}
+	if(GM_getValue('sp', true) == true){c(GetOverviewStats());}
 	if(GM_getValue('ch', true) == true){c(Chat());}
 	if(GM_getValue('pi', true) == true){c(RedirectPlayerImage());}
 	if(GM_getValue('op', true) == true){
@@ -804,7 +804,7 @@ function Buttons(){
 	"<td></td>" +
 	"</tr></table>";
 	document.getElementById('header_game').appendChild(ButtonsDiv);
-	if(GM_getValue('sp', false) == true){document.getElementById('CaracterStats').style.display='none';}
+	if(GM_getValue('sp', true) == false){document.getElementById('CaracterStats').style.display='none';}
 	
 	var text='';
 	for (x=1;x<=7;x++){
