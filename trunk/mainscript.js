@@ -10,21 +10,43 @@
 //################################################################################################################################
 //## GENERAL SCRIPT'S VALUES / ΓΕΝΙΚΕΣ ΜΕΤΑΒΛΗΤΕΣ ΤΟΥ SCRIPT
 //################################################################################################################################
-var version = "240";
-if(document.location.href.match(/^(.*\?)mod=(\w+).*sh=([0-9a-fA-F]+)/)){
-	var GCAO_result = document.location.href.match(/^(.*\?)mod=(\w+).*sh=([0-9a-fA-F]+)/);
+var doc=document;
+var version = "251";
+var unsafeWindow = this['unsafeWindow'] || window;
+if(document.location.href.match(/^(.*\?)mod=(\w+)/)){
+	if(document.location.href.match(/^(.*\?)mod=(\w+).*sh=([0-9a-fA-F]+)/)){
+		var GCAO_result = document.location.href.match(/^(.*\?)mod=(\w+).*sh=([0-9a-fA-F]+)/);
+		var GCAO_mod = GCAO_result[2];
+		var GCAO_secureCode = GCAO_result[3];
+	}else{
+		var GCAO_result = document.location.href.match(/^(.*\?)mod=(\w+)/);
+		var GCAO_mod = GCAO_result[2];
+		if(document.getElementById('menue_messages')){
+			var GCAO_secureCode = document.getElementById('menue_messages').getAttribute('href').match(/sh=([0-9a-fA-F]+)/)[1];
+		}else{
+			var GCAO_secureCode = 'error';
+		}
+	}
 	var GCAO_allresult = GCAO_result[0]; //ex.: http://s3.gladiatus.gr/game/index.php?mod=overview&sh=3311f55ccc62c53c42170cdf78b1cf59
 	var GCAO_siteurl = GCAO_result[1]; //ex.: http://s3.gladiatus.gr/game/index.php?
-	var GCAO_mod = GCAO_result[2];
-	var GCAO_secureCode = GCAO_result[3];
+	
 	var UrlOverview = GCAO_siteurl + 'mod=overview&sh=' + GCAO_secureCode;
-	var UrlUpdate = "http://epiratiko.webs.com/GCAO/UpdateGCAO.htm";
 	if(document.location.href.match(/http\:\/\/s(\d+)/i)){var GCAO_server = document.location.href.match(/http\:\/\/s(\d+)/i)[1];}
 	else{var GCAO_server = "1";}
 }
 if(document.location.href.match(/submod=(\w+)/)){var GCAO_submod = document.location.href.match(/submod=(\w+)/)[1];}
 else{var GCAO_submod = 'noSubmod';}
 var day=new Date();
+
+//Fix unsafeWindow for Chrome
+if(navigator.userAgent.toLowerCase().match(/chrome/i)){
+    var div = document.createElement("div");
+    div.setAttribute("onclick", "return window;");
+    unsafeWindow = div.onclick();
+};
+
+//Images used in more than one function
+var img_clear = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAWCAYAAAC7ZX7KAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAI0SURBVFhH1ZdPSxtBGMZfU1Hrn2yWVugfUS+BkGM/gIJ4K+1H8WLOPfTiJd+h50JBsPTqd0gIwVKRlJ5KiFktTQ12dzvP1meyziqziePBFx5m9p1nXn++jpPs1N7ORiyO44k3J72zC8dVRVC34LrqcumxLPvzrssK606xwz8Lr5z8kM3VTlLnqHOajF/8XSd1d70PSZ1rwPV6/U7Fa7Wa3AR8+O7Nnepuvf8sBM4cicFgIJPIRhQMY5lEZl3nZ/g28EgtTCIrcBzHAhWLxUR8Nkdz3dbhSN1F0LP5R4n4bI7mem5gGj3Py0Ajx+AvYgeOFeToBn2xAOj/OQo5BnO5gfv9vvaWSiUNjTkDnrzAoWKFvv/6q/evLE4nOQhzBjzMW4GjKBKq1+tpv+/7AjGwlvbaOkwAjCfnI+i1pWmBGFhLe8cCBlC3282wIJeGxdwWl8qS1tdgBM29yJk+K3AQBGLK3JTHY+758VvE1CSezLUWhqGkVS6XM81DzvTZOjwMI0lr++XoGHAvcqbP2uH0n7pSqWh/u90WiIG1sc6wur/CK71endF1DjpDgRhYow9jbuBqtaq9rVZLw2HOgIfQtg4T4u36rLbun1xoOMwZ8NCfG5jGZrOZ+QdDjjEuMPd9Ov5zrZMARI6RG5j3aqPREOi2Tzpz3dph9QERKn38NkiE+U0y13N32Ly2bM82YKxHqovjyqz74L5ePswv8HhXcv1agzeO+6hbeP50wTkszt191f0Hfd8fmwxC+yAAAAAASUVORK5CYII%3D';
 
 //################################################################################################################################
 //## COUNTRY / LANGUAGE - ΧΩΡΑ / ΓΛΩΣΣΑ
@@ -114,6 +136,7 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_lostLife='Χαμένοι πόντοι ζωής';
 		var L_healLife='Πόντοι από θεραπεία';
 		var L_afterLife='Πόντοι μετά την θεραπεία';
+		var L_findGold='Βρές τον χρυσό';
 		//Auction
 		var L_bidNum='Αριθμός πλειοδοτήσεων';
 		var L_Items='Αντικείμενα';
@@ -125,8 +148,11 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_anunGuild='Ανακήνωση στο τάγμα';
 		var L_MessageWasSent='Το μήνυμα εστάλει!';
 		var L_minDamage='Ελάχιστη max-ζημιά';
-		var L_wearponsFound='Όπλα που βρέθηκαν';
+		var L_weaponsFound='Όπλα που βρέθηκαν';
+		var L_improvementsFound='Αναβαθμίσεις που βρέθηκαν';
 		var L_select='Επιλέξτε';
+		var L_hideGoldHere='Κρύψε τον χρυσό σου εδώ';
+		var L_priceValue='Τιμή = Αξία';
 		//Online Players
 		var L_OnlinePlayers='Ενεργοί παίχτες';
 		var L_guildPlayers='Ενεργοί παίχτες τάγματος';
@@ -137,7 +163,7 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_gold='Χρυσός';
 		var L_Packages='Πακέτα';
 		var L_invItems='Αποθηκευμένα αντικείμενα';
-		var L_packedValue='Αξία πακεταρισμένων αντικειμένων';
+		var L_packedValue='Αξία αντικειμένων';
 		var L_invValue='Αξία αποθηκευμένων αντικεμένων';
 		var L_total='Σύνολο';
 		var L_PackedGold='Πακεταρισμένος χρυσός';
@@ -158,8 +184,6 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		//Settings
 		var L_GCASettings='Ρυθμίσεις του Gladiatus Crazy Add On';
 		var L_HeaderSettings='Ρυθμίσεις του Header';
-		var L_DisplayLife='Εμφάνιση της μπάρας ζωής';
-		var L_DisplayLifePercent='Εμφάνιση και των πόντων ζωής και του ποσοστoύ ζωής (χωρίς mouseover)';
 		var L_DisplayLinkButtons='Εμφάνιση των κουμπιών στο header';
 		var L_DisplayAuctionStatus='Εμφάνιση της κατάστασης δημοπρατηρίου στο header';
 		var L_DisplayMerchantStatus='Εμφάνιση της κατάστασης δημοπρατηρίου μισθοφόρων στο header';
@@ -231,6 +255,10 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_guildMedicChanges='Εμφάνιση περισσότερων πληροφοριών στο Ιατρικό κέντρο';
 		var L_foodBackColor='Κόκκινο χρώμα πίσω από τα φαγητά που δίνουν περίσσότερους πόντους ζωής από ότι χρειάζεται (στην προεπισκόπηση)';
 		var L_packageAlertOpt='Ειδοποίηση για την λήξη των πακέτων (12 ώρες πριν)';
+		var L_bugSettings='Ρυθμίσεις προβλημάτων (Bugs)';
+		var L_showBugReports='Εμφάνιση αναφορών προβλημάτων';
+		var L_autoReportBugs='Αυτόματη αναφορά των προβλήματων στον server';
+		var L_showNewMessages='Εμφάνιση των νέων μηνυμάτων';
 	}else if(GCAO_lang=='fr'){
 		//Shurtcut Buttons
 		var L_guildMailTitle='Ecrire un message à la guilde';
@@ -309,6 +337,7 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_lostLife= 'Points de vie manquants';
 		var L_healLife= 'Points de vie restaurés';
 		var L_afterLife= 'Points de vie après un soin';
+		var L_findGold='Trouver l\'or';
 		//Auction
 		var L_bidNum='Nombre d\'enchérissement';
 		var L_Items='Objets';
@@ -320,8 +349,11 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_anunGuild='Annoncer à la guilde'; 
 		var L_MessageWasSent='Message envoyé !'; 
 		var L_minDamage='Minimum des dégâts max ';
-		var L_wearponsFound='Armes trouvées';
+		var L_weaponsFound='Armes trouvées';
+		var L_improvementsFound='Improvements found';
 		var L_select='Choisissez';
+		var L_hideGoldHere='You can hide your gold here';
+		var L_priceValue='Price = Value';
 		//Online Players
 		var L_OnlinePlayers='Joueurs en ligne';
 		var L_guildPlayers='Membres de la guilde en ligne';
@@ -353,8 +385,6 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		//Settings
 		var L_GCASettings='Paramètres de Gladiatus Crazy Add On';
 		var L_HeaderSettings='Paramètres du haut de page';
-		var L_DisplayLife='Afficher la barre de vie';
-		var L_DisplayLifePercent='Afficher les points de vie et le pourcentage de vie restante (rien lorsque la souris est au dessus)';
 		var L_DisplayLinkButtons='Afficher les raccourcis';
 		var L_DisplayAuctionStatus='Afficher le statut des enchères gladiateurs';
 		var L_DisplayMerchantStatus='Afficher le statut des enchères mercenaires';
@@ -426,6 +456,1016 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_guildMedicChanges='Afficher plus d\'information à la Villa Medici';
 		var L_foodBackColor= 'Mettre un fond rouge pour les consommables qui restaurent plus de points de vie que nécessaire (dans la vue générale)';
 		var L_packageAlertOpt='M\'informer si mes paquets vont expirer (12 heures à l\'avance environ)';
+		var L_bugSettings='Bug Settings';
+		var L_showBugReports='Show bug reports';
+		var L_autoReportBugs='Automatic report bugs to server';
+		var L_showNewMessages='Show new messages';
+	}else if(GCAO_lang=='de' && GCAO_server!='201'){
+		var L_guildMailTitle='Gildenmessage texten/spammen';
+		var L_guildMedicTitle='Zum Notarzt schleichen';
+		var L_guildMarketTitle='Im Gildenmarkt shoppen';
+		var L_guildStorageTitle='Das Lagerhaus füllen';
+		var L_staticsTitle='Meine Werte';
+
+		var L_sure='Bist du sicher ?';
+		var L_weaponAlert='Du trägst <font color="red">not</font>keine<font color="red">!</font> Waffe';
+		var L_newMail='Du hast eine <font color="yellow">new</font> neue Nachricht<font color="yellow">!</font>';
+		var L_Full='Voll';
+		var L_New='Neu';
+		var L_newsAlert='Es gibt eine <font color="yellow">new</font> neue Nachricht von GCA<font color="yellow">!</font>';
+		var L_PackagesWillExpire='<font color="red">not</font>Deine Pakete laufen aus<font color="red">!</font>';
+		var L_hours='Stunde';
+
+		var L_changePlayerImage='Ändere Dein Profilfoto';
+		var L_Overfloated='Das Foto ist zu groß';
+		var L_plImageWillBeLost='Dein Profilfoto geht verloren und wird nicht gespeichert';
+		var L_plDecriptionWillBeCut='Deine Profilbeschreibung wird auf die richtige Länge zugeschnitten';
+		var L_defImages='Zeige Deine Fotos';
+		var L_imgMadeFrom='Deine Fotos sind von';
+		var L_changeGuildImage='Gildenwappen wechseln';
+		var L_gImageWillBeLost='Das Gildenwappen geht verloren und wird nicht gespeichert';
+		var L_gDescrtipionWillBeCut='Gildenbeschreibung wird angepasst, damit sie passt';
+
+		var L_spent='Ausgeben';
+		var L_SimOfTraining = 'Trainingssimulator';
+		var L_Stat = 'Statistik';
+		var L_From = 'Von';
+		var L_To = 'Zu';
+		var L_Cost = 'Kostet';
+		var L_TrainingCampLevel = 'Stufe des Trainingsgelände';
+		var L_Reduction ='Reduzieren:';
+		var L_TotalCost = 'Totale Kosten:';
+		var L_Calculate = 'Berechne';
+		var L_TotalCostTitle = 'Meine Statistik auf der linken Seite anzeigen';
+		var L_CalculateTitle = 'Berechne alle Kosten der Statistik';
+
+		var L_Simulator='Simulator';
+		var L_arena='ARENA';
+		var L_Battles='Kämpfe';
+		var L_Won='Gewonnen';
+		var L_Lost='Verloren';
+		var L_Draws='Unentschieden';
+		var L_Damage='Schaden verteilt';
+		var L_myAvDamage='Dein durchschnittlicher Schaden';
+		var L_hisAvDamage='Der durchschnittlicher Schaden deines Gegners';
+		var L_Life='Lebenspunkte';
+		var L_myRemLife='Verbleibende Lebenspunkte';
+		var L_hisRemLife='Verbleibende Lebenspunkte deines Gegners';
+		var L_trainingSim='Trainingssimulator';
+		var L_playerA='Spieler A';
+		var L_playerB='Spieler B';
+		var L_selectMethod='Wähle Methode';
+		var L_selectEnemy='Wähle Gegner';
+		var L_byName='Spieler beim Namen';
+		var L_byID='Spieler über ID';
+		var L_go='Los!';
+		var L_winnigChance='Gewinnchance';
+		var L_PlayerAAvDamage='Durchschnittlicher Schaden von Spieler A';
+		var L_PlayerBAvDamage='Durchschnittlicher Schaden von Spieler B';
+		var L_Results='Ergebnisse';
+		var L_ClearAll='Alles Löschen';
+		var L_playerNotFound='Spieler kann nicht gefunden werden';
+		var L_searchData='Durchsuche die Datenbank';
+		var L_noStats='Keine Statistik vorhanden';
+		var L_thisIsLocation='Das ist ein Standort';
+
+		var L_StorageInfo='Lagerhaus Information';
+		var L_itemNum='Anzahl von Items';
+		var L_TotalValue='Totaler Wert';
+		var L_currentLife='Momentane Lebenspunkte';
+		var L_lostLife='Verlorene Lebenspunkte';
+		var L_healLife='Zu heilende Lebenspunkte';
+		var L_afterLife='Leben nach Heilung';
+		var L_findGold='Find gold';
+
+		var L_bidNum='Anzahl von Geboten';
+		var L_Items='Items';
+		var L_selectItem='Wähle ein Item';
+		var L_Type='Type';
+		var L_selectType='Wähle einen Typ';
+		var L_Clear='Lösche die Eingabe';
+		var L_veryShort='Sehr Kurz';
+		var L_anunGuild='Der Gilde ankündigen';
+		var L_MessageWasSent='Nachricht wurde gesendet!';
+		var L_minDamage='Minumum Schaden';
+		var L_weaponsFound='Waffe gefunden';
+		var L_improvementsFound='Improvements found';
+		var L_select='Wähle';
+		var L_hideGoldHere='You can hide your gold here';
+		var L_priceValue='Price = Value';
+
+		var L_OnlinePlayers='Spieler die Online sind';
+		var L_guildPlayers='Gidenmitglieder die Online sind';
+		var L_familyPlayers='Familiamitglieder die Online sind';
+		var L_noOnlinePlayer='Keine Spieler online';
+		var L_sentMessage='Nachricht wurde gesendet';
+
+		var L_gold='Gold';
+		var L_Packages='Pakete';
+		var L_invItems='Items im Inventar';
+		var L_packedValue='Items in Paketen\' Wert';
+		var L_invValue='Items im Inventar\' Wert';
+		var L_total='Total';
+		var L_PackedGold='Gold in Paketen';
+		var L_totalGold='Total Gewonnenes Gold';
+		var L_totalItemValue='Wert aller Items';
+
+		var L_Username='Spieler Name';
+		var L_Country='Land';
+		var L_GuildChat='Gilden Chat';
+		var L_CountryChat='Nationaler Chat';
+		var L_GlobalChat='Globaler Chat';
+
+		var L_checkAll='Check Alle';
+		var L_ID='Spieler ID';
+		var L_ratioTitle='Lebensmittel Ratio | Preis Ratio';
+		var L_noGuildText='Du bist in keiner Gilde.<br>Falls du doch in einer Gilde bist <a href='+GCAO_siteurl+'mod=guild&sh='+GCAO_secureCode+' >Hier</a> kannst du deine Statistik updaten';
+
+		var L_GCASettings='Gladiatus Crazy Add Einstellungen';
+		var L_HeaderSettings='Überschrift Einstellungen';
+		var L_DisplayLinkButtons='Zeige die Button in der Überschriftleiste';
+		var L_DisplayAuctionStatus='Zeige den Auktionshaus-Sstatus in der Überschriftleiste';
+		var L_DisplayMerchantStatus='Zeige den Söldner-Auktionshaus-Status in der Überschriftleiste';
+		var L_DisplayOnlinePlayersButton='Zeige den Online Button in der Überschriftleiste';
+		var L_DisplayLinkBox='Zeige die Linkbox auf der rechte Seite';
+		var L_TimersSettings='Timer Einstellung';
+		var L_DisplayLastBeingAttacked='Zeige an, wann Du das letztemal in der Arena angegriffen wurdest';
+		var L_DisplayLastBeingAttacked2='Zeige an, wann Du das letztemal in der Circus Turma angegriffen wurdest';
+		var L_AuctionSettings='Auktionshaus Einstellungen';
+		var L_FillAuctionPrices='Gebe die Preise der Items im Auktionshaus automatisch ein';
+		var L_ChangeItemsBgColor='Wechsel die Hintergrund Farbe der Items\' basierend auf der Qualitätstufe der Items';
+		var L_AuctionMoreItemsLavels='Zeige mehrere verschiedene Stufen in der Itemauswahl';
+		var L_DisplayItemNumAndBids='Zeige die Anzahl von Items und die Anzahl von Geboten in der Auktion';
+		var L_DisplayItemList='Zeige eine Liste von Items in der Auktion und vom Markt = Suchleiste';
+		var L_ExpandAuctionTable3='Vergrössere den Auktionstisch (3 Items in jeder Reihe)';
+		var L_SimulatorSettings='Simulator Einstellungen';
+		var L_enSimulator='Ermöglische den PvP simulator für jedes Spielerprofil';
+		var L_setFightNum='Lege die Anzahl von simulierten Kämpfen fest';
+		var L_maximum='Maximum';
+		var L_guildSettings='Gilden & Markt Einstellungen';
+		var L_guildStoreInfo='Zeige die Infobox im Gildenlagerhaus';
+		var L_moreGuildStats='Zeige mehr Informationen von den ersten 15 gegnerischen Gilden in der Kriegsmeisterhalle.';
+		var L_monsterSimulator='Zeige den Trainingssimulator im Gildentrainingsgelände';
+		var L_gmailChanges='Ermögliche Gildenmail Änderungen';
+		var L_ratioOpt='Zeige das Verhältniss im Wert (Lebenspunkte zu Preis) bei jedem Item auf dem Markt';
+		var L_enPriceRatio='Ermöglich das Preis Wert Verhältniss (nicht sehr genau)';
+		var L_alertSettings='Alarm Einstellungen';
+		var L_immedBuy='Zeige eine Bestätigungsbox wenn Du ein Item per Sofortkauf im Auktionshaus kaufst';
+		var L_reduceTimeEx='Zeige eine Bestätigungsbox wenn Du eine Expedition gegen Rubine machen willst';
+		var L_questOpt='Informiere mich, wenn ich eine neue Aufgabe annehmen kann oder wenn bei einer Aufgabe das Zeitlimit abläuft';
+		var L_forumMessageOpt='Informiere mich, wenn ich eine Nachricht im Forum bekommen habe (mit einem [ ! ] neben dem Forum link)';
+		var L_weaponAlertOpt='Informiere mich, wenn ich keine Waffe trage (mit einem [ ! ] neben der Übersichtsleiste)';
+		var L_otherSettings='Andere Einstellungen';
+		var L_msgchangesOpt='Ermögliche Nachrichten Änderungen';
+		var L_enBBCODE='ErmOEgliche BBCODE in Nachrichten';
+		var L_enChat='Ermögliche Chat (Gilden, National, International)';
+		var L_enRememberTabs='Erinnere deine  Inventar und Sölder Tabs';
+		var L_enImages='Ermögliche das benutzerdefinierte Spieler/Gilden Bilder System';
+		var L_disPackageCounters='Zeige den Paket Zähler';
+		var L_disID='Zeige die ID jedes Spielers in seiner Statistik';
+		var L_disHeal='Zeige die Heilungsstatistik in den Spielerstatistiken an';
+		var L_disTrainingChages='Zeige die Veränderungen in den Basen und im Maximum die sich durch das Training ändern würden';
+		var L_enHighlight='Hebe die Söldner hervor die du beim Söldnerhändler kaufen kannst';
+		var L_enStyleFixes='Wende Stiländerungen an';
+		var L_speedSettings='Geschwindigkeitsstufen';
+		var L_stopPulling='Lade keine Informationen wenn die Seite geladen wird (Option fuer langsame Verbindungen)';
+		var L_willStop='Diese Option wird <font color="red"><b>stoppen</b></font>';
+		var L_customCursor='Wähle benutzerdefinierten Cursor';
+		var L_Save='Speichern';
+		var L_AboutUs='Über uns';
+		var L_Settings='Einstellungen';
+		var L_donateTitle='Tue Gutes - Spende für das Gladiatus Crazy Add On';
+		var L_donateText='Danke uns und hilf uns, indem Du Geld an unseren Paypal-Account spendest. Durch Deine Spende hilfst Du uns, an dem Add on weiterzuarbeiten, dass heisst mehr Updates, neue Möglichkeiten und keine Bugs! Klicke diesen Button um uns zu unterstützen';
+		var L_description='Gladiatus Crazy Add On is a free add on that helps you with Gladiatus through the many features it gives. It actually uses better the info that the game server gives to your browser. Have fun with it and enjoy your fights!';
+		var L_aboutTitle='Über das Gladiatus Crazy Add On';
+		var L_descriptionTitle='Beschreibung';
+		var L_Programmers='Programmierer';
+		var L_Translators='Übersetzer';
+		var L_Hostpage='Hostpage';
+		var L_ContactUs='Kontaktiere uns';
+		var L_Contact1='indem du eine e-mail an Apo59m@gmail.com oder GreatApo@gmail.com schickst';
+		var L_Contact2='Mit einer Nachricht an unsere Spieler auf den Griechischen Servern (GreatApo auf s1 und DarkThanos auf s2) oder auf dem Französichen Server (djor at s?)';
+		var L_Contact3=' oder in in den 3 Öffentlichen Thread auf <a href="http://board.gladiatus.gr/index.php?page=Thread&threadID=12835" target="_blank">Greek</a>, <a target="_blank" href="http://board.gladiatus.fr/index.php?page=Thread&amp;threadID=37368">French</a> und <a target="_blank" href="http://board.gladiatus.us/index.php?page=Thread&amp;threadID=15543">USA</a> Forum';
+		var L_thanksTo='Wir bedanken uns bei';
+		var L_MonsterHunters='Monster Statistik/Name hunters';
+		var L_ItemHunters='Item hunters';
+		var L_HideGoldInAuction='Färbe/Makiere die Eingabe, wenn ich ein Item zum selben Preis beim Händler verkaufen kann';
+		var L_HideGoldInAuction='Färbe/Makiere die Eingabe, wenn ich ein Item zum selben Preis beim Händler verkaufen kann';
+		var L_guildSafeChanges='Ermögliche Gildenänderung Sicherung';
+		var L_guildMedicChanges='Zeig mehr Informationen in der Villa Medici';
+		var L_foodBackColor='Zeige einen Roten Hintergrund bei Nahrungsmitteln, die mehr Lebenspunkte geben als benötigt';
+		var L_packageAlertOpt='Informiere mich, wenn meine Pakete auslaufen sollten (12 Stunden zuvor)';
+		var L_bugSettings='Bug Settings';
+		var L_showBugReports='Show bug reports';
+		var L_autoReportBugs='Automatic report bugs to server';
+		var L_showNewMessages='Show new messages';
+	}else if(GCAO_lang=='lv'){
+		var L_guildMailTitle='Rakstīt ģildei vēstuli';
+		var L_guildMedicTitle='Iet uz dziednīcu';
+		var L_guildMarketTitle='Iet uz ģildes tirgu';
+		var L_guildStorageTitle='Iet uz ģildes noliktavu';
+		var L_staticsTitle='Mani stati';
+		
+		var L_sure='Droši zini ?';
+		var L_weaponAlert='Tev <font color="red">nav</font> ieroča<font color="red">!</font>';
+		var L_newMail='Tev ir pienākusi <font color="yellow">jauna</font> ziņa forumā<font color="yellow">!</font>';
+		var L_Full='Pilns';
+		var L_New='JAUNS';
+		var L_newsAlert='Ir pienākusi <font color="yellow">jauna</font> ziņa GCA Jaunumos<font color="yellow">!</font>';
+		var L_PackagesWillExpire='Pakas drīz tiks dzēstas';
+		var L_hours='stundas';
+		
+		var L_changePlayerImage='Mainīt spēlētāja attēlu';
+		var L_Overfloated='Links ir par garu';
+		var L_plImageWillBeLost='Spēlētāja attēls netiks saglabāts';
+		var L_plDecriptionWillBeCut='Spēlētāja apraksts tiks saīsināts, jo tas ir par garu';
+		var L_defImages='Rādīt noklusētos attēlus';
+		var L_imgMadeFrom='Attēlu autors';
+		var L_changeGuildImage='Mainīt ģildes attēlu';
+		var L_gImageWillBeLost='Ģildes attēls netiks saglabāts';
+		var L_gDescrtipionWillBeCut='Ģildes apraksts tiks saīsināts, jo tas ir par garu';
+		
+		var L_spent='ir iztērēts treniņiem';
+		var L_SimOfTraining = 'Treniņa simulators';
+		var L_Stat = 'Statistika';
+		var L_From = 'No';
+		var L_To = 'Līdz';
+		var L_Cost = 'Cena';
+		var L_TrainingCampLevel = 'Treniņu laukuma līmenis';
+		var L_Reduction ='Samazināšanās:';
+		var L_TotalCost = 'Gala cena:';
+		var L_Calculate = 'Rēķināt';
+		var L_TotalCostTitle = 'Ielikt manus status kreisajā kolonnā';
+		var L_CalculateTitle = 'Aprēķināt kopējās izmaksas';
+		
+		var L_Simulator='Simulators';
+		var L_arena='ARĒNA';
+		var L_Battles='Cīņas';
+		var L_Won='Uzvarētas';
+		var L_Lost='Zaudētas';
+		var L_Draws='Neizšķirti';
+		var L_Damage='Bojājums';
+		var L_myAvDamage='Tavs vidējais bojājums';
+		var L_hisAvDamage='Pretinieka vidējais bojājums';
+		var L_Life='Dzīvība';
+		var L_myRemLife='Tava atlikusī dzīvība';
+		var L_hisRemLife='Pretinieka atlikusī dzīvība';
+		var L_trainingSim='Treniņa simulators';
+		var L_playerA='Spēlētājs A';
+		var L_playerB='Spēlētājs B';
+		var L_selectMethod='Izvēlies pretinieku';
+		var L_selectEnemy='Izvēlies pretinieku';
+		var L_byName='Spēlētājs pēc vārda';
+		var L_byID='Spēlētājs pēc ID';
+		var L_go='Simulēt';
+		var L_winnigChance='Uzvaras iespēja';
+		var L_PlayerAAvDamage='Spēlētāja A vidējais bojājums';
+		var L_PlayerBAvDamage='Spēlētāja B vidējais bojājums';
+		var L_Results='Rezultāti';
+		var L_ClearAll='Nodzēst';
+		var L_playerNotFound='Spēlētājs nav atrasts';
+		var L_searchData='Meklē...';
+		var L_noStats='Nav statu';
+		var L_thisIsLocation='Šī ir atrašanās vieta';
+		
+		var L_StorageInfo='Noliktavas Informācija';
+		var L_itemNum='Priekšmetu Skaits';
+		var L_TotalValue='Kopējā vērtība';
+		var L_currentLife='Pašreizējā dzīvība';
+		var L_lostLife='Zaudētā dzīvība';
+		var L_healLife='Tiks izdziedēts';
+		var L_afterLife='Dzīvība pēc dziedināšanas';
+		var L_findGold='Find gold';
+		
+		var L_bidNum='Solītāju skaits';
+		var L_Items='Priekšmeti';
+		var L_selectItem='Izvēlies';
+		var L_Type='Tips';
+		var L_selectType='Izvēlies';
+		var L_Clear='Nodzēst';
+		var L_veryShort='Ļoti īss';
+		var L_anunGuild='Paziņot ģildei';
+		var L_MessageWasSent='Ziņa ir nosūtīta!';
+		var L_minDamage='Minimālais bojājums';
+		var L_weaponsFound='Atrasts';
+		var L_improvementsFound='Improvements found';
+		var L_select='Izvēlēties';
+		var L_hideGoldHere='You can hide your gold here';
+		var L_priceValue='Price = Value';
+		
+		var L_OnlinePlayers='Spēlētāji Online';
+		var L_guildPlayers='Ģildes biedri Online';
+		var L_familyPlayers='Draugi Online';
+		var L_noOnlinePlayer='Neviens nav online';
+		var L_sentMessage='Nosūtīt ziņu';
+		
+		var L_gold='Zelts';
+		var L_Packages='Pakas';
+		var L_invItems='Inventāru priekšmeti';
+		var L_packedValue='Pakoto mantu vērtība';
+		var L_invValue='Inventāru mantu vērtība';
+		var L_total='Kopā';
+		var L_PackedGold='Sapakotais zelts';
+		var L_totalGold='Kopējais nopelnītais zelts';
+		var L_totalItemValue='Kopējā mantu vērtība';
+		
+		var L_Username='Lietotājvārds';
+		var L_Country='Valsts';
+		var L_GuildChat='Ģildes Čats';
+		var L_CountryChat='Valsts Čats';
+		var L_GlobalChat='Pasaules Čats';
+		
+		var L_checkAll='Atzīmēt visus';
+		var L_ID='Spēlētāja ID';
+		var L_ratioTitle='Ēdiena Ratio | Cenas Ratio';
+		var L_noGuildText='Tu neesi nevienā ģildē.<br>Ja tu tomēr esi, tad spied <a href='+GCAO_siteurl+'mod=guild&sh='+GCAO_secureCode+' >šeit</a> lai atjaunotu savus status';
+
+		var L_GCASettings='Gladiatus Crazy Add On Iestatījumi';
+		var L_HeaderSettings='Galvenie';
+		var L_DisplayLinkButtons='Rādīt papildus izvēlnes ikonas lapas augšpusē';
+		var L_DisplayAuctionStatus='Rādīt izsoles statusu lapas augšpusē';
+		var L_DisplayMerchantStatus='Rādīt arī algotņu izsoles statusu';
+		var L_DisplayOnlinePlayersButton='Rādīt "Online Spēlētāji" pogu';
+		var L_DisplayLinkBox='Rādīt papildus izvēlni lapas labajā pusē';
+		var L_TimersSettings='Taimera iestatījumi';
+		var L_DisplayLastBeingAttacked='Rādīt laiku, kas pagājis, kopš tev kāds uzbruka Arēnā';
+		var L_DisplayLastBeingAttacked2='Rādīt laiku, kas pagājis, kopš kāds tev uzbruka Turma Arēnā';
+		var L_AuctionSettings='Izsoles iestatījumi';
+		var L_FillAuctionPrices='Automātiski ierakstīt solīšanas cenu';
+		var L_ChangeItemsBgColor='Mainīt mantas fonu (balstoties uz kvalitāti) izsolē';
+		var L_AuctionMoreItemsLavels='Vairāk līmeņu izsoles sadaļā "Minimālais līmenis"';
+		var L_DisplayItemNumAndBids='Rādīt mantu un solītāju skaitu izsolē';
+		var L_DisplayItemList='Rādīt mantu saraksta izvēlni izsolēs un tirgū';
+		var L_ExpandAuctionTable3='Palielināt izsoles tabulu (3 mantas rindā)';
+		var L_SimulatorSettings='Simulatora iestatījumi';
+		var L_enSimulator='Rādīt PvP simulatoru katra spēlētāja profilā';
+		var L_setFightNum='Norādi simulēto cīņu skaitu';
+		var L_maximum='maksimums';
+		var L_guildSettings='Ģildes & Tirgus iestatījumi';
+		var L_guildStoreInfo='Rādīt papildus info ģildes noliktavā';
+		var L_moreGuildStats='Rādīt papildus info Kara Meistaru Zālē pirmajā 15 pretinieku ģildēm';
+		var L_monsterSimulator='Rādīt treniņu simulatoru ģildes Treniņu Laukumā';
+		var L_gmailChanges='Izmantot ģildes pasta uzlabojumus';
+		var L_ratioOpt='Rādīt "Ratio" (ēdiens/cena) vērtību katrai mantai tirgū';
+		var L_enPriceRatio='Rādīt cenas "Ratio" vērtību (nav diez ko precīzi)';
+		var L_alertSettings='Brīdinājumu Iestatījumi';
+		var L_immedBuy='Display a confirmation box when you immediately buy an item from auction';
+		var L_reduceTimeEx='Prasīt apstiprinājumu, kad tu maksā rubīnu lai ietu ekspedīcijā';
+		var L_questOpt='Rādīt, ja ir pieejami jauni kvesti vai rādīt atlikušo laiku līdz jauniem';
+		var L_forumMessageOpt='Informēt mani, ja ir pienākusi jauna foruma ziņa (ar [ ! ] blakus foruma linkam)';
+		var L_weaponAlertOpt='Brīdināt mani, ja man nav ieroča (ar [ ! ] blakus pārskatam)';
+		var L_otherSettings='Citi iestatījumi';
+		var L_msgchangesOpt='Izmantot ziņu izmaiņas';
+		var L_enBBCODE='Lietot BB kodus ziņās';
+		var L_enChat='Ieslēgt Čatu (Ģildes, Valsts and Pasaules)';
+		var L_enRememberTabs='Atcerēties inventāru un pārdevēju tabus';
+		var L_enImages='Izmantot pašu bildes avatariem (spēlētājam un ģildei)';
+		var L_disPackageCounters='Rādīt paku informāciju';
+		var L_disID='Katra spēlētāja profilā rādīt viņa ID';
+		var L_disHeal='Rādīt dziedināšanas statu katra spēlētāja profilā';
+		var L_disTrainingChages='Rādīt pamata un maksimuma status pie trenera';
+		var L_enHighlight='Izcelt mantas, kuras tu vari nopirkt pie pārdevējiem';
+		var L_enStyleFixes='Izmantot dizaina uzlabojumus';
+		var L_speedSettings='Ātrdarbības iestatījumi';
+		var L_stopPulling='Atslēgt sekojošas iespējas (noderīgi lēnam internetam)';
+		var L_willStop='Šī opcija <font color="red"><b>atslēgs</b></font>';
+		var L_customCursor='Izvēlies citu kursoru';
+		var L_Save='Saglabāt';
+		var L_AboutUs='Par Mums';
+		var L_Settings='Iestatījumi';
+		var L_donateTitle='Ziedo Gladiatus Crazy Add On';
+		var L_donateText='Noziedo nedaudz naudas kā pateicību par šo addonu. Ziedojot, tu palīdzēsi addona izstrādē - t.i., vairāk jaunumu, jaunu iespēju un mazāk kļūdu! Klikšķini, lai mūs atbalsītu ';
+		var L_description='Gladiatus Crazy Add On ir bezmaksas FireFox addons, kas ievērojami atvieglo spēles gaitu. Have fun with it and enjoy your fights!';
+		var L_aboutTitle='Par Gladiatus Crazy Add On';
+		var L_descriptionTitle='Apraksts';
+		var L_Programmers='Programmētāji';
+		var L_Translators='Tulkotāji';
+		var L_Hostpage='Mājaslapa';
+		var L_ContactUs='Raksti mums';
+		var L_Contact1='uz e-pastu Apo59m@gmail.com vai GreatApo@gmail.com';
+		var L_Contact2='ar ziņu mūsu spēlētājiem grieķu serveros (GreatApo no s1 un DarkThanos no s2) vai franču serveros (djor no s?)';
+		var L_Contact3='vai arī raksti forumā <a href="http://board.gladiatus.gr/index.php?page=Thread&threadID=12835" target="_blank">Ģrieķija</a>, <a target="_blank" href="http://board.gladiatus.fr/index.php?page=Thread&amp;threadID=37368">Francija</a> un <a target="_blank" href="http://board.gladiatus.us/index.php?page=Thread&amp;threadID=15543">ASV</a> forum';
+		var L_thanksTo='Liels paldies';
+		var L_MonsterHunters='Monstru stati/vārdu mednieki';
+		var L_ItemHunters='Mantu mednieki';
+		var L_HideGoldInAuction='Iekrāsot cenu izsolē, ja es varu pārdot mantu veikalā par tādu pašu cenu, kāda tā ir pašlaik (noderīgi zelta seivošanai)';
+		var L_HideGoldInAuction='Iekrāsot cenu izsolē, ja es varu pārdot mantu veikalā par tādu pašu cenu, kāda tā ir pašlaik (noderīgi zelta seivošanai)';
+		var L_guildSafeChanges='Lietot ģildes Bankas izmaiņas';
+		var L_guildMedicChanges='Rādīt papildus info pie Dziednieka';
+		var L_foodBackColor='Sarkans fons ēdienam, kas dod vairāk dzīvības punktu, nekā nepieciešams (pārskatā)';
+		var L_packageAlertOpt='Informēt mani, ja pakas drīz tiks dzēstas (12 stundas iepriekš)';
+		var L_bugSettings='Bug Settings';
+		var L_showBugReports='Show bug reports';
+		var L_autoReportBugs='Automatic report bugs to server';
+		var L_showNewMessages='Show new messages';
+	}else if(GCAO_lang=='nl'){
+		var L_guildMailTitle='Schrijf Gildebericht;'
+		var L_guildMedicTitle='Ga naar Villa Medici';
+		var L_guildMarketTitle='Ga naar de Gildemarkt';
+		var L_guildStorageTitle='Ga naar het Pakhuis';
+		var L_staticsTitle='Mijn stats';
+
+		var L_sure='Ben je zeker ?';
+		var L_weaponAlert='Je draagt <font color="red">geen</font> Wapen<font color="red">!</font>';
+		var L_newMail='Je hebt een<font color="yellow">nieuw</font> bericht op het forum<font color="yellow">!</font>';
+		var L_Full='Vol';
+		var L_New='NIEUW';
+		var L_newsAlert='Er is een<font color="yellow">nieuw</font> bericht op GCA Nieuws<font color="yellow">!</font>';
+		var L_PackagesWillExpire='Pakketten verlopen binnen';
+		var L_hours='uur';
+
+		var L_changePlayerImage='Verander spelers afbeelding';
+		var L_Overfloated='De afbeelding is te groot';
+		var L_plImageWillBeLost='Spelers afbeelding wordt niet opgeslagen';
+		var L_plDecriptionWillBeCut='Spelers profiel wordt ingekort';
+		var L_defImages='Laat standaard afbeeldingen zien';
+		var L_imgMadeFrom='Afbeeldingen zijn gemaakt door';
+		var L_changeGuildImage='Verander Gilde afbeelding';
+		var L_gImageWillBeLost='Gilde afbeelding wordt niet opgeslagen';
+		var L_gDescrtipionWillBeCut='Beschrijving van de gilde wordt ingekort';
+
+		var L_spent='Gekost';
+		var L_SimOfTraining = 'Trainings simulator';
+		var L_Stat='Statistiek';
+		var L_From='Van';
+		var L_To='Naar';
+		var L_Cost='Kost';
+		var L_TrainingCampLevel = 'Trainingsgrond level';
+		var L_Reduction='Korting:';
+		var L_TotalCost='Totale kosten:';
+		var L_Calculate='Bereken';
+		var L_TotalCostTitle='Zet mijn stats in de linker kolom';
+		var L_CalculateTitle='Bereken de kosten van de stats';
+
+		var L_Simulator='Simulator';
+		var L_arena='ARENA';
+		var L_Battles='Gevechten';
+		var L_Won='Gewonnen';
+		var L_Lost='Verloren';
+		var L_Draws='Gelijkspel';
+		var L_Damage='Schade';
+		var L_myAvDamage='Eigen gemiddelde schade';
+		var L_hisAvDamage='Tegenstanders gemiddelde schade';
+		var L_Life='Levenspunten';
+		var L_myRemLife='Overergebleven levenspunten';
+		var L_hisRemLife='Overgebleven levenspunten van je tegenstander';
+		var L_trainingSim='Trainings Simulator';
+		var L_playerA='Speler A';
+		var L_playerB='Speler B';
+		var L_selectMethod='Selecteer methode';
+		var L_selectEnemy='Selecteer vijand';
+		var L_byName='Spelersnaam';
+		var L_byID='Spelers ID';
+		var L_go='Simuleer';
+		var L_winnigChance='Kans om te winnen';
+		var L_PlayerAAvDamage='Spelers A gemiddelde schade';
+		var L_PlayerBAvDamage='Spelers B gemiddelde schade';
+		var L_Results='Resultaten';
+		var L_ClearAll='Wis alles';
+		var L_playerNotFound='Speler niet gevonden !';
+		var L_searchData='Zoek data...';
+		var L_noStats='Geen stats bekend !';
+		var L_thisIsLocation='Dit is een locatie !';
+
+		var L_StorageInfo='Opslag Info';
+		var L_itemNum='Aantal Items';
+		var L_TotalValue='Totale waarde';
+		var L_currentLife='Momentele levenspunten';
+		var L_lostLife='Verloren levenspunten';
+		var L_healLife='Genezingspunten';
+		var L_afterLife='Levenspunten na genezing';
+		var L_findGold='Find gold';
+
+		var L_bidNum='Aantal biedingen';
+		var L_Items='Voorwerpen';
+		var L_selectItem='Selecteer Voorwerp';
+		var L_Type='Type';
+		var L_selectType='Selecteer Type';
+		var L_Clear='Wis';
+		var L_veryShort='Zeer Kort';
+		var L_anunGuild='Bericht aan Gilde';
+		var L_MessageWasSent='Bericht is verstuurd!';
+		var L_minDamage='Minimum max-schade';
+		var L_wearponsFound='Wapens gevonden';
+		var L_select='Selecteer';
+		var L_hideGoldHere='You can hide your gold here';
+		var L_priceValue='Price = Value';
+
+		var L_OnlinePlayers='Online Spelers';
+		var L_guildPlayers='Online Gildegenoten';
+		var L_familyPlayers='Online Familia leden';
+		var L_noOnlinePlayer='Geen Spelers Online';
+		var L_sentMessage='Stuur Bericht';
+
+		var L_gold='Goud';
+		var L_Packages='Pakketten';
+		var L_invItems='Voorwerpen inventaris';
+		var L_packedValue='Waarde\'Pakket voorwerpen';
+		var L_invValue='Waarde\' Inventaris voorwerpen';
+		var L_total='Totaal';
+		var L_PackedGold='Goud pakketten';
+		var L_totalGold='Totaal goud';
+		var L_totalItemValue='Totale waarde voorwerpen';
+
+		var L_Username='Gebruikersnaam';
+		var L_Country='Land';
+		var L_GuildChat='Gilde Chat';
+		var L_CountryChat='Land Chat';
+		var L_GlobalChat='Wereld Chat';
+
+		var L_checkAll='Vink allen aan';
+		var L_ID='Spelers ID';
+		var L_ratioTitle='Voedsel Ratio | Prijs Ratio';
+		var L_noGuildText='Je hebt geen Gilde.<br>als je er wel een hebt ga naar <a href='+GCAO_siteurl+'mod=guild&sh='+GCAO_secureCode+'>hier</a> om je stats te updaten';
+
+
+		var L_GCASettings='Gladiatus Crazy Add On Instellingen';
+		var L_HeaderSettings='Kop instellingen';
+		var L_DisplayLife='Laat levensbalk zien bovenaan';
+		var L_DisplayLifePercent='Laat levens-punten- percentage zien (geen mouse over)';
+		var L_DisplayLinkButtons='Plaats knoppen bovenaan';
+		var L_DisplayAuctionStatus='Laat veiling status zien';
+		var L_DisplayMerchantStatus='Voeg huurlingen veiling toe aan de veiling status';
+		var L_DisplayOnlinePlayersButton='Laat de "Online Spelers" knop zien';
+		var L_DisplayLinkBox='Laat de Link Box aan de rechterkant zien';
+		var L_TimersSettings='Timers instellingen';
+		var L_DisplayLastBeingAttacked='Laat de verlopen tijd zien van laatste aanval op je';
+		var L_DisplayLastBeingAttacked2='Laat de verlopen tijd zien van laatste aanval op je in Circus Turma';
+		var L_AuctionSettings='Veiling Instellingen';
+		var L_FillAuctionPrices='Automatisch prijzen ingevuld op de veiling';
+		var L_ChangeItemsBgColor='Verander de achtergrond kleur (gebaseerd op kwaliteit) op de veiling';
+		var L_AuctionMoreItemsLavels='Meer levels in het filterveld';
+		var L_DisplayItemNumAndBids='Laat het aantal voorwerpen en biedingen zien';
+		var L_DisplayItemList='Laat een voorwerpennaam filterlijst zien op de veiling en de markt';
+		var L_ExpandAuctionTable3='Breid het veilingsoverzicht uit (3 voorwerpen per rij)';
+		var L_SimulatorSettings='Simulator instellingen';
+		var L_enSimulator='Zet de PvP simulator aan bij iedere spelers \'profiel';
+		var L_setFightNum='Stel het aantal simulatie gevechten in';
+		var L_maximum='maximum';
+		var L_guildSettings='Gilde en markt instellingen';
+		var L_guildStoreInfo='Laat een info box zien bij het pakhuis';
+		var L_moreGuildStats='Laat meer stats zien in de kampioenszaal voor de eerste 15 rivaliserende gildes';
+		var L_monsterSimulator='Laat de trainings simulator zien bij de trainingsgrond';
+		var L_gmailChanges='Sta toe gildeberichten te veranderen';
+		var L_ratioOpt='Stelt de "Ratio" waarde in(voedsel en prijs) van elk voorwerp op de markt';
+		var L_enPriceRatio='Zet de prijs "Ratio" waarde aan (dit is niet echt acuraat)';
+		var L_alertSettings='Alarm instellingen';
+		var L_immedBuy='Open een popup als je een directe koop doet op de veiling';
+		var L_reduceTimeEx='Open een popup als je een juweel betaald om een expeditie te doen';
+		var L_questOpt='Informeer me als er nieuwe quest beschikbaar is en laat de resterende tijd zien voor een nieuwe';
+		var L_forumMessageOpt='waarschuw me als ik een nieuw bericht heb ontvangen (met een [ ! ] op de forum link)';
+		var L_weaponAlertOpt='Waarschuw me als ik geen wapen draag (met een [ ! ] op de Overzicht link)';
+		var L_otherSettings='Andere instellingen';
+		var L_msgchangesOpt='Sta toe berichten te veranderen';
+		var L_enBBCODE='Laat het gebruik van BBCODE toe in berichten';
+		var L_enChat='Aanzetten Chat (Gilde, Land en Wereld)';
+		var L_enRememberTabs='Onthoud je laatst gebruikte tab\'s van je inventaris,koopmannen en markten';
+		var L_enImages='Aangepaste Spelers en gilde afbeeldingen systeem';
+		var L_disPackageCounters='Toon pakket tellers';
+		var L_disID='Toon de  ID van iedere speler onder zijn stats';
+		var L_disHeal='Toon de GENEZING stat van iedere speler onder zijn stats';
+		var L_disTrainingChages='Toon de basis stats en de max verbetering bij de training';
+		var L_enHighlight='Highlight de voorwerpen die je bij de koopmannen kunt kopen';
+		var L_enStyleFixes='Apply style fixes';
+		var L_speedSettings='Snelheids instellingen';
+		var L_stopPulling='Stop info laden als de pagina laad (optie voor trage verbindingen)';
+		var L_willStop='Deze optie zal  <font color="red"><b>stoppen</b></font>';
+		var L_customCursor='Kies een aangepaste cursor';
+		var L_Save='Save';
+		var L_AboutUs='Over ons';
+		var L_Settings='Instellingen';
+		var L_donateTitle='Doneer aan Gladiatus Crazy Add On';
+		var L_donateText='Bedank en help ons ook door een bijdrage te doneren op onze PayPal account. Door het doneren help je ons zodat wij kunnen blijven werken aan deze addon wat zal resulteren in meer updates, nieuwe mogelijkheden en geen Bugs!! Klik op de knop om ons te steunen';
+		var L_description='Gladiatus Crazy Add On is een gratis Add on die je helpt met  de vele extra mogelijkheden in Gladiatus. De Add on gebruikt en geeft betere info dan dat de game server naar jou browser stuurt. Veel plezier met de Add on en geniet van je gevechten!';
+		var L_aboutTitle='About Gladiatus Crazy Add On';
+		var L_descriptionTitle='Beschrijving';
+		var L_Programmers='Programmeurs';
+		var L_Translators='Vertalers';
+		var L_Hostpage='Hostpagina';
+		var L_ContactUs='Neem contact met ons';
+		var L_Contact1='via e-mail naar Apo59m@gmail.com of GreatApo@gmail.com';
+		var L_Contact2='Met berichten naar onze spelers op de Griekse servers (GreatApo at s1 and DarkThanos at s2) of op de Franse server (djor at s?)';
+		var L_Contact3='of via de 3 open topics op het <a href="http://board.gladiatus.gr/index.php?page=Thread&threadID=12835" target="_blank">Griekse</a>, <a target="_blank" href="http://board.gladiatus.fr/index.php?page=Thread&amp;threadID=37368">Franse</a> and <a target="_blank" href="http://board.gladiatus.us/index.php?page=Thread&amp;threadID=15543">Amerikaanse</a> forum';
+		var L_thanksTo='Met dank aan';
+		var L_MonsterHunters='Monster stats/naam jagers';
+		var L_ItemHunters='Voorwerpen jagers';
+		var L_HideGoldInAuction='Kleur/Highlight de ingaveals je het voorwerp voor dezelfde prijs aan de koopmannen kan verkopen als je er voor geboden hebt';
+		var L_HideGoldInAuction='Kleur/Highlight de ingave als je het voorwerp voor dezelfde prijs aan de koopmannen kan verkopen als je er voor geboden hebt';
+		var L_guildSafeChanges='Knop voor sneldonatie in de gildebank';
+		var L_guildMedicChanges='Toon meer info bij Villa Medici';
+		var L_foodBackColor='Rode achtergrond voor voedsel dat meer levenspunten geeft dan nodig is (in je rugzak)';
+		var L_packageAlertOpt='Informeer me als pakketten gaan vervallen (12 uur van te voren)';
+		var L_bugSettings='Bug Settings';
+		var L_showBugReports='Show bug reports';
+		var L_autoReportBugs='Automatic report bugs to server';
+		var L_showNewMessages='Show new messages';
+	}else if(GCAO_lang=='hu'){
+		var L_guildMailTitle='Egyesületi üzenet írása';
+		var L_guildMedicTitle='Villa Medici';
+		var L_guildMarketTitle='Egyesületi piac';
+		var L_guildStorageTitle='Egyesületi raktár';
+		var L_staticsTitle='Statisztikáim';
+
+		var L_sure='Biztosan ?';
+		var L_weaponAlert='<font color="red">Nincs</font> fegyver a kezedben<font color="red">!</font>';
+		var L_newMail='You have a <font color="yellow">new</font> message at forum<font color="yellow">!</font>';
+		var L_Full='Tele';
+		var L_New='Új';
+		var L_newsAlert='<font color="yellow">Új</font> GCA üzenet<font color="yellow">!</font>';
+		var L_PackagesWillExpire='Csomagjaid hamarosan lejárnak';
+		var L_hours='óra';
+
+		var L_changePlayerImage='Játékos képének cseréje';
+		var L_Overfloated='Túl nagy';
+		var L_plImageWillBeLost='A kijelölt kép nem került mentésre.';
+		var L_plDecriptionWillBeCut='A kép átmeretezésre kerül';
+		var L_defImages='Az alapértelmezett képek jelenjenek meg';
+		var L_imgMadeFrom='A képeket készítette';
+		var L_changeGuildImage='Egyesületi logó cseréje';
+		var L_gImageWillBeLost='A kijelölt kép nem került mentésre.';
+		var L_gDescrtipionWillBeCut='A kép átmeretezésre kerül';
+
+		var L_spent='ráfordítás';
+		var L_SimOfTraining = 'Gyakorlás szimulátor';
+		var L_Stat = 'Kategória';
+		var L_From = 'Kiindulás';
+		var L_To = 'Cél';
+		var L_Cost = 'Ár';
+		var L_TrainingCampLevel = 'Gyakorlótér szintje';
+		var L_Reduction ='Megtakarítás:';
+		var L_TotalCost = 'Teljes ár:';
+		var L_Calculate = 'Számolj';
+		var L_TotalCostTitle = 'A jelenlegi értékeim kerüljenek a bal oldali oszlopba';
+		var L_CalculateTitle = 'Az összes ára';
+
+		var L_Simulator='Szimulátor';
+		var L_arena='ARÉNA';
+		var L_Battles='Harcok';
+
+		var L_Won='Győzelem';
+		var L_Lost='Vereség';
+		var L_Draws='Döntetlen';
+		var L_Damage='Sebzés';
+		var L_myAvDamage='Átlagos sebzésed';
+		var L_hisAvDamage='Ellenfeled átlagos sebzése';
+		var L_Life='Életerő';
+		var L_myRemLife='Megmaradó életerő';
+		var L_hisRemLife='Ellenfeled megmaradó életereje';
+		var L_trainingSim='Gyakorlás szimulátor';
+		var L_playerA='A játékos';
+		var L_playerB='B játékos';
+		var L_selectMethod='Válassz módszert';
+		var L_selectEnemy='Válassz ellenfelet';
+		var L_byName='Játékost a neve alapján';
+		var L_byID='Játékost ID alapján';
+		var L_go='Mehet!';
+		var L_winnigChance='Győzelmi esély';
+		var L_PlayerAAvDamage='A játékos átlagos sebzése';
+		var L_PlayerBAvDamage='B játékos átlagos sebzése';
+		var L_Results='Eredmény';
+		var L_ClearAll='Az összes törlése';
+		var L_playerNotFound='Nincs ilyen játékos';
+		var L_searchData='Keresem...';
+		var L_noStats='Nincs ilyen statisztika';
+		var L_thisIsLocation='Ez egy hely';
+
+		var L_StorageInfo='Raktári információ';
+		var L_itemNum='Tárgyak száma';
+		var L_TotalValue='Összes értéke';
+		var L_currentLife='Aktuális életerő';
+		var L_lostLife='Elvesztett életerő';
+		var L_healLife='Gyógyított életerő';
+		var L_afterLife='Életerő gyógyítás után';
+		var L_findGold='Arany keresése';
+
+		var L_bidNum='Összes licitek száma';
+		var L_Items='Tárgyak';
+		var L_selectItem='Válassz tárgyat';
+		var L_Type='Típus';
+		var L_selectType='Válassz típust';
+		var L_Clear='Törlés';
+		var L_veryShort='Nagyon rövid';
+		var L_anunGuild='Jelentem az egyesületben';
+		var L_MessageWasSent='Üzenet elküldve!';
+		var L_minDamage='Legkisebb-legnagyobb sebzés';
+		var L_weaponsFound='Találtam fegyvert';
+		var L_improvementsFound='Találtam fejlesztést';
+		var L_select='Válassz';
+		var L_hideGoldHere='Itt tudod elmenteni az aranyadat';
+		var L_priceValue='Ár = Érték';
+
+		//Tip: Online Players
+		var L_OnlinePlayers='Online játékosok';
+		var L_guildPlayers='Online egyesületi tagok';
+		var L_familyPlayers='Online barátok';
+		var L_noOnlinePlayer='Nincs senki online';
+		var L_sentMessage='Elküldött üzenet';
+
+		//Tip: Packages
+		var L_gold='Arany';
+		var L_Packages='Csomagok';
+		var L_invItems='Zsákok tartalma';
+		var L_packedValue='Csomagjaid értéke';
+		var L_invValue='Zsákjaid értéke';
+		var L_total='Összesen';
+		var L_PackedGold='Csomagolt arany';
+		var L_totalGold='Összes szerzett arany';
+		var L_totalItemValue='A tárgyak összesített értéke';
+
+		//Tip: Chat
+		var L_Username='Felhasználónév';
+		var L_Country='Ország';
+		var L_GuildChat='Egyesületi Chat';
+		var L_CountryChat='Országos Chat';
+		var L_GlobalChat='Nemzetközi Chat';
+
+		//Tip: Other
+		var L_checkAll='Összes kijelölése';
+		var L_ID='Játékos ID-je';
+		var L_ratioTitle='Élelem | Ár';
+		var L_noGuildText='Nem vagy egyeület tagja.<br>Amennyiben mégis, úgy kattints <a href='+GCAO_siteurl+'mod=guild&sh='+GCAO_secureCode+' >erre a linkre</a> , hogy frssüljön a statisztikád.';
+
+		var L_GCASettings='A Gladiatus Crazy Add On Beállításai';
+		var L_HeaderSettings='Fejléc beállítása';
+		var L_DisplayLife='Életerő mutatása a fejlécen';
+		var L_DisplayLifePercent='Mutasd az életerőt pontban, és százalékban is';
+		var L_DisplayLinkButtons='Link gombok elhelyezése a fejlécen';
+		var L_DisplayAuctionStatus='Aukció állapotának kijelzése a fejlécen';
+		var L_DisplayMerchantStatus='Kereskedő állapotának kijelzése a fejlécen';
+		var L_DisplayOnlinePlayersButton='Mutasd az "Online játékosok" gombot a fejlécen';
+		var L_DisplayLinkBox='Jelenjen meg egy link-doboz az oldal jobb oldalán';
+		var L_TimersSettings='Időmérők beállításai';
+		var L_DisplayLastBeingAttacked='Annak kijelzése, hogy mennyi ideje támadtak meg az arénában utoljára.';
+		var L_DisplayLastBeingAttacked2='Annak kijelzése, hogy mennyi ideje támadtak meg az Circus Turmában utoljára.';
+		var L_AuctionSettings='Aukciós beállítások';
+		var L_FillAuctionPrices='Az árak automatikus kitöltése';
+		var L_ChangeItemsBgColor='A tárgy minősége alapján változó színű háttér az aukción.';
+		var L_AuctionMoreItemsLavels='Több választható szint a szűrésnél';
+		var L_DisplayItemNumAndBids='Az aukción résztvevő tárgyak, és a licitek számának mutatása.';
+		var L_DisplayItemList='Tárgylista mutatása a kereső dobozban';
+		var L_ExpandAuctionTable3='3 tárgy jelenjen meg egy sorban.';
+		var L_SimulatorSettings='A szimulátor beállításai';
+		var L_enSimulator='Játékos-Játékos elleni szimulátor (JvJ) engedélyezése a karaterprofilon.';
+		var L_setFightNum='Szimulált harcok száma';
+		var L_maximum='legfeljebb';
+		var L_guildSettings='Egyesület, és piaci beállítások';
+		var L_guildStoreInfo='Információs doboz megjelenítése az egyesületi raktárnál.';
+		var L_moreGuildStats='Több statisztika mutatása az első 15 csatánál, a harcmesterek csarnokában.';
+		var L_monsterSimulator='Gyakorlás szimulátor mutatása az egyesületi gyakorlótéren.';
+		var L_gmailChanges='Egyesületi üzenetekkel kapcsolatos változtatások engedélyezése (pl.:kinézet).';
+		var L_ratioOpt='Az "Arány" mutatása (étel, és ár) a piacon, minden terméknél.';
+		var L_enPriceRatio='Az "Arány" engedélyezése (nem túl pontos).';
+		var L_alertSettings='Riasztási beállítások';
+		var L_immedBuy='Aukciórol való kivásárláskor felugró ablak megjelenítése.';
+		var L_reduceTimeEx='Felugró ablak megjelenítése, ha az expedíciót rubinnal váltanád ki.';
+		var L_questOpt='Figyelmeztessen, ha van elérhető új küldetés, egyébként pedig jelezze ki a hátralévő időt.';
+		var L_forumMessageOpt='Jelezzen, ha új egyesületi üzenet érkezett ([ ! ] jelenik meg az egyesület gomb mellett).';
+		var L_weaponAlertOpt='Figyelmeztessen, ha nincs a kezemben fegyver ([ ! ] jelenik meg az áttekintés gomb mellett)';
+		var L_otherSettings='Egyéb beállítások';
+		var L_msgchangesOpt='Üzenetekkel kapcsolatos változások engedélyezése';
+		var L_enBBCODE='Üzenetekben engedélyezze a BBCODE-ot';
+		var L_enChat='Chat engedélyezése (egyesületi, országos, és nemzetközi)';
+		var L_enRememberTabs='Emlékezzen az utoljára megnyitott oldalakra (zsákjaid, kereskedőknél).';
+		var L_enImages='Engedélyezze az egyéni játékos, és egyesületi képeket.';
+		var L_disPackageCounters='Csomag számláló mutatása';
+		var L_disID='Mutassa a játékos ID-jét, a statisztikák oldalon';
+		var L_disHeal='Jelenjen meg a gyógyítási érték minden játékosnál.';
+		var L_disTrainingChages='Gyakorlásnál látszódjanak a játékos alapjai, és a gyakorlással elérhető maximális értékek is.';
+		var L_enHighlight='Kereskedőknél emelje ki az azonnal megvásárolható termékeket.';
+		var L_enStyleFixes='Stílus-javítások engedélyezése.';
+		var L_speedSettings='Sebességgel kapcsolatos beállítások';
+		var L_stopPulling='A lap betöltődésekor ne kérjen le információkat (lassú kapcsolat esetén).';
+		var L_willStop='Ez az opció <font color="red"><b>letiltja</b></font>';
+		var L_customCursor='Válassz egyéni kurzort';
+		var L_Save='Mentés';
+		var L_AboutUs='Rólunk';
+		var L_Settings='Beállítások';
+		var L_donateTitle='Támogasd Gladiatus Crazy Add On-t';
+		var L_donateText='Köszönjük, hogy támogatsz minket a PayPal rendszeren át.Segítségeddel folytatni tudjuk ennek a kiegészítőnek fejlesztését - ez gyakoribb frissítéseket, új funkciókat, gyorsabb hibajavítást jelent. Kattints a Támogass minket gombra!';
+		var L_description='A Gladiatus Crazy Add On egy ingyenes kiegészítő, mely funkcióival segíti, és megkönnyíti a játékot a Gladiatuson. Segítségével több információhoz juthatsz a játékban. Jó játékot, és élvezd a harcokat!';
+		var L_aboutTitle='A Gladiatus Crazy Add On-ról';
+		var L_descriptionTitle='Leírás';
+		var L_Programmers='Programozók';
+		var L_Translators='Fordították';
+		var L_Hostpage='Honlapunk';
+		var L_ContactUs='Lépj kapcsolatba velünk';
+		var L_Contact1='e-mail címem: Apo59m@gmail.com , illetve GreatApo@gmail.com';
+		var L_Contact2=' a görög szervereken üzenetben is (GreatApo s1-en, és DarkThanos az s2-n), a francia szerveren (djor s?)';
+		var L_Contact3='elérhetőek vagyunk még 3 fórumon is <a href="http://board.gladiatus.gr/index.php?page=Thread&threadID=12835" target="_blank">Görög</a>, <a target="_blank" href="http://board.gladiatus.fr/index.php?page=Thread&amp;threadID=37368">Francia</a> and <a target="_blank" href="http://board.gladiatus.us/index.php?page=Thread&amp;threadID=15543">USA</a>';
+		var L_thanksTo='Nagy köszönettel tartozunk az alábbiaknak';
+		var L_MonsterHunters='Szörny statisztikák/nevének keresése';
+		var L_ItemHunters='Tárgy kereső';
+		var L_HideGoldInAuction='Színezze/emelje ki a bevitt adatot, ha a licittel azonos áron lehet eladni a tárgyat a kereskedőnél.';
+		var L_HideGoldInAuction='Színezze/emelje ki a bevitt adatot, ha a licittel azonos áron lehet eladni a tárgyat a kereskedőnél.';
+		var L_guildSafeChanges='Az egyesületi bank extra funkciónak engedélyezése.';
+		var L_guildMedicChanges='Több adat mutatása a Villa Mediciben.';
+		var L_foodBackColor='Vörös háttérrel emelje ki azokat az ételeket, amelyek több életerőt gyógyítanak, mint amennyi szükséges (áttekintésnél).';
+		var L_packageAlertOpt='Értesítsen, mielőtt a csomagjaid lejárnak (12 órával előtte).';
+		var L_bugSettings='Hiba beállítások';
+		var L_showBugReports='Hibajelentés mutatása';
+		var L_autoReportBugs='Hibák automatikus jelentése';
+		var L_showNewMessages='Új üzenetek megjelenítése';
+	}else if(GCAO_lang=='dk'){
+		var L_guildMailTitle='Skriv ordens besked';
+		var L_guildMedicTitle='Gε til orden\'s Villa Medici';
+		var L_guildMarketTitle='Gε til orden\'s marked';
+		var L_guildStorageTitle='Gε til orden\'s Lagerhus';
+		var L_staticsTitle='Mine stats';
+
+		var L_sure='Er du sikker ?';
+		var L_weaponAlert='Du er <font color="red">ikke</font> ifψrt et vεben<font color="red">!</font>';
+		var L_newMail='<Du har en <font color="yellow">ny</font> besked i forum<font color="yellow">!</font>';
+		var L_Full='Fuld';
+		var L_New='NY';
+		var L_newsAlert='Der er en <font color="yellow">ny</font> besked i GCA News<font color="yellow">!</font>';
+		var L_PackagesWillExpire='Pakker vil snart forsvinde';
+		var L_hours='Timer';
+
+		var L_changePlayerImage='Skift spiller\'s billede';
+		var L_Overfloated='Billede er for stort';
+		var L_plImageWillBeLost='Spiller\'s billede vil gε tabt og ikke blive gemt';
+		var L_plDecriptionWillBeCut='Spiller\'s beskrivelse vil blive skεret til at passe';
+		var L_defImages='Vis Standard billeder';
+		var L_imgMadeFrom='Billeder blev lavet af';
+		var L_changeGuildImage='Skift ordens billede';
+		var L_gImageWillBeLost='Ordens\'s Billedet vil blive tabt og vil ikke blive gemt';
+		var L_gDescrtipionWillBeCut='Ordens\'s beskrivelse vil blive skεret til at passe';
+
+		var L_spent='Brugt';
+		var L_SimOfTraining = 'trζningssimulator';
+		var L_Stat = 'Statistik';
+		var L_From = 'Fra';
+		var L_To = 'Til';
+		var L_Cost = 'Koster';
+		var L_TrainingCampLevel = 'Trζningslejr niveau';
+		var L_Reduction ='reduktion:';
+		var L_TotalCost = 'Samlede omkostninger:';
+		var L_Calculate = 'Beregn';
+		var L_TotalCostTitle = 'Put mine stats i venstre kolonne';
+		var L_CalculateTitle = 'Beregne omkostningerne ved alle statistikker';
+
+		var L_Simulator='Simulator';
+		var L_arena='ARENA';
+		var L_Battles='Kampe';
+		var L_Won='Vundet';
+		var L_Lost='Tabt';
+		var L_Draws='Draws';
+		var L_Damage='Skade';
+		var L_myAvDamage='Din Gennemsnitlig Skader';
+		var L_hisAvDamage='Modstander \'s Gennemsnitlig Damage';
+		var L_Life='Liv';
+		var L_myRemLife='Dit tilbagevζrende liv';
+		var L_hisRemLife='Modstander \'s tilbagevζrende Liv';
+		var L_trainingSim='Training Simulator';
+		var L_playerA='Spiller A';
+		var L_playerB='Spiller B';
+		var L_selectMethod='Vζlg metode';
+		var L_selectEnemy='Vζlg fjende';
+		var L_byName='spiller ved navn';
+		var L_byID='Spiller ved ID';
+		var L_go='ANGRIB!';
+		var L_winnigChance='Chance for at vinde';
+		var L_PlayerAAvDamage='Player \'s A gennemsnitlige skade';
+		var L_PlayerBAvDamage='Player \'s B gennemsnit skader';
+		var L_Results='resultat';
+		var L_ClearAll='Ryd alle';
+		var L_playerNotFound='Spilleren ikke fundet';
+		var L_searchData='Sψgning af data...';
+		var L_noStats='Ingen statistik for dette';
+		var L_thisIsLocation='Dette er et sted';
+
+		var L_StorageInfo='lageroplysning';
+		var L_itemNum='Antal Items';
+		var L_TotalValue='Samlet vζrdi';
+		var L_currentLife='Nuvζrende livspoint';
+		var L_lostLife='Lost livspoint';
+		var L_healLife='Heal livspoint';
+		var L_afterLife='Dit liv efter healing';
+		var L_findGold='Find guld';
+
+		var L_bidNum='Antal bud';
+		var L_Items='Items';
+		var L_selectItem='Vζlg Item';
+		var L_Type='Type';
+		var L_selectType='Vζlg Type';
+		var L_Clear='Klar Input';
+		var L_veryShort='Meget kort';
+		var L_anunGuild='Announce for at Ordens';
+		var L_MessageWasSent='Beskeden blev sendt!';
+		var L_minDamage='Minimum max-skader';
+		var L_weaponsFound='Vεben fundet';
+		var L_improvementsFound='Forbedringer fundet';
+		var L_select='Vζlg';
+		var L_hideGoldHere='Du kan skjule dit guld her';
+		var L_priceValue='Pris = vζrdi';
+
+		var L_OnlinePlayers='Online Spillere';
+		var L_guildPlayers='Online Ordens Spillere';
+		var L_familyPlayers='Online Venner';
+		var L_noOnlinePlayer='Ingen spiller online';
+		var L_sentMessage='sendt meddelelse';
+
+		var L_gold='guld';
+		var L_Packages='pakker';
+		var L_invItems='Bag Items';
+		var L_packedValue='Pakkede items\' vζrdi';
+		var L_invValue='Bag items\' vζrdi';
+		var L_total='Samlet';
+		var L_PackedGold='Medbragt guld';
+		var L_totalGold='Samlet fik guld';
+		var L_totalItemValue='Samlet items vζrdi';
+
+		var L_Username='Brugernavn';
+		var L_Country='Land';
+		var L_GuildChat='Ordens Chat';
+		var L_CountryChat='Lands Chat';
+		var L_GlobalChat='Verdens Chat';
+
+		var L_checkAll='Tjek Alle';
+		var L_ID='Spiller\'s ID';
+		var L_ratioTitle='Mad fRatio | Pris Ratio';
+		var L_noGuildText='Du har ikke en Orden.<br>Hvis du har en sε gε til <a href='+GCAO_siteurl+'mod=guild&sh='+GCAO_secureCode+' >here</a> For dine stats opdateres';
+
+		var L_GCASettings='Gladiatus Crazy Add On indstillinger';
+		var L_HeaderSettings='sidehoved Indstillinger';
+		var L_DisplayLife='Vis liv bar pε header';
+		var L_DisplayLifePercent='Vise bεde livspoint og liv procent (no mouseover)';
+		var L_DisplayLinkButtons='Vis link knapper pε header';
+		var L_DisplayAuctionStatus='Vis auktion status pε header';
+		var L_DisplayMerchantStatus='Tilfψj kψbmanden\'s auktion status pε header';
+		var L_DisplayOnlinePlayersButton='Vis "Online Spillere" knappen pε header';
+		var L_DisplayLinkBox='Vis Link boks til hψjre pε siden';
+		var L_TimersSettings='timere Indstillinger';
+		var L_DisplayLastBeingAttacked='Viser tiden fra sidste gang, du er blevet angrebet';
+		var L_DisplayLastBeingAttacked2='Viser tiden fra sidste gnag, du er blevet angrebet fra Circus Turma';
+		var L_AuctionSettings='Auktion Indstillinger';
+		var L_FillAuctionPrices='Auto fylde priser pε auktion';
+		var L_ChangeItemsBgColor='Skif Items\' Baggrund (baseret pε kvalitet) pε auktion';
+		var L_AuctionMoreItemsLavels='Flere vare levels pε auktion sψgefelt';
+		var L_DisplayItemNumAndBids='Vis antallet af items og antallet af bud pε auktion';
+		var L_DisplayItemList='Vis en items liste pε auktioner og markeder sψgefelt';
+		var L_ExpandAuctionTable3='Expand the auction table (3 items in every row)';
+		var L_SimulatorSettings='simulator Indstillinger';
+		var L_enSimulator='Aktiver PvP simulator pε alle spillere \'s profil';
+		var L_setFightNum='Indstil antallet af simulerede kampe';
+		var L_maximum='maksimal';
+		var L_guildSettings='Ordens & OrdensMarket Indstillinger';
+		var L_guildStoreInfo='Vis info boksen i Ordens \'s lager';
+		var L_moreGuildStats='Vis mere statistik pε ordens \'s krig lejr for de fψrste 15 ordens modstanderen';
+		var L_monsterSimulator='Vis trζningssimulator pε ordens \'s uddannelse bygning';
+		var L_gmailChanges='Aktiver Guild mail ζndringer';
+		var L_ratioOpt='Vis "forhold" vζrdi (mad og pris) af hver post i markedet';
+		var L_enPriceRatio='Aktiver pris "forhold" vζrdi (det er ikke meget prζcis)';
+		var L_alertSettings='advarsel Settings';
+		var L_immedBuy='Vis en bekrζftelse boks, nεr du straks kψber et item fra auktion';
+		var L_reduceTimeEx='Vis en bekrζftelse boks, nεr du betaler en rubin til at foretage en ekspedition';
+		var L_questOpt='Informer mig, hvis jeg har en ny mission til rεdighed, eller vise den resterende tid';
+		var L_forumMessageOpt='Informer mig, hvis jeg har en ny forum meddelelse (med et [!] Nζste til forum link)';
+		var L_weaponAlertOpt='Informer mig, hvis jeg ikke bζre et vεben (med et [!] Nζste til oversigt link)';
+		var L_otherSettings='andre indstillinger';
+		var L_msgchangesOpt='Aktiver besked ζndringer';
+		var L_enBBCODE='Aktiver BBCode ved beskeder';
+		var L_enChat='Aktiver Chat (Guild, Land og Global)';
+		var L_enRememberTabs='Husk din beholdning \'s og kψbmand \' s faner';
+		var L_enImages='Aktiver brugerdefineret player / ordens billede-system';
+		var L_disPackageCounters='Vis pakken tζllere';
+		var L_disID='Vis ID fra hver eneste spiller under hans stats';
+		var L_disHeal='Vis HEALING STATS fra hver eneste spiller under hans stats';
+		var L_disTrainingChages='Vis basics og stat \'s stψrste forandring, nεr du trζner';
+		var L_enHighlight='Fremhζv items, du kan kψbe i forretninger';
+		var L_enStyleFixes='Anvend style rettelser';
+		var L_speedSettings='hastighedsindstillinger';
+		var L_stopPulling='Stop trζkke info, nεr siden belastninger (mulighed for langsomme forbindelser)';
+		var L_willStop='Denne mulighed vil <font color="red"><b>stoppe</b></font>';
+		var L_customCursor='Vζlg en brugerdefineret markψr';
+		var L_Save='Gem';
+		var L_AboutUs='om os';
+		var L_Settings='indstillinger';
+		var L_donateTitle='Donere til Gladiatus Crazy Add On';
+		var L_donateText='Tak for os og ogsε hjζlpe os ved at donere nogle penge i vores PayPal-konto. Ved at donere til vores konto du hjζlpe os med at arbejde videre med denne tilfψjelse, som betyder flere opdateringer, nye funktioner og ingen bugs! Klik pε knappen for at stψtte os';
+		var L_description='Gladiatus Crazy Add On er et gratis add on, der hjζlper dig med Gladiatus gennem de mange features det giver. Den bruger faktisk bedre info, at spillet serveren giver til din browser. Hav det sjovt med det og nyd jeres kampe!';
+		var L_aboutTitle='Om Gladiatus Crazy Add On';
+		var L_descriptionTitle='Beskrivelse';
+		var L_Programmers='programmψrer';
+		var L_Translators='oversζttere';
+		var L_Hostpage='Hostpage';
+		var L_ContactUs='Kontakt os';
+		var L_Contact1='via e-mail pε Apo59m@gmail.com eller GreatApo@gmail.com';
+		var L_Contact2='med besked pε vores spillere i den grζske servere (GreatApo pε S1 og DarkThanos pε s2) eller fransk server (djor ved s?)';
+		var L_Contact3='eller fra de 3 εbne emner pε <a href="http://board.gladiatus.gr/index.php?page=Thread&threadID=12835" target="_blank"> grζsk </ a>, <a target = "_blank "href =" http://board.gladiatus.fr/index.php?page=Thread&threadID=37368 "> Fransk </ a> og <a target =" _blank "href =" http://board. gladiatus.us / index.php? page = Thread & threadid = 15543 "> USA </ a> forum';
+		var L_thanksTo='Mange tak til';
+		var L_MonsterHunters='Monster Stats / navn jζgere';
+		var L_ItemHunters='Item jζgere';
+		var L_HideGoldInAuction='Farve / Fremhζv input, hvis jeg kan sζlge varen til den handlende til samme pris end tilbuddet';
+		var L_HideGoldInAuction='Farve / Fremhζv input, hvis jeg kan sζlge varen til den handlende til samme pris end tilbuddet';
+		var L_guildSafeChanges='Aktiver Guild sikker ζndringer';
+		var L_guildMedicChanges='Vis mere info pε Medicinsk center';
+		var L_foodBackColor='Rψd baggrund for de fψdevarer, som giver mere liv punkter, som er nψdvendigt (i oversigt)';
+		var L_packageAlertOpt='Informer mig, hvis mine pakker er ved at udlψbe (12 timer fψr)';
+		var L_bugSettings='Bug Indstillinger';
+		var L_showBugReports='Vis fejlrapporter';
+		var L_autoReportBugs='Automatisk rapportere fejl til server';
+		var L_showNewMessages='Vis nye beskeder';
 	}else{
 		//Shurtcut Buttons
 		var L_guildMailTitle='Write guild message';
@@ -503,6 +1543,7 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_lostLife='Lost life points';
 		var L_healLife='Heal life points';
 		var L_afterLife='Life after heal';
+		var L_findGold='Find gold';
 		//Auction
 		var L_bidNum='Number of bids';
 		var L_Items='Items';
@@ -514,8 +1555,11 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_anunGuild='Announce to guild';
 		var L_MessageWasSent='Message was sent!';
 		var L_minDamage='Minimum max-damage';
-		var L_wearponsFound='Weapons found';
+		var L_weaponsFound='Weapons found';
+		var L_improvementsFound='Improvements found';
 		var L_select='Select';
+		var L_hideGoldHere='You can hide your gold here';
+		var L_priceValue='Price = Value';
 		//Online Players
 		var L_OnlinePlayers='Online Players';
 		var L_guildPlayers='Online Guild Players';
@@ -547,8 +1591,6 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		//Settings
 		var L_GCASettings='Gladiatus Crazy Add On Settings';
 		var L_HeaderSettings='Header Settings';
-		var L_DisplayLife='Display life bar on header';
-		var L_DisplayLifePercent='Display both life points and life percent (no mouseover)';
 		var L_DisplayLinkButtons='Display link buttons on the header';
 		var L_DisplayAuctionStatus='Display auction status on the header';
 		var L_DisplayMerchantStatus='Add the merchant\'s auction status on the header';
@@ -620,6 +1662,10 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_guildMedicChanges='Show more info at the Medic center';
 		var L_foodBackColor='Red background for the food items that gives more life points that needed (at overview)';
 		var L_packageAlertOpt='Inform me if my packages are going to expire (12 hours before)';
+		var L_bugSettings='Bug Settings';
+		var L_showBugReports='Show bug reports';
+		var L_autoReportBugs='Automatic report bugs to server';
+		var L_showNewMessages='Show new messages';
 	}
 }
 //################################################################################################################################
@@ -638,10 +1684,9 @@ function Main(){
 		document.getElementById("saveGCAOstats").addEventListener("click", saveMePlease, false);
 	}
 	if(document.getElementById('banner_top') && document.getElementById('banner_event') && (document.getElementById('banner_top').style.display=='' || document.getElementById('banner_top').style.display=='block')){c(moveAdd());}
-	if(GM_getValue('lb', true) == true && GM_getValue('sp', false) == false){c(HealthBar());}
 	if(GM_getValue('bu', true) == true){c(Buttons());}
 	if(GM_getValue('au', true) == true){c(AuctionStatus());}
-	if(GM_getValue('sp', true) == true){c(GetOverviewStats());}
+	if(GM_getValue('sp', false) == false){c(GetOverviewStats());}
 	if(GM_getValue('ch', true) == true){c(Chat());}
 	if(GM_getValue('pi', true) == true){c(RedirectPlayerImage());}
 	if(GM_getValue('op', true) == true){
@@ -663,14 +1708,20 @@ function Main(){
 		if(GCAO_submod=='noSubmod'){
 			if(GM_getValue('dh', false) == true && document.getElementById('char_healing_tt')){document.getElementById('char_healing_tt').style.display="block";}
 			if(GM_getValue('lp', true) == true){c(canIeatThis());}
+			c(generateImage());
 		}
 	}
 	else if(GCAO_mod=='player'){
 		if(GCAO_submod=='stats'){c(morePlayerStats());}
 		else if(GCAO_submod=='noSubmod' && !document.location.href.match(/&doll=[2-6]/i)){
-			if(GM_getValue('si', true) == true && GM_getValue('sp', false) == false){c(simulator());}
+			//if(GM_getValue('si', true) == true && GM_getValue('sp', false) == false){c(simulator());}
 			if(GM_getValue('id', false) == true){c(showId());}
 			if(GM_getValue('dh', false) == true){if(document.getElementById('char_healing_tt')){document.getElementById('char_healing_tt').style.display="block";}}
+		}
+	}
+	else if(GCAO_mod=='arena'){
+		if(GCAO_submod=='noSubmod' || GCAO_submod=='grouparena'){
+			c(arenaChanges());
 		}
 	}
 	else if(GCAO_mod=='messages'){
@@ -680,18 +1731,18 @@ function Main(){
 				c(msgButtons());
 			}
 		}else if(GCAO_submod=='messageNew'){
-			if(document.getElementById('message')){location.href="javascript:document.getElementById('message').setCaretPosition(0);void(0);"}
+			if(doc.getElementById('message')){
+				doc.getElementById('message').focus();
+			}
 		}
 	}
 	else if(GCAO_mod=='auction'){
 		if(GM_getValue('cb', true) == true){c(auctionbgcolor());}
 		if(GM_getValue('an', true) == true){c(auctionnumbers());}
 		if(GM_getValue('ml', true) == true){c(auctionitemlevel());}
-		if(GM_getValue('af', true) == true){c(autoFillAuctionFields());}
+		c(autoFillAuctionFields());
 		if(GM_getValue('ca', true) == true){c(confirmRubies());}
 		if(GM_getValue('ea', false) == true){c(auctionExtendTable());}
-		if(GM_getValue('dv', true) == true){c(detailView());}
-		if(GM_getValue('hg', true) == true){c(howToHideGoldInAuctions());}
 		if(GM_getValue('il', true) == true){c(itemList());}
 	}
 	else if(GCAO_mod=='market'){
@@ -706,7 +1757,7 @@ function Main(){
 	}
 	else if(GCAO_mod=='guild_main'){
 		if(GCAO_submod=='admin_mail' && GM_getValue('mc', true) == true){c(guildMailChanges());}
-		else if(GCAO_submod=='memberlist'){c(saveGuildmatesIDs());}
+		else if(GCAO_submod=='memberlist'){c(saveGuildmatesIDs());c(moreMemberStats());}
 		else if(GCAO_submod=='noSubmod' && GM_getValue('pi', true) == true){c(guildImage());}
 	}
 	else if(GCAO_mod=='guild_storage'){
@@ -717,8 +1768,14 @@ function Main(){
 		else if(GCAO_submod=='noSubmod'){c(guildNameTake());}
 	}
 	else if(GCAO_mod=='guild_warcamp'){
-		if(GCAO_submod=='guild_member_reports') c(warCampMemberGold());
-		else if(GCAO_submod=='guild_combatreports' && GCAO_allresult.match(/gcid=\d+/i) && GM_getValue('pi', true) == true){c(reportGuildImage());}
+		if(GCAO_submod=='guild_member_reports'){
+			c(warCampMemberGold());
+			c(warCampMemberStyle());
+		}
+		else if(GCAO_submod=='guild_combatreports'){ 
+			if(GCAO_allresult.match(/gcid=\d+/i) && GM_getValue('pi', true) == true){c(reportGuildImage());}
+			else{c(betterGuildWarIcons());}
+		}
 		else if(GCAO_submod=='noSubmod' && GM_getValue('gg', true) == true){c(guildWarMoreStats());}
 	}
 	else if(GCAO_mod=='guild_training'){
@@ -746,26 +1803,7 @@ function Main(){
 	if(GM_getValue('cu', 0)!=0){c(changeTheCursor());}
 	if(GM_getValue('dayChecked', 0)!=day.getDate()){c(checkForNews());}
 	if(GM_getValue('ShowNewsAlert', false)==true){c(showNewsAlert());}
-}
-
-//################################################################################################################################
-//## LIFE BAR / ΜΠΑΡΑ ΖΩΗΣ
-//################################################################################################################################
-function HealthBar(){
-	var img_backbar = 'data:image/jpeg;base64,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';
-	var loadingImage="data:image/gif;base64,R0lGODlhKQAGAPEBAAAAAP///////////yH+EUNyZWF0ZWQgd2l0aCBHSU1QACH5BAkPAAIAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAKQAGAAACK4Qvh2rJriCLINgA0sX65up11vRtZQiOIpdi03qqbcya7wzn+Hw/PeVjFAAAIfkECQ8AAwAsAAAAACkABgAAAiyEP4dqya6gCjQA2UC1aV9dfR5IfQ/JoWLYhSq2lq38qvXpzWlun37EMAEZBQAh+QQJDwADACwAAAAAKQAGAAACK4Q/h2rJrqAKNIBUrWwg3159HkiJ4WaW2Elabaox8LyWbx0/9z7qfiRDoQoAIfkECQ8AAwAsAAAAACkABgAAAi2EP4dqya6gCjSAVC2ul/X8cQC4UaEpNSNXWiv6anH3zK1B2nqdg15Ki/yGjAIAIfkECQ8AAwAsAAAAACkABgAAAiyEP4dqya6gCjSAVC2uF+T+eJxIdd9Wohpjjie5vm/4wW1qq2Bks1LjC4YYBQAh+QQJDwADACwAAAAAKQAGAAACKoQ/h2rJrqAKNIBULa4X5P5JR+hxGwWaJSoa5KvCLOPG9ixrNN32/M8oAAAh+QQJDwADACwAAAAAKQAGAAACLIQ/h2rJrqAKNIBULa4X5P54nEh131aiGmOOJ7m+b/jBbWqrYGSzUuMLhhgFACH5BAkPAAMALAAAAAApAAYAAAIthD+HasmuoAo0gFQtrpf1/HEAuFGhKTUjV1or+mpx98ytQdp6nYNeSov8howCACH5BAkPAAMALAAAAAApAAYAAAIrhD+HasmuoAo0gFStbCDfXn0eSInhZpbYSVptqjHwvJZvHT/3Pup+JEOhCgAh+QQJDwADACwAAAAAKQAGAAACLIQ/h2rJrqAKNADZQLVpX119Hkh9D8mhYtiFKraWrfyq9enNaW6ffsQwARkFADs%3D";
-	
-	var BgImageFix = document.createElement('img');
-	BgImageFix.setAttribute('id', 'BgImageFix');
-	BgImageFix.setAttribute('src', img_backbar);
-	BgImageFix.setAttribute('style', 'position:absolute;z-index:1;top:84px;left:335px;');
-	document.getElementById('header_values_ressources').setAttribute('style', 'z-index:10;');
-	document.getElementById('header_values_general').setAttribute('style', 'z-index:10;');
-	document.getElementById('header_game').appendChild(BgImageFix);
-	var HealthBarDiv = document.createElement('div');
-	HealthBarDiv.setAttribute('id', 'HealthBarDiv');
-	HealthBarDiv.innerHTML='<div style="left:0px;top:58px;cursor:pointer;" class="cooldown_bar"><div id="cooldown_bar_fill_life" class="cooldown_bar_fill cooldown_bar_fill_progress" style="width: 100%;"></div><div id="cooldown_bar_text_life" class="cooldown_bar_text"><img style="margin-top:6px;margin-left:2px;opacity:0.5;" src="'+loadingImage+'"/></div></div>'
-	document.getElementById('header_values_ressources').appendChild(HealthBarDiv);
+	if(GM_getValue('nm', true) == true){c(seeNewMessage());}
 }
 
 //################################################################################################################################
@@ -804,26 +1842,70 @@ function Buttons(){
 	"<td></td>" +
 	"</tr></table>";
 	document.getElementById('header_game').appendChild(ButtonsDiv);
-	if(GM_getValue('sp', true) == false){document.getElementById('CaracterStats').style.display='none';}
+	if(GM_getValue('sp', false) == true){document.getElementById('CaracterStats').style.display='none';}
 	
-	var text='';
-	for (x=1;x<=7;x++){
-		text += "<tr><td id=\"Tran"+x+"\" class=\"Stats_Tran\"></td><td><div style=\"width:10px;\"></div></td><td> : </td><td><div style=\"width:10px;\"></div></td><td id=\"st_"+x+"\" class=\"Stats_Stat\"></td></tr>";
+	if(GCAO_mod!='player'){
+		var text='';
+		for (x=1;x<=7;x++){
+			text += "<tr><td id=\"Tran"+x+"\" class=\"Stats_Tran\"></td><td><div style=\"width:10px;\"></div></td><td> : </td><td><div style=\"width:10px;\"></div></td><td id=\"st_"+x+"\" class=\"Stats_Stat\"></td></tr>";
+		}
+		var StatsDiv = document.createElement('div');
+		StatsDiv.setAttribute('id', 'StatsDiv');
+		StatsDiv.setAttribute('style', 'display:none;opacity:0.8;position:absolute;z-index:501;top:148px;left:622px;border:1px solid #c0c0c0;background-color:#000000;color:#ffffff;padding:5px;');
+		StatsDiv.innerHTML="<style>.Stats_Tran{text-align:left;font-weight:bold;}.Stats_Stat{text-align:right;}</style>" +
+		"<div style=\"float:right;border:1px solid grey;background-color:#ffffff;color:#000000;width:15px;height:15px;line-height:13px;margin-top:-12px;margin-right:-12px;cursor:pointer;\" onclick=\"document.getElementById('StatsDiv').style.display='none'\"><center><b>x</b></center></div>" +
+		"<table cellspacing=\"0\" cellpadding=\"0\" style=\"width:100%;border-spacing:0px;border:0px;\">" +
+		"<tr><td id=\"TranLIFE\" class=\"Stats_Tran\"></td><td><div style=\"width:10px;\"></div></td><td> : </td><td><div style=\"width:10px;\"></div></td><td id=\"st_LIFE\" class=\"Stats_Stat\"></td></tr>" +
+		"<tr><td id=\"TranLEVEL\" class=\"Stats_Tran\"></td><td><div style=\"width:10px;\"></div></td><td> : </td><td><div style=\"width:10px;\"></div></td><td id=\"st_LEVEL\" class=\"Stats_Stat\"></td></tr>" +
+		text+
+		"<tr><td id=\"TranARMOR\" class=\"Stats_Tran\"></td><td><div style=\"width:10px;\"></div></td><td> : </td><td><div style=\"width:10px;\"></div></td><td id=\"st_ARMOR\" class=\"Stats_Stat\"></td></tr>" +
+		"<tr><td id=\"TranDAMAGE\" class=\"Stats_Tran\"></td><td><div style=\"width:10px;\"></div></td><td> : </td><td><div style=\"width:10px;\"></div></td><td id=\"st_DAMAGE\" class=\"Stats_Stat\"></td></tr>" +
+		"</table>";
+		document.getElementById('header_game').appendChild(StatsDiv);
+	}else{
+		var top=496;
+		if(document.getElementById('banner_top')){top=496+25;}
+		var StatsDiv = document.createElement('div');
+		StatsDiv.setAttribute('id', 'StatsDiv');
+		StatsDiv.setAttribute('style', 'display:none;opacity:0.95;position:absolute;z-index:501;top:'+top+'px;left:605px;');
+		StatsDiv.innerHTML='<div style="background-image:url(http://s1.gladiatus.gr/game/img/char_status_kopf_b.jpg);width:70px;height:5px;overflow:hidden"></div>'+
+			'<div class="charstats_bg2" style="width:70px;">'+
+			'	<div class="charstats_value22_mirrored" id="st_LEVEL"></div>'+
+			'</div>'+
+			'<div class="charstats_bg2" style="width:70px;">'+
+			'	<div class="charstats_value3_mirrored" id="st_LIFE"></div>'+
+			'</div>'+
+			'<div class="charstats_bg2" style="width:70px;">'+
+			'	<div class="charstats_value3_mirrored" id="st_1"></div>'+
+			'</div>'+
+			'<div class="charstats_bg2" style="width:70px;">'+
+			'	<div class="charstats_value3_mirrored" id="st_2"></div>'+
+			'</div>'+
+			'	<div class="charstats_bg2" style="width:70px;">'+
+			'	<div class="charstats_value3_mirrored" id="st_3"></div>'+
+			'</div>'+
+			'	<div class="charstats_bg2" style="width:70px;">'+
+			'	<div class="charstats_value3_mirrored" id="st_4"></div>'+
+			'</div>'+
+			'	<div class="charstats_bg2" style="width:70px;">'+
+			'	<div class="charstats_value3_mirrored" id="st_5"></div>'+
+			'</div>'+
+			'	<div class="charstats_bg2" style="width:70px;">'+
+			'	<div class="charstats_value3_mirrored" id="st_6"></div>'+
+			'</div>'+
+			'	<div class="charstats_bg2" style="width:70px;">'+
+			'	<div class="charstats_value3_mirrored" id="st_7"></div>'+
+			'</div>'+
+			'<div class="charstats_bg2" style="width:70px;">'+
+			'	<div class="charstats_value22_mirrored" id="st_ARMOR"></div>'+
+			'</div>'+
+			'<div class="charstats_bg2" style="width:70px;">'+
+			'	<div class="charstats_value22_mirrored" id="st_DAMAGE"></div>'+
+			'</div>'+
+			'<div style="clear:both;background-image:url(http://s1.gladiatus.gr/game/img/char_status_abschluss_b.jpg);width:70px;height:5px;overflow:hidden"></div>';
+	
+		document.getElementById('header_game').appendChild(StatsDiv);
 	}
-	
-	var StatsDiv = document.createElement('div');
-	StatsDiv.setAttribute('id', 'StatsDiv');
-	StatsDiv.setAttribute('style', 'display:none;opacity:0.8;position:absolute;z-index:501;top:148px;left:622px;border:1px solid #c0c0c0;background-color:#000000;color:#ffffff;padding:5px;');
-	StatsDiv.innerHTML="<style>.Stats_Tran{text-align:left;font-weight:bold;}.Stats_Stat{text-align:right;}</style>" +
-	"<div style=\"float:right;border:1px solid grey;background-color:#ffffff;color:#000000;width:15px;height:15px;line-height:13px;margin-top:-12px;margin-right:-12px;cursor:pointer;\" onclick=\"document.getElementById('StatsDiv').style.display='none'\"><center><b>x</b></center></div>" +
-	"<table cellspacing=\"0\" cellpadding=\"0\" style=\"width:100%;border-spacing:0px;border:0px;\">" +
-	"<tr><td id=\"TranLIFE\" class=\"Stats_Tran\"></td><td><div style=\"width:10px;\"></div></td><td> : </td><td><div style=\"width:10px;\"></div></td><td id=\"st_LIFE\" class=\"Stats_Stat\"></td></tr>" +
-	"<tr><td id=\"TranLEVEL\" class=\"Stats_Tran\"></td><td><div style=\"width:10px;\"></div></td><td> : </td><td><div style=\"width:10px;\"></div></td><td id=\"st_LEVEL\" class=\"Stats_Stat\"></td></tr>" +
-	text+
-	"<tr><td id=\"TranARMOR\" class=\"Stats_Tran\"></td><td><div style=\"width:10px;\"></div></td><td> : </td><td><div style=\"width:10px;\"></div></td><td id=\"st_ARMOR\" class=\"Stats_Stat\"></td></tr>" +
-	"<tr><td id=\"TranDAMAGE\" class=\"Stats_Tran\"></td><td><div style=\"width:10px;\"></div></td><td> : </td><td><div style=\"width:10px;\"></div></td><td id=\"st_DAMAGE\" class=\"Stats_Stat\"></td></tr>" +
-	"</table>";
-	document.getElementById('header_game').appendChild(StatsDiv);
 }
 
 //################################################################################################################################
@@ -845,7 +1927,7 @@ function AuctionStatus(){
 		onload: function(response){
 			if(!response.responseText.match('bx0')){
 				var AuctionTranslation = response.responseText.match('class="submenuitem_aktive" target="_self">([^<]+)</a>')[1];
-				var Status = response.responseText.match('<span class="description_span_right"><b>(\.+)</b></span>')[1];
+				var Status = response.responseText.match('class="description_span_right"><b>(\.+)</b></span>')[1];
 				document.getElementById('A1').innerHTML = AuctionTranslation + " : <b>" + Status + "</b>";
 			}
 		}
@@ -857,7 +1939,7 @@ function AuctionStatus(){
 			onload: function(response){
 				if(!response.responseText.match('bx0')){
 					var AuctionTranslation = response.responseText.match('class="pngfix  current" style="cursor:pointer;">([^<]+)</a></li></ul>')[1];
-					var Status = response.responseText.match('<span class="description_span_right"><b>(\.+)</b></span>')[1];
+					var Status = response.responseText.match('class="description_span_right"><b>(\.+)</b></span>')[1];
 					document.getElementById('A2').innerHTML=AuctionTranslation+" : <b>"+Status+"</b>";
 				}
 			}
@@ -882,19 +1964,7 @@ function GetOverviewStats(){
 			var exactLife = response.responseText.match(/onmouseover="return escape\((.+)nowrap.'>(\d+) \/ (\d+)/i);
 			var exactLifeA = exactLife[2];
 			var exactLifeB = exactLife[3];
-			var TranLife = response.responseText.match(/nowrap.'>([^:.<>]+):<\/td>/i)[1];
-			
-			if(document.getElementById('HealthBarDiv')){
-				document.getElementById('cooldown_bar_fill_life').style.width=life+'%';
-				if(GM_getValue('rb', false) == false){
-					document.getElementById('cooldown_bar_text_life').innerHTML=TranLife+' : '+life+'%';
-					document.getElementById('HealthBarDiv').setAttribute('onmouseout', "document.getElementById('cooldown_bar_text_life').innerHTML='"+TranLife+' : '+life+'%'+"';");
-					document.getElementById('HealthBarDiv').setAttribute('onmouseover', "document.getElementById('cooldown_bar_text_life').innerHTML='"+exactLifeA+" / "+exactLifeB+"';");
-				}else{
-					document.getElementById('cooldown_bar_text_life').innerHTML=exactLifeA+' / '+exactLifeB+' ('+life+'%)';
-				}
-				document.getElementById('HealthBarDiv').setAttribute('title', TranLife);
-			}
+			var TranLife = document.getElementById('header_values_hp_bar').getAttribute('onmouseover').match(/nowrap.'>([^:<]+):<\/td>/i)[1];
 			
 			var TranLevel = response.responseText.match('charstats_value21">([^<]+)</span>')[1];
 			var Level = response.responseText.match('charstats_value22">([^<]+)</span>')[1];
@@ -908,7 +1978,10 @@ function GetOverviewStats(){
 				for (x=1;x<=7;x++){
 					allstat2[x] = TranStats[x].match(/charstats_text">([^<]+)<\/span>/i)[1];
 					allstat[x] = Stats[x].match(/charstats_value">([^<]+)<\/span>/i)[1];
-					document.getElementById('Tran'+x).innerHTML=allstat2[x];document.getElementById('st_'+x).innerHTML=allstat[x];
+					if(document.getElementById('Tran'+x)){
+						document.getElementById('Tran'+x).innerHTML=allstat2[x];
+					}
+					document.getElementById('st_'+x).innerHTML=allstat[x];
 				}
 			}
 			else{
@@ -927,10 +2000,16 @@ function GetOverviewStats(){
 			var DAMAGE = Stats2[2].match(/charstats_value22">([^<]+)<\/span>/i)[1];
 			
 			if(document.getElementById('ButtonsDiv')){
-				document.getElementById('TranLIFE').innerHTML=TranLife;document.getElementById('st_LIFE').innerHTML=life+' %';
-				document.getElementById('TranLEVEL').innerHTML=TranLevel;document.getElementById('st_LEVEL').innerHTML=Level;
-				document.getElementById('TranARMOR').innerHTML=TranARMOR;document.getElementById('st_ARMOR').innerHTML=ARMOR;
-				document.getElementById('TranDAMAGE').innerHTML=TranDAMAGE;document.getElementById('st_DAMAGE').innerHTML=DAMAGE;
+				if(document.getElementById('TranLIFE')){
+					document.getElementById('TranLIFE').innerHTML=TranLife;
+					document.getElementById('TranLEVEL').innerHTML=TranLevel;
+					document.getElementById('TranARMOR').innerHTML=TranARMOR;
+					document.getElementById('TranDAMAGE').innerHTML=TranDAMAGE;
+				}
+				document.getElementById('st_LIFE').innerHTML=life+' %';
+				document.getElementById('st_LEVEL').innerHTML=Level;
+				document.getElementById('st_ARMOR').innerHTML=ARMOR;
+				document.getElementById('st_DAMAGE').innerHTML=DAMAGE;
 			}
 			
 			var DamageMin=DAMAGE.match(/(\d+)...(\d+)/i)[1];
@@ -993,32 +2072,34 @@ function RedirectPlayerImage(){
 }
 
 function myPlayerImage(){
-	if(GM_getValue('PlayerImage' + window.location.host, '')!=''){
-		var img_Player=GM_getValue('PlayerImage' + window.location.host, '');
-		document.getElementById('p8_1_1').parentNode.setAttribute('id','PlayerImage');
-		document.getElementById('PlayerImage').setAttribute('style','width: 168px; height: 194px; margin-left: auto; margin-right: auto;background-image:url(\''+img_Player+'\');background-repeat:no-repeat;-moz-background-size: 100% 100%;-o-background-size: 100% 100%;-webkit-background-size: 100% 100%;background-size: 100% 100%;');
+	if(doc.getElementById('p8_1_1')){
+		if(GM_getValue('PlayerImage' + window.location.host, '')!=''){
+			var img_Player=GM_getValue('PlayerImage' + window.location.host, '');
+			doc.getElementById('p8_1_1').parentNode.setAttribute('id','PlayerImage');
+			doc.getElementById('PlayerImage').setAttribute('style','width: 168px; height: 194px; margin-left: auto; margin-right: auto;background-image:url(\''+img_Player+'\');background-repeat:no-repeat;-moz-background-size: 100% 100%;-o-background-size: 100% 100%;-webkit-background-size: 100% 100%;background-size: 100% 100%;');
+		}
 	}
 }
 
 function otherPlayerImage(){
-	if(document.getElementById('content').innerHTML.match(/##GTI=/i)){
-		var img_Player=document.getElementById('content').innerHTML.match(/##GTI=([^#]+)##/i)[1];
-		document.getElementById('p8_1_1').parentNode.setAttribute('id','PlayerImage');
-		document.getElementById('PlayerImage').setAttribute('style','width: 168px; height: 194px; margin-left: auto; margin-right: auto;background-image:url(\''+img_Player+'\');background-repeat:no-repeat;-moz-background-size: 100% 100%;-o-background-size: 100% 100%;-webkit-background-size: 100% 100%;background-size: 100% 100%;');
+	if(doc.getElementById('content').innerHTML.match(/##GTI=/i)){
+		var img_Player=doc.getElementById('content').innerHTML.match(/##GTI=([^#]+)##/i)[1];
+		doc.getElementById('p8_1_1').parentNode.setAttribute('id','PlayerImage');
+		doc.getElementById('PlayerImage').setAttribute('style','width: 168px; height: 194px; margin-left: auto; margin-right: auto;background-image:url(\''+img_Player+'\');background-repeat:no-repeat;-moz-background-size: 100% 100%;-o-background-size: 100% 100%;-webkit-background-size: 100% 100%;background-size: 100% 100%;');
 	}
 }
 
 function report0PlayerImage(){
 	if(GM_getValue('PlayerImage' + window.location.host, '')!=''){
 		var img_Player=GM_getValue('PlayerImage' + window.location.host, '');
-		document.getElementById('attackerAvatar1').getElementsByTagName('div')[3].setAttribute('id','PlayerImage');
-		document.getElementById('PlayerImage').setAttribute('style','background-image: url(\''+img_Player+'\'); width: 168px; height: 194px; margin-left: auto; margin-right: auto;background-repeat:no-repeat;-moz-background-size: 100% 100%;-o-background-size: 100% 100%;-webkit-background-size: 100% 100%;background-size: 100% 100%;');
+		doc.getElementById('attackerAvatar1').getElementsByTagName('div')[3].setAttribute('id','PlayerImage');
+		doc.getElementById('PlayerImage').setAttribute('style','background-image: url(\''+img_Player+'\'); width: 168px; height: 194px; margin-left: auto; margin-right: auto;background-repeat:no-repeat;-moz-background-size: 100% 100%;-o-background-size: 100% 100%;-webkit-background-size: 100% 100%;background-size: 100% 100%;');
 	}
 }
 
 function report3PlayerImage(){
-	if(document.getElementById('attackerAvatar1').innerHTML.match(/p=(\d+)/i)){
-		var p1=document.getElementById('attackerAvatar1').innerHTML.match(/p=(\d+)/i)[1];
+	if(doc.getElementById('attackerAvatar1').innerHTML.match(/p=(\d+)/i)){
+		var p1=doc.getElementById('attackerAvatar1').innerHTML.match(/p=(\d+)/i)[1];
 		var link1=GCAO_siteurl+'mod=player&p='+p1+'&sh='+GCAO_secureCode;
 		GM_xmlhttpRequest({
 			method: "GET",
@@ -1026,14 +2107,14 @@ function report3PlayerImage(){
 			onload: function(response){
 				if(response.responseText.match(/##GTI=/i)){
 					var img_Player1=response.responseText.match(/##GTI=([^#]+)##/i)[1];
-					document.getElementById('attackerAvatar1').getElementsByTagName('div')[3].setAttribute('id','PlayerImage1');
-					document.getElementById('PlayerImage1').setAttribute('style','background-image: url(\''+img_Player1+'\'); width: 168px; height: 194px; margin-left: auto; margin-right: auto;background-repeat:no-repeat;-moz-background-size: 100% 100%;-o-background-size: 100% 100%;-webkit-background-size: 100% 100%;background-size: 100% 100%;');
+					doc.getElementById('attackerAvatar1').getElementsByTagName('div')[3].setAttribute('id','PlayerImage1');
+					doc.getElementById('PlayerImage1').setAttribute('style','background-image: url(\''+img_Player1+'\'); width: 168px; height: 194px; margin-left: auto; margin-right: auto;background-repeat:no-repeat;-moz-background-size: 100% 100%;-o-background-size: 100% 100%;-webkit-background-size: 100% 100%;background-size: 100% 100%;');
 				}
 			}
 		});
 	}
-	if(document.getElementById('defenderAvatar11').innerHTML.match(/p=(\d+)/i)[1]){
-		var p11=document.getElementById('defenderAvatar11').innerHTML.match(/p=(\d+)/i)[1];
+	if(doc.getElementById('defenderAvatar11').innerHTML.match(/p=(\d+)/i)[1]){
+		var p11=doc.getElementById('defenderAvatar11').innerHTML.match(/p=(\d+)/i)[1];
 		var link11=GCAO_siteurl+'mod=player&p='+p11+'&sh='+GCAO_secureCode;
 		GM_xmlhttpRequest({
 			method: "GET",
@@ -1041,8 +2122,8 @@ function report3PlayerImage(){
 			onload: function(response){
 				if(response.responseText.match(/##GTI=/i)){
 					var img_Player11=response.responseText.match(/##GTI=([^#]+)##/i)[1];
-					document.getElementById('defenderAvatar11').getElementsByTagName('div')[1].setAttribute('id','PlayerImage11');
-					document.getElementById('PlayerImage11').setAttribute('style','background-image: url(\''+img_Player11+'\'); width: 168px; height: 194px; margin-left: auto; margin-right: auto;background-repeat:no-repeat;-moz-background-size: 100% 100%;-o-background-size: 100% 100%;-webkit-background-size: 100% 100%;background-size: 100% 100%;');
+					doc.getElementById('defenderAvatar11').getElementsByTagName('div')[3].setAttribute('id','PlayerImage11');
+					doc.getElementById('PlayerImage11').setAttribute('style','background-image: url(\''+img_Player11+'\'); width: 168px; height: 194px; margin-left: auto; margin-right: auto;background-repeat:no-repeat;-moz-background-size: 100% 100%;-o-background-size: 100% 100%;-webkit-background-size: 100% 100%;background-size: 100% 100%;');
 				}
 			}
 		});
@@ -1050,11 +2131,11 @@ function report3PlayerImage(){
 }
 
 function reportPlayerImage(){
-	document.getElementById('content').getElementsByTagName('table')[2].getElementsByTagName('td')[0].setAttribute('id','attackerAvatar1');
-	document.getElementById('content').getElementsByTagName('table')[2].getElementsByTagName('td')[2].setAttribute('id','defenderAvatar11');
+	doc.getElementById('content').getElementsByTagName('table')[2].getElementsByTagName('td')[0].setAttribute('id','attackerAvatar1');
+	doc.getElementById('content').getElementsByTagName('table')[2].getElementsByTagName('td')[2].setAttribute('id','defenderAvatar11');
 	
-	if(document.getElementById('attackerAvatar1').innerHTML.match(/p=(\d+)/i)){
-		var p1=document.getElementById('attackerAvatar1').innerHTML.match(/p=(\d+)/i)[1];
+	if(doc.getElementById('attackerAvatar1').innerHTML.match(/p=(\d+)/i)){
+		var p1=doc.getElementById('attackerAvatar1').innerHTML.match(/p=(\d+)/i)[1];
 		var link1=GCAO_siteurl+'mod=player&p='+p1+'&sh='+GCAO_secureCode;
 		GM_xmlhttpRequest({
 			method: "GET",
@@ -1062,14 +2143,14 @@ function reportPlayerImage(){
 			onload: function(response){
 				if(response.responseText.match(/##GTI=/i)){
 					var img_Player1=response.responseText.match(/##GTI=([^#]+)##/i)[1];
-					document.getElementById('attackerAvatar1').getElementsByTagName('div')[3].setAttribute('id','PlayerImage1');
-					document.getElementById('PlayerImage1').setAttribute('style','background-image: url(\''+img_Player1+'\'); width: 168px; height: 194px; margin-left: auto; margin-right: auto;background-repeat:no-repeat;-moz-background-size: 100% 100%;-o-background-size: 100% 100%;-webkit-background-size: 100% 100%;background-size: 100% 100%;');
+					doc.getElementById('attackerAvatar1').getElementsByTagName('div')[3].setAttribute('id','PlayerImage1');
+					doc.getElementById('PlayerImage1').setAttribute('style','background-image: url(\''+img_Player1+'\'); width: 168px; height: 194px; margin-left: auto; margin-right: auto;background-repeat:no-repeat;-moz-background-size: 100% 100%;-o-background-size: 100% 100%;-webkit-background-size: 100% 100%;background-size: 100% 100%;');
 				}
 			}
 		});
 	}
-	if(document.getElementById('defenderAvatar11').innerHTML.match(/p=(\d+)/i)){
-		var p11=document.getElementById('defenderAvatar11').innerHTML.match(/p=(\d+)/i)[1];
+	if(doc.getElementById('defenderAvatar11').innerHTML.match(/p=(\d+)/i)){
+		var p11=doc.getElementById('defenderAvatar11').innerHTML.match(/p=(\d+)/i)[1];
 		var link11=GCAO_siteurl+'mod=player&p='+p11+'&sh='+GCAO_secureCode;
 		GM_xmlhttpRequest({
 			method: "GET",
@@ -1077,8 +2158,8 @@ function reportPlayerImage(){
 			onload: function(response){
 				if(response.responseText.match(/##GTI=/i)){
 					var img_Player11=response.responseText.match(/##GTI=([^#]+)##/i)[1];
-					document.getElementById('defenderAvatar11').getElementsByTagName('div')[3].setAttribute('id','PlayerImage11');
-					document.getElementById('PlayerImage11').setAttribute('style','background-image: url(\''+img_Player11+'\'); width: 168px; height: 194px; margin-left: auto; margin-right: auto;background-repeat:no-repeat;-moz-background-size: 100% 100%;-o-background-size: 100% 100%;-webkit-background-size: 100% 100%;background-size: 100% 100%;');
+					doc.getElementById('defenderAvatar11').getElementsByTagName('div')[3].setAttribute('id','PlayerImage11');
+					doc.getElementById('PlayerImage11').setAttribute('style','background-image: url(\''+img_Player11+'\'); width: 168px; height: 194px; margin-left: auto; margin-right: auto;background-repeat:no-repeat;-moz-background-size: 100% 100%;-o-background-size: 100% 100%;-webkit-background-size: 100% 100%;background-size: 100% 100%;');
 				}
 			}
 		});
@@ -1186,7 +2267,7 @@ function guildImage(){
 }
 
 function reportGuildImage(){
-	if(document.getElementById('content').innerHTML.match(/i=\d+/g)[0]){
+	if(document.getElementById('content').innerHTML.match(/i=\d+/g)){
 		var g1=document.getElementById('content').innerHTML.match(/i=\d+/g)[0];
 		var link1=GCAO_siteurl+'mod=guild_main&'+g1+'&sh='+GCAO_secureCode;
 		GM_xmlhttpRequest({
@@ -1266,8 +2347,10 @@ function GuildImageSave(){
 //################################################################################################################################
 function guildNameTake(){
 	if(!document.getElementById('content').getElementsByTagName('input')[0]){
-		var guildName=document.getElementById('content').getElementsByTagName('b')[0].innerHTML;
-		Set_Cookie('guildName',guildName);
+		if(document.getElementById('content').getElementsByTagName('b')[0]){
+			var guildName=document.getElementById('content').getElementsByTagName('b')[0].innerHTML;
+			Set_Cookie('guildName',guildName);
+		}
 	}
 }
 
@@ -1348,135 +2431,139 @@ function resetStats(){
 }
      
 function addTrainingCostSimulator(){
-	var div = document.createElement('div');
-	
-	var L_Strength = document.getElementById('char_f0_tt').getElementsByTagName('span')[0].innerHTML;
-	var L_Skill = document.getElementById('char_f1_tt').getElementsByTagName('span')[0].innerHTML;
-	var L_Agility = document.getElementById('char_f2_tt').getElementsByTagName('span')[0].innerHTML;
-	var L_Constitution = document.getElementById('char_f3_tt').getElementsByTagName('span')[0].innerHTML;
-	var L_Charisma = document.getElementById('char_f4_tt').getElementsByTagName('span')[0].innerHTML;
-	var L_Intelligence = document.getElementById('char_f5_tt').getElementsByTagName('span')[0].innerHTML;
+	if(document.getElementById('char_f0_tt')){
+		var div = document.createElement('div');
+		
+		var L_Strength = document.getElementById('char_f0_tt').getElementsByTagName('span')[0].innerHTML;
+		var L_Skill = document.getElementById('char_f1_tt').getElementsByTagName('span')[0].innerHTML;
+		var L_Agility = document.getElementById('char_f2_tt').getElementsByTagName('span')[0].innerHTML;
+		var L_Constitution = document.getElementById('char_f3_tt').getElementsByTagName('span')[0].innerHTML;
+		var L_Charisma = document.getElementById('char_f4_tt').getElementsByTagName('span')[0].innerHTML;
+		var L_Intelligence = document.getElementById('char_f5_tt').getElementsByTagName('span')[0].innerHTML;
 
-    document.getElementById('content').appendChild(div);
-	div.innerHTML +='<div class="contentItem" style="margin-top: 0px;">'
-    +'<h3>'+L_SimOfTraining+'</h3>'
-    +'<div class="contentItem_content">'
-	+'<style>'
-	+'input.button4 {background-image: url("http://i617.photobucket.com/albums/tt260/goldisever/GCAO/button4.jpg");border:0 none;color:#453011;font-size:11px;font-weight:bold;height:26px;width:37px;}'
-	+'</style>'
-    +'<table align="center" style="border:1px solid #af8e50;background-color:#ded8c6;padding:5px;">'
-    +'<tr>'
-    +'<th align="center" width="50"> '+L_Stat+' </th>'
-    +'<th align="center" width="40"> '+L_From+' </th>'
-    +'<th align="center" width="50"> '+L_To+' </th>'
-    +'<th align="center">  </th>'
-    +'<th align="center" width="150" > '+L_Cost+' <img align="absmiddle" src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif"></th>'
-    +''
-    +'</tr>'
-    +'<tr>'
-    +'<th align="center">'+L_Strength+'</th>'
-    +'<th><input type="text" id="inputStat1" size="7"></th>'
-    +'<th><input type="text" id="inputStat2" size="7"></th>'
-	+'<th align="center"><input type="button" id="addOne1" class="button4" onclick="document.getElementById(\'inputStat2\').value++;" value="+1">'
-	+'<input type="button" id="removeOne1" class="button4" onclick="document.getElementById(\'inputStat2\').value=document.getElementById(\'inputStat2\').value-1;" value="-1" style="margin-left:4px;"></th>'
-    +'<th align="center"><span id="inputStat14"></span></th>'
-    +'</tr>'
-    +'<tr>'
-    +'<th align="center">'+L_Skill+' </th>'
-    +'<th><input type="text" id="inputStat3" size="7"></th>'
-    +'<th><input type="text" id="inputStat4" size="7"></th>'
-	+'<th align="center"><input type="button" id="addOne2" class="button4" onclick="document.getElementById(\'inputStat4\').value++;" value="+1">'
-	+'<input type="button" id="removeOne2" class="button4" onclick="document.getElementById(\'inputStat4\').value=document.getElementById(\'inputStat4\').value-1;" value="-1" style="margin-left:4px;"></th>'
-    +'<th align="center"><span id="inputStat15"></span></th>'
-    +'</tr>'
-    +'<tr>'
-    +'<th align="center">'+L_Agility+' </th>'
-    +''
-    +'<th><input type="text" id="inputStat5" size="7"></th>'
-    +'<th><input type="text" id="inputStat6" size="7"></th>'    
-	+'<th align="center"><input type="button" id="addOne3" class="button4" onclick="document.getElementById(\'inputStat6\').value++;" value="+1">'
-	+'<input type="button" id="removeOne3" class="button4" onclick="document.getElementById(\'inputStat6\').value=document.getElementById(\'inputStat6\').value-1;" value="-1" style="margin-left:4px;"></th>'
+		if(navigator.userAgent.toLowerCase().match(/chrome/i)){var num=6;}else{var num=7;}
+		
+		document.getElementById('content').appendChild(div);
+		div.innerHTML +='<div class="contentItem" style="margin-top: 0px;">'
+		+'<h3>'+L_SimOfTraining+'</h3>'
+		+'<div class="contentItem_content">'
+		+'<style>'
+		+'input.button4 {background-image: url("http://i617.photobucket.com/albums/tt260/goldisever/GCAO/button4.jpg");border:0 none;color:#453011;font-size:11px;font-weight:bold;height:26px;width:37px;}'
+		+'</style>'
+		+'<table align="center" style="border:1px solid #af8e50;background-color:#ded8c6;padding:5px;">'
+		+'<tr>'
+		+'<th align="center" width="50"> '+L_Stat+' </th>'
+		+'<th align="center" width="40"> '+L_From+' </th>'
+		+'<th align="center" width="50"> '+L_To+' </th>'
+		+'<th align="center">  </th>'
+		+'<th align="center" width="150" > '+L_Cost+' <img align="absmiddle" src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif"></th>'
+		+''
+		+'</tr>'
+		+'<tr>'
+		+'<th align="center">'+L_Strength+'</th>'
+		+'<th><input type="text" id="inputStat1" size="'+num+'"></th>'
+		+'<th><input type="text" id="inputStat2" size="'+num+'"></th>'
+		+'<th align="center"><input type="button" id="addOne1" class="button4" onclick="document.getElementById(\'inputStat2\').value++;" value="+1">'
+		+'<input type="button" id="removeOne1" class="button4" onclick="document.getElementById(\'inputStat2\').value=document.getElementById(\'inputStat2\').value-1;" value="-1" style="margin-left:4px;"></th>'
+		+'<th align="center"><span id="inputStat14"></span></th>'
+		+'</tr>'
+		+'<tr>'
+		+'<th align="center">'+L_Skill+' </th>'
+		+'<th><input type="text" id="inputStat3" size="'+num+'"></th>'
+		+'<th><input type="text" id="inputStat4" size="'+num+'"></th>'
+		+'<th align="center"><input type="button" id="addOne2" class="button4" onclick="document.getElementById(\'inputStat4\').value++;" value="+1">'
+		+'<input type="button" id="removeOne2" class="button4" onclick="document.getElementById(\'inputStat4\').value=document.getElementById(\'inputStat4\').value-1;" value="-1" style="margin-left:4px;"></th>'
+		+'<th align="center"><span id="inputStat15"></span></th>'
+		+'</tr>'
+		+'<tr>'
+		+'<th align="center">'+L_Agility+' </th>'
+		+''
+		+'<th><input type="text" id="inputStat5" size="'+num+'"></th>'
+		+'<th><input type="text" id="inputStat6" size="'+num+'"></th>'    
+		+'<th align="center"><input type="button" id="addOne3" class="button4" onclick="document.getElementById(\'inputStat6\').value++;" value="+1">'
+		+'<input type="button" id="removeOne3" class="button4" onclick="document.getElementById(\'inputStat6\').value=document.getElementById(\'inputStat6\').value-1;" value="-1" style="margin-left:4px;"></th>'
 
-    +'<th align="center"><span id="inputStat16"></span></th>'
-    +'</tr>'
-    +'<tr>'
-    +'<th align="center">'+L_Constitution+' </th>'
-    +'<th><input type="text" id="inputStat7" size="7"></th>'
-    +'<th><input type="text" id="inputStat8" size="7"></th>'
-	+'<th align="center"><input type="button" id="addOne4" class="button4" onclick="document.getElementById(\'inputStat8\').value++;" value="+1">'
-	+'<input type="button" id="removeOne4" class="button4" onclick="document.getElementById(\'inputStat8\').value=document.getElementById(\'inputStat8\').value-1;" value="-1" style="margin-left:4px;"></th>'
-    +'<th align="center"><span id="inputStat17"></span></th>'
-    +'</tr>'
-    +'<tr>'
-    +'<th align="center">'+L_Charisma+' </th>'
-    +'<th><input type="text" id="inputStat9" size="7"></th>'
-    +'<th><input type="text" id="inputStat10" size="7"></th>'
-	+'<th align="center"><input type="button" id="addOne5" class="button4" onclick="document.getElementById(\'inputStat10\').value++;" value="+1">'
-	+'<input type="button" id="removeOne5" class="button4" onclick="document.getElementById(\'inputStat10\').value=document.getElementById(\'inputStat10\').value-1;" value="-1" style="margin-left:4px;"></th>'
-    +'<th align="center"><span id="inputStat18"></span></th>'
-    +''
-    +'</tr>'
-    +'<tr>'
-    +'<th align="center">'+L_Intelligence+' </th>'
-    +'<th><input type="text" id="inputStat11" size="7"></th>'
-    +'<th><input type="text" id="inputStat12" size="7"></th>'
-	+'<th align="center"><input type="button" id="addOne6" class="button4" onclick="document.getElementById(\'inputStat12\').value++;" value="+1">'
-	+'<input type="button" id="removeOne6" class="button4" onclick="document.getElementById(\'inputStat12\').value=document.getElementById(\'inputStat12\').value-1;" value="-1" style="margin-left:4px;"></th>'
-    +'<th align="center"><span id="inputStat19"></span></th>'
-    +'</tr>'
-    +'<tr>'
-    +'<th align="center" colspan="2">'+L_TrainingCampLevel+'</th>'
-    +'<th align="center">'
-    +'<select id="inputStat0" onChange="calculStats()" name="selection" >'
-    +'<option value="0">0</option>'
-    +'<option value="1">1</option>'
-    +''
-    +'<option value="2">2</option>'
-    +'<option value="3">3</option>'
-    +'<option value="4">4</option>'
-    +'<option value="5">5</option>'
-    +'<option value="6">6</option>'
-    +'<option value="7">7</option>'
-    +'<option value="8">8</option>'
-    +'<option value="9">9</option>'
-    +'<option value="10">10</option>'
-    +''
-    +'<option value="11">11</option>'
-    +'<option value="12">12</option>'
-    +'<option value="13">13</option>'
-    +'<option value="14">14</option>'
-    +'<option value="15">15</option>'
-    +'</select>'
-    +'</th>'
-    +'<th align="right">'+L_Reduction+' </th>'
-    +'<th align="center"><span id="inputStat20"></span></th>'
-    +'</tr>'
-    +''
-    +'<tr>'
-    +'<th colspan="2" align="center"></th>'
-    +'<th align="right" colspan="2"><b>'+L_TotalCost+'</b></th>'
-    +'<th align="center"><span id="inputStat13"></span></th>'
-    +'</tr>'
-    +'<tr>'
-    +'<th colspan="5" align="center">'
-    +'<input class="button2" type="button" value="'+L_staticsTitle+'" id="myStats" title="'+L_TotalCostTitle+'">'
-    +'<input class="button2" type="button" value="'+L_Calculate+'" id="calculate" title="'+L_CalculateTitle+'" style="margin-left:20px;">'
-    +'<input class="button3" type="button" onClick="resetStats()" value="'+L_ClearAll+'" id="reset" title="'+L_ClearAllTitle+'" style="margin-left:20px;">'
-    +'</th>'
-    +'</tr>'
-    +'</table></div>';
+		+'<th align="center"><span id="inputStat16"></span></th>'
+		+'</tr>'
+		+'<tr>'
+		+'<th align="center">'+L_Constitution+' </th>'
+		+'<th><input type="text" id="inputStat7" size="'+num+'"></th>'
+		+'<th><input type="text" id="inputStat8" size="'+num+'"></th>'
+		+'<th align="center"><input type="button" id="addOne4" class="button4" onclick="document.getElementById(\'inputStat8\').value++;" value="+1">'
+		+'<input type="button" id="removeOne4" class="button4" onclick="document.getElementById(\'inputStat8\').value=document.getElementById(\'inputStat8\').value-1;" value="-1" style="margin-left:4px;"></th>'
+		+'<th align="center"><span id="inputStat17"></span></th>'
+		+'</tr>'
+		+'<tr>'
+		+'<th align="center">'+L_Charisma+' </th>'
+		+'<th><input type="text" id="inputStat9" size="'+num+'"></th>'
+		+'<th><input type="text" id="inputStat10" size="'+num+'"></th>'
+		+'<th align="center"><input type="button" id="addOne5" class="button4" onclick="document.getElementById(\'inputStat10\').value++;" value="+1">'
+		+'<input type="button" id="removeOne5" class="button4" onclick="document.getElementById(\'inputStat10\').value=document.getElementById(\'inputStat10\').value-1;" value="-1" style="margin-left:4px;"></th>'
+		+'<th align="center"><span id="inputStat18"></span></th>'
+		+''
+		+'</tr>'
+		+'<tr>'
+		+'<th align="center">'+L_Intelligence+' </th>'
+		+'<th><input type="text" id="inputStat11" size="'+num+'"></th>'
+		+'<th><input type="text" id="inputStat12" size="'+num+'"></th>'
+		+'<th align="center"><input type="button" id="addOne6" class="button4" onclick="document.getElementById(\'inputStat12\').value++;" value="+1">'
+		+'<input type="button" id="removeOne6" class="button4" onclick="document.getElementById(\'inputStat12\').value=document.getElementById(\'inputStat12\').value-1;" value="-1" style="margin-left:4px;"></th>'
+		+'<th align="center"><span id="inputStat19"></span></th>'
+		+'</tr>'
+		+'<tr>'
+		+'<th align="center" colspan="2">'+L_TrainingCampLevel+'</th>'
+		+'<th align="center">'
+		+'<select id="inputStat0" onChange="calculStats()" name="selection" >'
+		+'<option value="0">0</option>'
+		+'<option value="1">1</option>'
+		+''
+		+'<option value="2">2</option>'
+		+'<option value="3">3</option>'
+		+'<option value="4">4</option>'
+		+'<option value="5">5</option>'
+		+'<option value="6">6</option>'
+		+'<option value="7">7</option>'
+		+'<option value="8">8</option>'
+		+'<option value="9">9</option>'
+		+'<option value="10">10</option>'
+		+''
+		+'<option value="11">11</option>'
+		+'<option value="12">12</option>'
+		+'<option value="13">13</option>'
+		+'<option value="14">14</option>'
+		+'<option value="15">15</option>'
+		+'</select>'
+		+'</th>'
+		+'<th align="right">'+L_Reduction+' </th>'
+		+'<th align="center"><span id="inputStat20"></span></th>'
+		+'</tr>'
+		+''
+		+'<tr>'
+		+'<th colspan="2" align="center"></th>'
+		+'<th align="right" colspan="2"><b>'+L_TotalCost+'</b></th>'
+		+'<th align="center"><span id="inputStat13"></span></th>'
+		+'</tr>'
+		+'<tr>'
+		+'<th colspan="5" align="center">'
+		+'<input class="button2" type="button" value="'+L_staticsTitle+'" id="myStats" title="'+L_TotalCostTitle+'">'
+		+'<input class="button2" type="button" value="'+L_Calculate+'" id="calculate" title="'+L_CalculateTitle+'" style="margin-left:20px;">'
+		+'<input class="button3" type="button" onClick="resetStats()" value="'+L_ClearAll+'" id="reset" title="'+L_ClearAllTitle+'" style="margin-left:20px;">'
+		+'</th>'
+		+'</tr>'
+		+'</table></div>';
 
-    document.getElementById('myStats').addEventListener('click',function(){putMyStats2();},true);
-    document.getElementById('calculate').addEventListener('click',function(){calculStats();},true);
-    document.getElementById('reset').addEventListener('click',function(){resetStats();},true);
+		document.getElementById('myStats').addEventListener('click',function(){putMyStats2();},true);
+		document.getElementById('calculate').addEventListener('click',function(){calculStats();},true);
+		document.getElementById('reset').addEventListener('click',function(){resetStats();},true);
 
-    resetStats();
-	for (x=1;x<=6;x++){
-		document.getElementById('addOne'+x).addEventListener('click',function(){calculStats();},true);
-		document.getElementById('removeOne'+x).addEventListener('click',function(){calculStats();},true);
-		var y=x*2;
-		var z=x-1;
-		document.getElementById('inputStat'+y).value = document.getElementById('char_f'+z+'_tt').getAttribute('onmouseover').match(/\\'>(\d+)/g)[1].match(/(\d+)/g)[0];
+		resetStats();
+		for (x=1;x<=6;x++){
+			document.getElementById('addOne'+x).addEventListener('click',function(){calculStats();},true);
+			document.getElementById('removeOne'+x).addEventListener('click',function(){calculStats();},true);
+			var y=x*2;
+			var z=x-1;
+			document.getElementById('inputStat'+y).value = document.getElementById('char_f'+z+'_tt').getAttribute('onmouseover').match(/\\'>(\d+)/g)[1].match(/(\d+)/g)[0];
+		}
 	}
 }
 
@@ -1835,10 +2922,6 @@ function aHit(chanceOfHittingTheOpponent,damageMin,damageMax,myCritChance,oppone
 //## MESSAGES / ΜΗΝΥΜΑΤΑ
 //################################################################################################################################
 function messages(){
-	/*var date=new Date();
-	var hours=date.getHours();
-	var serverHours = document.getElementById('header_game').getElementsByTagName('span')[6].innerHTML.match(/\d\d.\d\d.\d\d\d\d (\d+):\d\d/i)[1];
-	var lostHours=hours*1-serverHours*1;*/
 	document.getElementById('content').getElementsByTagName('div')[0].style.padding='0px';
 	if(document.getElementsByTagName('input')[0]){document.getElementsByTagName('input')[0].parentNode.style.marginLeft='-6px';}
 	
@@ -1891,10 +2974,6 @@ function messages(){
 		if(navigator.userAgent.toLowerCase().match(/chrome/i)){var pre='span';}else{var pre='pre';}
 		messagesHTML = messagesHTML.replace(/<textarea.cols..\d+..rows..\d+..class..input.>/gi, '<img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/msg.png" style="position:absolute;margin-left:-29px;margin-top:-17px;"><div style="background:#DBCBA5;border-top:1px solid #AF8E50;border-bottom:1px solid #AF8E50;padding:5px;margin:5px -5px 5px -5px;"><'+pre+' width="60" style="margin:0px;line-height:15px;">').replace(/<\/textarea>/gi,'</'+pre+'></div>');
 	
-		
-		
-		
-		
 		//Message tags
 		if(GM_getValue('bb', false) == true){
 			while(messagesHTML.match(/\[img\](.+)\[#img\]/i)){
@@ -1932,21 +3011,19 @@ function messages(){
 		document.getElementById('content').getElementsByTagName('table')[0].innerHTML = messagesHTML;
 	}
 	
-	
-		
-		var arrayName = new Array();
-		var arrayId = new Array();
-		if(Get_Cookie("GCAOguildMates")){
-			var temp = Get_Cookie("GCAOguildMates").split("#");
-			var mate;
-			for(var i=1; i < temp.length; i++){
-				mate = temp[i].split("<");
-				// arrayName[arrayName.length] = mate[0];
-				// arrayId[arrayId.length] = mate[1];
-				// var regexp = new RegExp(mate[0],"gi");
-				// document.getElementById('content').innerHTML = document.getElementById('content').innerHTML.replace(regexp,"<a href=\""+GCAO_siteurl+"mod=player&p="+mate[1]+"&sh="+GCAO_secureCode+"\">"+mate[0]+'</a>');//"<a href=\""+GCAO_siteurl+"mod=player&p="+mate[1]+"&sh="+GCAO_secureCode+"\">"+mate[0]+'</a>');
-			}
+	var arrayName = new Array();
+	var arrayId = new Array();
+	if(Get_Cookie("GCAOguildMates")){
+		var temp = Get_Cookie("GCAOguildMates").split("#");
+		var mate;
+		for(var i=1; i < temp.length; i++){
+			mate = temp[i].split("<");
+			// arrayName[arrayName.length] = mate[0];
+			// arrayId[arrayId.length] = mate[1];
+			// var regexp = new RegExp(mate[0],"gi");
+			// document.getElementById('content').innerHTML = document.getElementById('content').innerHTML.replace(regexp,"<a href=\""+GCAO_siteurl+"mod=player&p="+mate[1]+"&sh="+GCAO_secureCode+"\">"+mate[0]+'</a>');//"<a href=\""+GCAO_siteurl+"mod=player&p="+mate[1]+"&sh="+GCAO_secureCode+"\">"+mate[0]+'</a>');
 		}
+	}
 }
 
 function msgButtons(){
@@ -1966,36 +3043,37 @@ function msgButtons(){
 //################################################################################################################################
 function afford(){
 	if(document.getElementById('shop')){
-		var item=document.getElementById('shop').getElementsByTagName('div')[1].id.match(/.\d+/i);
-		
-		var gold=document.getElementById('sstat_gold_val').innerHTML.replace(/\./g,'').match(/\d+/i)*1;
-		var rubi=document.getElementById('sstat_ruby_val').innerHTML.replace(/\./g,'').match(/\d+/i)*1;
-		for (i = 0; i <=6; i++){
-			for (j = 0; j <=8; j++){
-				if(document.getElementById('tOoLtIp_'+item+'_'+i+'_'+j)){
-					if(document.getElementById('tOoLtIp_'+item+'_'+i+'_'+j).innerHTML.replace(/\./gi,'').match(/(\d+) <img[^\/]+\/img\/res3/i)){
-						document.getElementById(item+'_'+i+'_'+j).style.background='rgba(255, 0, 0, 0.2)';
-						if(document.getElementById('tOoLtIp_'+item+'_'+i+'_'+j).innerHTML.replace(/\./gi,'').match(/(\d+) <img[^\/]+\/img\/res3/i)[1]*1>rubi*1){
-							document.getElementById(item+'_'+i+'_'+j).style.opacity='0.25';
+		if(document.getElementById('shop').getElementsByTagName('div')[1]){
+			var item=document.getElementById('shop').getElementsByTagName('div')[1].id.match(/.\d+/i);
+			
+			var gold=document.getElementById('sstat_gold_val').innerHTML.replace(/\./g,'').match(/\d+/i)*1;
+			var rubi=document.getElementById('sstat_ruby_val').innerHTML.replace(/\./g,'').match(/\d+/i)*1;
+			for (i = 0; i <=6; i++){
+				for (j = 0; j <=8; j++){
+					if(document.getElementById('tOoLtIp_'+item+'_'+i+'_'+j)){
+						if(document.getElementById('tOoLtIp_'+item+'_'+i+'_'+j).innerHTML.replace(/\./gi,'').match(/(\d+) <img[^\/]+\/img\/res3/i)){
+							document.getElementById(item+'_'+i+'_'+j).style.background='rgba(255, 0, 0, 0.2)';
+							if(document.getElementById('tOoLtIp_'+item+'_'+i+'_'+j).innerHTML.replace(/\./gi,'').match(/(\d+) <img[^\/]+\/img\/res3/i)[1]*1>rubi*1){
+								document.getElementById(item+'_'+i+'_'+j).style.opacity='0.25';
+							}
+						}else{
+							document.getElementById(item+'_'+i+'_'+j).style.opacity='1.00';
 						}
-					}
-					else{
-						document.getElementById(item+'_'+i+'_'+j).style.opacity='1.00';
-					}
-					
-					if(document.getElementById('tOoLtIp_'+item+'_'+i+'_'+j).innerHTML.replace(/\./gi,'').match(/(\d+) <img[^\/]+\/img\/res2/i)){
-						if(document.getElementById('tOoLtIp_'+item+'_'+i+'_'+j).innerHTML.replace(/\./gi,'').match(/(\d+) <img[^\/]+\/img\/res2/i)[1]*1>gold*1){
-							document.getElementById(item+'_'+i+'_'+j).style.opacity='0.25';
+						
+						if(document.getElementById('tOoLtIp_'+item+'_'+i+'_'+j).innerHTML.replace(/\./gi,'').match(/(\d+) <img[^\/]+\/img\/res2/i)){
+							if(document.getElementById('tOoLtIp_'+item+'_'+i+'_'+j).innerHTML.replace(/\./gi,'').match(/(\d+) <img[^\/]+\/img\/res2/i)[1]*1>gold*1){
+								document.getElementById(item+'_'+i+'_'+j).style.opacity='0.25';
+							}
+						}else{
+							document.getElementById(item+'_'+i+'_'+j).style.opacity='1.00';
 						}
-					}
-					else{
-						document.getElementById(item+'_'+i+'_'+j).style.opacity='1.00';
 					}
 				}
 			}
 		}
 	}
 }
+
 function reAfford(){
 	var oldSetToolTip = unsafeWindow.SetToolTip;
 	unsafeWindow.SetToolTip = function (updateTooltip){
@@ -2065,7 +3143,7 @@ function styleFixes(){
 	StyleFixesElement.innerHTML="<style>.paging_button{height:26px;} ul#mainnav li a {line-height: 10px;padding-top:14px;} .selection {width:130px;}</style>";
 	document.getElementById('header_game').appendChild(StyleFixesElement);
 	
-	if(document.getElementById('ticker1')){//Buttom while traveling fix
+	if(document.getElementById('ticker1') && document.getElementsByTagName('input')[0]){//Buttom while traveling fix
 		document.getElementsByTagName('input')[0].setAttribute('class','button1');
 	}
 	else if(GCAO_mod=='guild_library' && GCAO_submod=='noSubmod'){
@@ -2074,8 +3152,10 @@ function styleFixes(){
 		}
 	}
 	else if(GCAO_mod=='guild_main' && GCAO_submod=='noSubmod'){
-		if(document.getElementById('mainbox').getElementsByTagName('td')[1]){
-			document.getElementById('mainbox').setAttribute('style','max-width: 600px; overflow: hidden; width: 530px;margin-left:-16px;');
+		if(document.getElementById('mainbox')){
+			if(document.getElementById('mainbox').getElementsByTagName('td')[1]){
+				document.getElementById('mainbox').setAttribute('style','max-width: 600px; overflow: hidden; width: 530px;margin-left:-16px;');
+			}
 		}
 	}
 	
@@ -2088,50 +3168,41 @@ function styleFixes(){
 //Number of items and bids / Αριθμός αντικειμένων και προσφορών
 function auctionnumbers() {
 	if(document.getElementById('auction_table')){
-		var rows = document.forms.length - 1;
-		var links = document.getElementById('auction_table').getElementsByTagName('a').length - rows;
-	
+		var items = document.forms.length-1;
+		var code=document.getElementById('auction_table').innerHTML;
+		var bids=0;
+		while(code.match('color:#8A0808;')){
+			code=code.replace('color:#8A0808;','DONE');
+			bids++
+		}
 		var numbersDiv = document.createElement('div');
 		numbersDiv.setAttribute('id', 'mystylecolor');
 		numbersDiv.setAttribute('class', 'title2_box');
 		numbersDiv.setAttribute('style', 'margin-left:-17px;margin-right:-17px;margin-top:20px;');
-		numbersDiv.innerHTML = '<div class=\"title_inner\"><center>'+L_itemNum+': ' + rows + '<br>'+L_bidNum+': ' + links + '</center></div>';
+		numbersDiv.innerHTML = '<div class=\"title_inner\"><center>'+L_itemNum+': ' + items + '<br>'+L_bidNum+': ' + bids + '</div></center></div>';
 		document.getElementById('auction_filter').appendChild(numbersDiv);
 	}
 }
 
 //Background color / Χρώμα παρασκηνίου
 function auctionbgcolor() {
-	var rows = document.forms.length - 1;
-	
 	if(document.getElementById('auction_table')){
-		var colorcss = '';
-		if (rows<=180){
-			var x=0;
-			while(!document.body.getElementsByTagName('script')[x].innerHTML.match('AddCharDiv') && (x<100)){x++;}
-			var contentHTML = document.getElementsByTagName('script')[x].innerHTML;
-			
-			var itemboxa = contentHTML.match(/"auction_\d+"/gi);
-			var srccol = /\d.........................................................................................................................................................................................................Tahoma;\\'><tr><td style\=\\'color:(....)/gi;
-			var colorbox = contentHTML.match(srccol);
-			var itemcode,color,RGBcolor;
-			
-			for (i = 0; i <rows; i++){
-				itemcode = itemboxa[i].match(/auction_\d+/gi);
-				color = colorbox[i].match(/color:..../gi);
+		var itemNum=document.forms.length-1;
+		var i=1;
+		var color='';
+		while(i<=itemNum && i<501){
+			if(document.getElementById('auction_table').getElementsByTagName('td')[i-1]){
+				color=document.getElementById('auction_table').getElementsByTagName('td')[i-1].getElementsByTagName('div')[4].getAttribute('onmouseover');
+				color=color.match(/color:..../gi)[0];
 				if (color=='color:lime'){RGBcolor = '0, 255, 0, 0.1'}
 				else if (color=='color:#515'){RGBcolor = '0, 70, 255, 0.2'}
 				else if (color=='color:#E30'){RGBcolor = '227, 3, 224, 0.2'}
 				else if (color=='color:#FF6'){RGBcolor = '255, 106, 0, 0.2'}
 				else if (color=='color:whit'){RGBcolor = '255, 255, 255, 0.2'}
 				else{RGBcolor = '90, 156, 255, 0.2'}
-		
-				colorcss = colorcss + '#' + itemcode + '{background: rgba(' + RGBcolor + ');}';
+				document.getElementById('auction_table').getElementsByTagName('td')[i-1].getElementsByTagName('div')[4].setAttribute('style','background: rgba(' + RGBcolor + ');width:64px;height:96px;');
+				i++
 			}
-		var colorStyleDiv = document.createElement('div');
-		colorStyleDiv.setAttribute('id', 'mystylecolor');
-		colorStyleDiv.innerHTML = '<style type="text/css">' + colorcss + '</style>';
-		document.getElementById('auction_filter').appendChild(colorStyleDiv);
 		}
 	}
 }
@@ -2139,9 +3210,6 @@ function auctionbgcolor() {
 //More levels at search / Αναλυτικότερα επίπεδα στην αναζήτηση
 function auctionitemlevel() {
 		var minlevel = document.getElementById('auction_filter').innerHTML.match(/option value\="(\d+)/i)[1];
-		var OL2result = document.getElementsByName('fl')[0].innerHTML.match(/option value\="(\d+)/g);
-		var found = false;
-		
 		var lvl = document.getElementById('icon_level').parentNode.getElementsByTagName('div')[1].innerHTML*1;
 		var addedLevel = lvl * 0.25;
 		var plusToInteger = addedLevel;
@@ -2156,68 +3224,48 @@ function auctionitemlevel() {
 		var option = "";
 		for (i = 0; i <is; i=i+2){
 			var fnumber = -(is-maxlevel-i-1);
-			if(document.getElementsByName('fl')[1]){
-				var selectedlevel = document.getElementsByName('fl')[1].value;
+			if(document.getElementsByName('itemLevel')[1]){
+				var selectedlevel = document.getElementsByName('itemLevel')[1].value;
 			}
 			if(selectedlevel == null){selectedlevel = minlevel}
 			if(fnumber==selectedlevel){var OptSelect = 'selected="selected"'}
 			else{var OptSelect = ""}
 			option = option + '<option value="' + fnumber + '" ' + OptSelect + '>' + fnumber + '+</option>' ;
 		}
-		document.getElementsByName('fl')[0].innerHTML = option ;
-}
-
-//Autofill inputs / Μικρότερη προσφορά μέσα στο input
-function autoFillAuctionFields(){
-	var divs = document.evaluate(".//div[@class='auction_bid_div']",document.getElementById('content'),null,XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,null);
-	if(divs.snapshotLength) {
-		for(var i = 0; i < divs.snapshotLength; i++) {
-			if(!divs.snapshotItem(i).innerHTML.match(/: ([0-9]*\.*[0-9]*) <"/i)){
-				var price = divs.snapshotItem(i).innerHTML.match(new RegExp(": ([0-9]*\.*[0-9]*) <"));
-				if(!price) continue;
-				price = price[1].replace(/\./g, "");
-				var input = document.evaluate(".//input[@name='bid_amount']", divs.snapshotItem(i), null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
-				if(input.snapshotLength){input.snapshotItem(0).value = price;}
-			}
+		if(document.getElementsByName('itemLevel')[0]){
+			document.getElementsByName('itemLevel')[0].innerHTML=option;
 		}
-	}
 }
 
-//Items where you can hide gold
-function howToHideGoldInAuctions(){
-	var rows = document.forms.length - 1;
-	var divs = document.evaluate(".//div[@class='auction_bid_div']",document.getElementById('content'),null,XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,null);
-	
+function autoFillAuctionFields(){
 	if(document.getElementById('auction_table')){
-		var colorcss = '';
-		if (rows<=180){
-			if(document.getElementsByTagName('script')[10].innerHTML.match('auction_')){var contentHTML = document.getElementsByTagName('script')[10].innerHTML;}
-			else if(document.getElementsByTagName('script')[11].innerHTML.match('auction_')){var contentHTML = document.getElementsByTagName('script')[11].innerHTML;}
-			else if(document.getElementsByTagName('script')[12].innerHTML.match('auction_')){var contentHTML = document.getElementsByTagName('script')[12].innerHTML;}
-			else if(document.getElementsByTagName('script')[13].innerHTML.match('auction_')){var contentHTML = document.getElementsByTagName('script')[13].innerHTML;}
-			
-			var itemboxa = contentHTML.match(/"auction_\d+"/gi);
-			var srccol = /\d.........................................................................................................................................................................................................Tahoma;\\'><tr><td style\=\\'color:(....)/gi;
-			var colorbox = contentHTML.match(srccol);
-			var itemcode,color;
-			
-			for (var i = 0; i <rows; i++){
-				itemcode = itemboxa[i].match(/auction_\d+/gi);
-				color = colorbox[i].match(/color:..../gi);
-				var rubis = divs.snapshotItem(i).innerHTML.split('&nbsp;')[1].split('<a')[0];
-				
-				//No bid
-				if(divs.snapshotItem(i).getElementsByTagName('a').length==1){
-					var rubis = divs.snapshotItem(i).innerHTML.split('&nbsp;')[1].split('<a')[0];
-					if (color=='color:#515'){var rubisMin = 46;}
-					else if (color=='color:lime'){var rubisMin = 40;}
-					else if (color=='color:#E30'){var rubisMin = 52;}//purple
-					else if (color=='color:whit'){var rubisMin = 40;}
-
-					if(parseInt(rubis)>=rubisMin)
-						divs.snapshotItem(i).getElementsByTagName('input')[0].style.backgroundColor="#FFCC66";
+		var divs = document.evaluate(".//div[@class='auction_bid_div']",document.getElementById('auction_table'),null,XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,null);
+		if(divs.snapshotLength && (GM_getValue('af', true)==true || GM_getValue('hg', true)==true)){
+			var bids=0;
+			var value='';
+			for(var i = 0; i < divs.snapshotLength; i++){
+				if(!divs.snapshotItem(i).innerHTML.match(/: ([0-9]*\.*[0-9]*)&nbsp;<"/i)){
+					//Autofill inputs / Μικρότερη προσφορά μέσα στο input
+					var price = divs.snapshotItem(i).innerHTML.match(new RegExp(": ([0-9]*\.*[0-9]*)&nbsp;<"));
+					if(!price) continue;
+					price = price[1].replace(/\./g, "");
+					var input = document.evaluate(".//input[@name='bid_amount']", divs.snapshotItem(i), null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+					if(GM_getValue('af', true) == true){
+						if(input.snapshotLength){input.snapshotItem(0).value = price;}
+					}
+					//Items where you can hide gold
+					if(GM_getValue('hg', true)==true){
+						value=document.getElementById('auction_table').getElementsByTagName('td')[i].getElementsByTagName('div')[4].getAttribute('onmouseover');
+						value=value.match(/([0-9]*\.*[0-9]*) <img/gi)[0].replace('.','').replace(' <img','')*1;
+						
+						if(value==price){
+							document.getElementById('auction_table').getElementsByTagName('td')[i].getElementsByTagName('div')[7].innerHTML+='<br><font color="#555555">'+L_hideGoldHere+'</font>';
+							document.getElementById('auction_table').getElementsByTagName('td')[i].getElementsByTagName('div')[5].getElementsByTagName('input')[0].style.backgroundColor="#FFCC66";
+						}else{
+							document.getElementById('auction_table').getElementsByTagName('td')[i].getElementsByTagName('div')[7].innerHTML+='<br><font color="#555555">'+L_priceValue+' + '+dottedNumber(price-value)+' <img border="0" align="absmiddle" src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif"></font>';
+						}
+					}
 				}
-				// alert(color+'   '+rubisMin);
 			}
 		}
 	}
@@ -2232,14 +3280,14 @@ function itemList(){
 	//Items names: [for green items: #0D960D] [for pink items: #E303E0] [for blue items: #0046FF]
 	//Upgrades: blue, yellow, green, purple, red, orange (yellow and orange will auto change by script so you can read the letters in game)
 	if(GCAO_lang=='fr'){
-		var prefixList = 'n[Adendathiels]|n[Amelias]|n[Amoviels]|n[Anchorons]|n[Appius]|n[Asayseths]|n[Asendacs]|n[Ashitills]|n[Bacias]|n[Barbekuus]|n[Beasthammers]|n[Berrys]|n[Bilgs]|n[Calodiens]c[#0D960D]|n[Chabdyns]|n[Chalinis]|n[Chealoths]|n[Cheggovs]|n[Chucks]|n[Ciallans]|n[Cisiens]|n[Dairus]|n[Decimus]|n[Denovs]|n[Dexterus]|n[Doitrems]|n[Doomeniks]|n[Elrarangs]|n[Elvilmandels]|n[Elywens]|n[Evotavs]|n[Fernabasts]|n[Fitschis]|n[Frabos]|n[Frickoys]|n[Frientas]|n[Fustriels]|n[Gadriewens]|n[Gaius]c[#E303E0]|n[Galarands]|n[Gidras]|n[Gonaks]|n[Granks]|n[Grasscrawlers]|n[Heudois]|n[Heuhois]|n[Ibiwans]|n[Ichorus]c[#E303E0]|n[Ismaels]|n[Isundels]|n[Jennifers]|n[Kedyssis]|n[Kerrannas]|n[Korks]|n[Kosmonas]|n[Leandronimus]|n[Liloels]|n[Lothays]|n[Lucius]c[#E303E0]|n[Lulus]|n[Lurtscharas]|n[Mandalus]|n[Manius]|n[Marcus]|n[Matéus]c[#E303E0]|n[Medonis]|n[Melanchaetas]|n[Melaneos]|n[Mermereus]|n[Mimas]|n[Monychustas]|n[Mooncruchers]|n[Nariths]|n[Opiehnzas]c[#E303E0]|n[Orlelds]|n[Peragos]|n[Phalangens]|n[Poirins]|n[Purmanns]|n[Rakrests]|n[Rayols]|n[Redos]|n[Reinkes]|n[Ronaldas]|n[Rynightes]|n[Sentarions]|n[Servius]|n[Sextus]|n[Shivas]|n[Skiterus]|n[Solitanis]|n[Sphingens]|n[Spurius]|n[Stoybaers]|n[Sugos]|n[Taliths]c[#0046FF]|n[Tanias]|n[Tantus]c[#E303E0]|n[Thorstens]|n[Tinothiels]|n[Titus]|n[Trafans]c[#0046FF]|n[Tuneses]|n[Umbros]|n[Umfetas]|n[Umilawens]|n[Uridos]|n[Urothiens]|n[Vuthiels]|n[Watzmanns]|n[Xenphlames]|n[Xus]|n[Yas]|n[Zeindras]c[#0D960D]|n[Zickezackes]|n[Zimbris]|n[Zombers]';
+		var prefixList = 'n[Adendathiels]|n[Amelias]|n[Amoviels]|n[Anchorons]|n[Appius]|n[Asayseths]|n[Asendacs]|n[Ashitills]|n[Bacias]|n[Barbekuus]|n[Beasthammers]|n[Berrys]|n[Bilgs]|n[Calódiens]c[#0D960D]|n[Chabdyns]|n[Chalinis]|n[Chealoths]|n[Cheggovs]|n[Chucks]|n[Ciallans]|n[Cisiens]|n[Dairus]|n[Decimus]|n[Denovs]|n[Dexterus]|n[Doitrems]|n[Doomeniks]|n[Elrarangs]|n[Elvilmandels]|n[Elywens]|n[Evotavs]|n[Fernabasts]|n[Fitschis]|n[Frabos]|n[Frickoys]|n[Frientas]|n[Fustriels]|n[Gadriewens]|n[Gaius]c[#E303E0]|n[Galarands]|n[Gidras]|n[Gonaks]|n[Granks]|n[Grasscrawlers]|n[Heudois]|n[Heuhois]|n[Ibiwans]|n[Ichorus]c[#E303E0]|n[Ismaels]|n[Isundels]|n[Jennifers]|n[Kedyssis]|n[Kerrannas]|n[Korks]|n[Kosmonas]|n[Leandronimus]|n[Liloels]|n[Lothays]|n[Lucius]c[#E303E0]|n[Lulus]|n[Lurtscharas]|n[Mandalus]|n[Manius]|n[Marcus]|n[Matéus]c[#E303E0]|n[Medonis]|n[Melanchaetas]|n[Melaneos]|n[Mermereus]|n[Mimas]|n[Monychustas]|n[Mooncruchers]|n[Nariths]|n[Opiehnzas]c[#E303E0]|n[Orlelds]|n[Peragos]|n[Phalangens]|n[Poirins]|n[Purmanns]|n[Rakrests]|n[Rayols]|n[Redos]|n[Reinkes]|n[Ronaldas]|n[Rynightes]|n[Sentarions]|n[Servius]|n[Sextus]|n[Shivas]|n[Skiterus]|n[Solitanis]|n[Sphingens]|n[Spurius]|n[Stoybaers]|n[Sugos]|n[Taliths]c[#0046FF]|n[Tanias]|n[Tantus]c[#E303E0]|n[Thorstens]|n[Tinothiels]|n[Titus]|n[Trafans]c[#0046FF]|n[Tuneses]|n[Umbros]|n[Umfetas]|n[Umilawens]|n[Uridos]|n[Urothiens]|n[Vuthiels]|n[Watzmanns]|n[Xenphlames]|n[Xus]|n[Yas]|n[Zeindras]c[#0D960D]|n[Zickezackes]|n[Zimbris]|n[Zombers]';
 		var suffixList = 'n[Agression]|n[Assassinat]|n[Delicatesse]|n[Dragon]|n[Elimination]|n[Enfer]|n[Paradis]';
 		var foodList = '';
 		var tempImpList = '';
 		var impList = '';
 	}else if(GCAO_lang=='gr'){
-		var prefixList='n[Adendathiels]|n[Amelias]|n[Amoviels]|n[Anchorons]|n[Appius]|n[Asayseths]|n[Asendacs]|n[Ashitills]|n[Bacias]|n[Barbekuus]|n[Beasthammers]|n[Berrys]|n[Bilgs]|n[Calodiens]c[#0D960D]|n[Chabdyns]|n[Chalinis]|n[Chealoths]|n[Cheggovs]|n[Chucks]|n[Ciallans]|n[Cisiens]|n[Dairus]|n[Decimus]|n[Denovs]|n[Dexterus]|n[Doitrems]|n[Doomeniks]|n[Elrarangs]|n[Elvilmandels]|n[Elywens]|n[Evotavs]|n[Fernabasts]|n[Fitschis]|n[Frabos]|n[Frickoys]|n[Frientas]|n[Fustriels]|n[Gadriewens]|n[Gaius]c[#E303E0]|n[Galarands]|n[Gidras]|n[Gonaks]|n[Granks]|n[Grasscrawlers]|n[Heudois]|n[Heuhois]|n[Ibiwans]|n[Ichorus]c[#E303E0]|n[Ismaels]|n[Isundels]|n[Jennifers]|n[Kedyssis]|n[Kerrannas]|n[Korks]|n[Kosmonas]|n[Leandronimus]|n[Liloels]|n[Lothays]|n[Lucius]c[#E303E0]|n[Lulus]|n[Lurtscharas]|n[Mandalus]|n[Manius]|n[Marcus]|n[Mateus]c[#E303E0]|n[Medonis]|n[Melanchaetas]|n[Melaneos]|n[Mermereus]|n[Mimas]|n[Monychustas]|n[Mooncruchers]|n[Nariths]|n[Opiehnzas]c[#E303E0]|n[Orlelds]|n[Peragos]|n[Phalangens]|n[Poirins]|n[Purmanns]|n[Rakrests]|n[Rayols]|n[Redos]|n[Reinkes]|n[Ronaldas]|n[Rynightes]|n[Sentarions]|n[Servius]|n[Sextus]|n[Shivas]|n[Skiterus]|n[Solitanis]|n[Sphingens]|n[Spurius]|n[Stoybaers]|n[Sugos]|n[Taliths]c[#0046FF]|n[Tanias]|n[Tantus]c[#E303E0]|n[Thorstens]|n[Tinothiels]|n[Titus]|n[Trafans]c[#0046FF]|n[Tuneses]|n[Umbros]|n[Umfetas]|n[Umilawens]|n[Uridos]|n[Urothiens]|n[Vuthiels]|n[Watzmanns]|n[Xenphlames]|n[Xus]|n[Yas]|n[Zeindras]c[#0D960D]|n[Zickezackes]|n[Zimbris]|n[Zombers]|n[Δαιμονοφονιάδες]';
-		var suffixList='n[Ο κατακερματισμός της]|n[ΚΑΘΑΡΟΤΗΤΟΣ]|n[Κατεδάφιση του]|n[Πολεμικών τεχνών]|n[Της αυτοδιοίκησης]|n[Της προσευχής]|n[Του διατάγματος]|n[της αλαζονείας]|n[της αλήθειας]|n[της ανάκαμψης]|n[της ανάπλασης]|n[της αναπόδρασης]|n[της ανδρικής ταυτότητας]|n[της ανεξαρτησίας]|n[της απόκρυψης]|n[της αρμονίας]|n[της βιαιότητας]|n[της γενναιοδωρίας]|n[της γης]|n[της διαμάχης]|n[της δολοφονίας]|n[της δύναμης]|n[της ελευθερίας]|n[της Επίθεσης]|n[της επιτυχίας]|n[της επιχειρηματικότητας]|n[της ετοιμότητας]|n[της ευγένειας]c[rgb(0, 70, 255)]|n[της ικανοποίησης]|n[της κολάσεως]c[rgb(0, 70, 255)]|n[της καταστροφής]|n[της μαθητείας]|n[της μάχης]|n[της μεγαλοπρέπειας]|n[της μοχθηρίας]|n[της ορειβασιας]|n[της πίστης]|n[της ποιότητος]|n[της πρόληψης]|n[της προσβολής]|n[της προστασίας]|n[της σιωπής]|n[της σύγχυσης]|n[της ταραχής]|n[της Τελετής]|n[της τρέλας]|n[της χάρης]|n[της υπόσχεσης]|n[της υποχώρησης]|n[του Άρη]|n[του βαπτίσματος]|n[του εμποδίου]|n[του ενδιαφέροντος]|n[του ευνουχισμού]|n[του ηλιου]|n[του θύματος]|n[του μπλοκαρίσματος]|n[του παραδεισου]c[rgb(0, 70, 255)]|n[του φεγγαριού]|n[των καταραμένων]|n[των τραυμάτων  ]|n[of Chakra]';
+		var prefixList='n[Adendathiels]|n[Amelias]|n[Amoviels]|n[Anchorons]|n[Appius]|n[Asayseths]|n[Asendacs]|n[Ashitills]|n[Bacias]|n[Barbekuus]|n[Beasthammers]|n[Berrys]|n[Bilgs]|n[Calódiens]c[#0D960D]|n[Chabdyns]|n[Chalinis]|n[Chealoths]|n[Cheggovs]|n[Chucks]|n[Ciallans]|n[Cisiens]|n[Dairus]|n[Decimus]|n[Denovs]|n[Dexterus]|n[Doitrems]|n[Doomeniks]|n[Elrarangs]|n[Elvilmandels]|n[Elywens]|n[Evotavs]|n[Fernabasts]|n[Fitschis]|n[Frabos]|n[Frickoys]|n[Frientas]|n[Fustriels]|n[Gadriewens]|n[Gaius]c[#E303E0]|n[Galarands]|n[Gidras]|n[Gonaks]|n[Granks]|n[Grasscrawlers]|n[Heudois]|n[Heuhois]|n[Ibiwans]|n[Ichorus]c[#E303E0]|n[Ismaels]|n[Isundels]|n[Jennifers]|n[Kedyssis]|n[Kerrannas]|n[Korks]|n[Kosmonas]|n[Leandronimus]|n[Liloels]|n[Lothays]|n[Lucius]c[#E303E0]|n[Lulus]|n[Lurtscharas]|n[Mandalus]|n[Manius]|n[Marcus]|n[Mateus]c[#E303E0]|n[Medonis]|n[Melanchaetas]|n[Melaneos]|n[Mermereus]|n[Mimas]|n[Monychustas]|n[Mooncruchers]|n[Nariths]|n[Opiehnzas]c[#E303E0]|n[Orlelds]|n[Peragos]|n[Phalangens]|n[Poirins]|n[Purmanns]|n[Rakrests]|n[Rayols]|n[Redos]|n[Reinkes]|n[Ronaldas]|n[Rynightes]|n[Sentarions]|n[Servius]|n[Sextus]|n[Shivas]|n[Skiterus]|n[Solitanis]|n[Sphingens]|n[Spurius]|n[Stoybaers]|n[Sugos]|n[Táliths]c[#0046FF]|n[Tanias]|n[Tantus]c[#E303E0]|n[Thorstens]|n[Tinothiels]|n[Titus]|n[Trafans]c[#0046FF]|n[Tûnêsés]|n[Umbros]|n[Umfetas]|n[Umilawens]|n[Uridos]|n[Uróthiens]|n[Vuthiels]|n[Watzmanns]|n[Xenphlames]|n[Xus]|n[Yas]|n[Zeindras]c[#0D960D]|n[Zickezackes]|n[Zimbris]|n[Zombers]|n[Δαιμονοφονιάδες]';
+		var suffixList='n[Ο κατακερματισμός της]|n[ΚΑΘΑΡΟΤΗΤΟΣ]|n[Κατεδάφιση του]|n[Πολεμικών τεχνών]|n[Της αυτοδιοίκησης]|n[Της προσευχής]|n[Του διατάγματος]|n[της αλαζονείας]|n[της αλήθειας]|n[της ανάκαμψης]|n[της ανάπλασης]|n[της αναπόδρασης]|n[της ανδρικής ταυτότητας]|n[της ανεξαρτησίας]|n[της απόκρυψης]|n[της αρμονίας]|n[της βιαιότητας]|n[της γενναιοδωρίας]|n[της γης]|n[της διαμάχης]|n[της δολοφονίας]|n[της δύναμης]|n[της ελευθερίας]|n[της Επίθεσης]|n[της επιτυχίας]|n[της επιχειρηματικότητας]|n[της ετοιμότητας]|n[της ευγένειας]c[rgb(0, 70, 255)]|n[της ικανοποίησης]|n[της κολάσεως]c[rgb(0, 70, 255)]|n[της καταστροφής]|n[της μαθητείας]|n[της μάχης]|n[της μεγαλοπρέπειας]|n[της μοχθηρίας]|n[της ορειβασιας]|n[της πίστης]|n[της ποιότητος]|n[της πρόληψης]|n[της προσβολής]|n[της προστασίας]|n[της σιωπής]|n[της σύγχυσης]|n[της ταραχής]|n[της Τελετής]|n[της τρέλας]|n[της χάρης]|n[της υπόσχεσης]|n[της υποχώρησης]|n[του Άρη]|n[του βαπτίσματος]|n[του εμποδίου]|n[του ενδιαφέροντος]|n[του ευνουχισμού]|n[του ηλιου]|n[του θανάτου]|n[του θύματος]|n[του μπλοκαρίσματος]|n[του παραδείσου]c[rgb(0, 70, 255)]|n[του φεγγαριού]|n[των καταραμένων]|n[των τραυμάτων  ]|n[of Chakra]';
 		var foodList='n[Κοτόπουλο]|n[Κρέας]|n[Μήλο]|n[Μπανάνες]|n[Μπριζόλα]|n[Τυρί]|n[Φίλτρο ζωής]|n[Ψάρι]|n[Ψωμάκι]|n[Ψωμί]';
 		var tempImpList='n[Λευκάγκαθα]|n[Μουκάλια δύναμης]v[δύναμης]c[blue]|n[Μουκάλια ικανότητας]v[ικανότητας]c[yellow]|n[Μουκάλια επιδεξιότητας]v[επιδεξιότητας]c[green]|n[Μουκάλια φυσικής κατάστασης]v[φυσικής κατάστασης]c[#FF7F00]|n[Μουκάλια χαρίσματος]v[χαρίσματος]c[purple]|n[Μουκάλια εξυπνάδας]v[εξυπνάδας]c[red]n[Ρίζα από τάιγκα]';
 		var impList='n[Εξοπλισμός]|n[Κίτρινη πούδρα]c[yellow]|n[Κόκκινη πούδρα]c[red]|n[Μπλέ πούδρα]c[blue]|n[Μυλόπετρα]|n[Μωβ πούδρα]c[purple]|n[Πορτοκαλί πούδρα]c[#FF7F00]|n[Πράσινη πούδρα]c[green]|n[Σφουγγάρι καθαρίσματος]';
@@ -2250,13 +3298,37 @@ function itemList(){
         var tempImpList = 'n[Lahve charismatu]v[charisma]c[purple]|n[Lahve dovednosti]v[bystrost]c[yellow]|n[Lahve obratnosti]v[obratnost]c[green]|n[Lahve síly]v[síly]c[blue]|n[Lahve inteligence]v[inteligence]c[red]|n[Lahve odolnosti]v[odolnosti]c[orange]';
         var impList = 'n[Brousek]|n[Ochranné vybavení]c[#4C3430]|n[Houba]c[grey]|n[Fialový prach]c[purple]|n[Žlutý prach]c[yellow]|n[Modrý prášek]c[blue]|n[Rudý prášek]c[red]|n[Oranžový prach]c[orange]';
 	}else if(GCAO_lang=='us' || GCAO_lang=='com'){
-		var prefixList = 'n[Adendathiels]|n[Amelias]|n[Amoviels]|n[Anchorons]|n[Appius]|n[Asayseths]|n[Asendacs]|n[Ashitills]|n[Bacias]|n[Barbekuus]|n[Beasthammers]|n[Berrys]|n[Bilgs]|n[Calodiens]c[#0D960D]|n[Chabdyns]|n[Chalinis]|n[Chealoths]|n[Cheggovs]|n[Chucks]|n[Ciallans]|n[Cisiens]|n[Dairus]|n[Decimus]|n[Denovs]|n[Dexterus]|n[Doitrems]|n[Doomeniks]|n[Elrarangs]|n[Elvilmandels]|n[Elywens]|n[Evotavs]|n[Fernabasts]|n[Fitschis]|n[Frabos]|n[Frickoys]|n[Frientas]|n[Fustriels]|n[Gadriewens]|n[Gaius]c[#E303E0]|n[Galarands]|n[Gidras]|n[Gonaks]|n[Granks]|n[Grasscrawlers]|n[Heudois]|n[Heuhois]|n[Ibiwans]|n[Ichorus]c[#E303E0]|n[Ismaels]|n[Isundels]|n[Jennifers]|n[Kedyssis]|n[Kerrannas]|n[Korks]|n[Kosmonas]|n[Leandronimus]|n[Liloels]|n[Lothays]|n[Lucius]c[#E303E0]|n[Lulus]|n[Lurtscharas]|n[Mandalus]|n[Manius]|n[Marcus]|n[Mateus]c[#E303E0]|n[Medonis]|n[Melanchaetas]|n[Melaneos]|n[Mermereus]|n[Mimas]|n[Monychustas]|n[Mooncruchers]|n[Nariths]|n[Opiehnzas]c[#E303E0]|n[Orlelds]|n[Peragos]|n[Phalangens]|n[Poirins]|n[Purmanns]|n[Rakrests]|n[Rayols]|n[Redos]|n[Reinkes]|n[Ronaldas]|n[Rynightes]|n[Sentarions]|n[Servius]|n[Sextus]|n[Shivas]|n[Skiterus]|n[Solitanis]|n[Sphingens]|n[Spurius]|n[Stoybaers]|n[Sugos]|n[Taliths]c[#0046FF]|n[Tanias]|n[Tantus]c[#E303E0]|n[Thorstens]|n[Tinothiels]|n[Titus]|n[Trafans]c[#0046FF5)]|n[Tuneses]|n[Umbros]|n[Umfetas]|n[Umilawens]|n[Uridos]|n[Urothiens]|n[Vuthiels]|n[Watzmanns]|n[Xenphlames]|n[Xus]|n[Yas]|n[Zeindras]c[#0D960D]|n[Zickezackes]|n[Zimbris]|n[Zombers]';
+		var prefixList = 'n[Adendathiels]|n[Amelias]|n[Amoviels]|n[Anchorons]|n[Appius]|n[Asayseths]|n[Asendacs]|n[Ashitills]|n[Bacias]|n[Barbekuus]|n[Beasthammers]|n[Berrys]|n[Bilgs]|n[Calódiens]c[#0D960D]|n[Chabdyns]|n[Chalinis]|n[Chealoths]|n[Cheggovs]|n[Chucks]|n[Ciallans]|n[Cisiens]|n[Dairus]|n[Decimus]|n[Denovs]|n[Dexterus]|n[Doitrems]|n[Doomeniks]|n[Elrarangs]|n[Elvilmandels]|n[Elywens]|n[Evotavs]|n[Fernabasts]|n[Fitschis]|n[Frabos]|n[Frickoys]|n[Frientas]|n[Fustriels]|n[Gadriewens]|n[Gaius]c[#E303E0]|n[Galarands]|n[Gidras]|n[Gonaks]|n[Granks]|n[Grasscrawlers]|n[Heudois]|n[Heuhois]|n[Ibiwans]|n[Ichorus]c[#E303E0]|n[Ismaels]|n[Isundels]|n[Jennifers]|n[Kedyssis]|n[Kerrannas]|n[Korks]|n[Kosmonas]|n[Leandronimus]|n[Liloels]|n[Lothays]|n[Lucius]c[#E303E0]|n[Lulus]|n[Lurtscharas]|n[Mandalus]|n[Manius]|n[Marcus]|n[Mateus]c[#E303E0]|n[Medonis]|n[Melanchaetas]|n[Melaneos]|n[Mermereus]|n[Mimas]|n[Monychustas]|n[Mooncruchers]|n[Nariths]|n[Opiehnzas]c[#E303E0]|n[Orlelds]|n[Peragos]|n[Phalangens]|n[Poirins]|n[Purmanns]|n[Rakrests]|n[Rayols]|n[Redos]|n[Reinkes]|n[Ronaldas]|n[Rynightes]|n[Sentarions]|n[Servius]|n[Sextus]|n[Shivas]|n[Skiterus]|n[Solitanis]|n[Sphingens]|n[Spurius]|n[Stoybaers]|n[Sugos]|n[Táliths]c[#0046FF]|n[Tanias]|n[Tantus]c[#E303E0]|n[Thorstens]|n[Tinothiels]|n[Titus]|n[Trafans]c[#0046FF5)]|n[Tûnêsés]|n[Umbros]|n[Umfetas]|n[Umilawens]|n[Uridos]|n[Uróthiens]|n[Vuthiels]|n[Watzmanns]|n[Xenphlames]|n[Xus]|n[Yas]|n[Zeindras]c[#0D960D]|n[Zickezackes]|n[Zimbris]|n[Zombers]';
 		var suffixList = 'n[No translation available]v[ ]';
 		var foodList = 'n[Apple]|n[Bananas]|n[Bread]|n[Bread rolls]|n[Cheese]|n[Chicken]|n[Fish]|n[Healing potion]|n[Meat haunch]|n[Steak]';
 		var tempImpList = 'n[Bottles of strength]c[blue]|n[Bottles of aptness]c[yellow]|n[Bottles of agility]c[green]|n[Bottles of constitution]c[orange]|n[Bottles of charisma]c[purple]|n[Bottles of Inteligence]c[red]|n[Howthorn]|n[Taigaroot]';
 		var impList = 'n[Blue powder]c[blue]|n[Detergent sponge]|n[Green powder]c[green]|n[Grindstone]|n[Orange powder]c[orange]|n[Protective gear]|n[Red powder]c[red]|n[Violet powder]c[purple]|n[Yellow powder]c[yellow]';
-	}else{
+	}else if(GCAO_lang=='lv'){
+		var prefixList = 'n[Adendathiels]|n[Amelias]|n[Amoviels]|n[Anchorons]|n[Appius]|n[Asayseths]|n[Asendacs]|n[Ashitills]|n[Bacias]|n[Barbekuus]|n[Beasthammers]|n[Berrys]|n[Bilgs]|n[Calódiens]c[#0D960D]|n[Chabdyns]|n[Chalinis]|n[Chealoths]|n[Cheggovs]|n[Chucks]|n[Ciallans]|n[Cisiens]|n[Dairus]|n[Decimus]|n[Denovs]|n[Dexterus]|n[Doitrems]|n[Doomeniks]|n[Elrarangs]|n[Elvilmandels]|n[Elywens]|n[Evotavs]|n[Fernabasts]|n[Fitschis]|n[Frabos]|n[Frickoys]|n[Frientas]|n[Fustriels]|n[Gadriewens]|n[Gaius]c[#E303E0]|n[Galarands]|n[Gidras]|n[Gonaks]|n[Granks]|n[Grasscrawlers]|n[Heudois]|n[Heuhois]|n[Ibiwans]|n[Ichorus]c[#E303E0]|n[Ismaels]|n[Isundels]|n[Jennifers]|n[Kedyssis]|n[Kerrannas]|n[Korks]|n[Kosmonas]|n[Leandronimus]|n[Liloels]|n[Lothays]|n[Lucius]c[#E303E0]|n[Lulus]|n[Lurtscharas]|n[Mandalus]|n[Manius]|n[Marcus]|n[Mateus]c[#E303E0]|n[Medonis]|n[Melanchaetas]|n[Melaneos]|n[Mermereus]|n[Mimas]|n[Monychustas]|n[Mooncruchers]|n[Nariths]|n[Opiehnzas]c[#E303E0]|n[Orlelds]|n[Peragos]|n[Phalangens]|n[Poirins]|n[Purmanns]|n[Rakrests]|n[Rayols]|n[Redos]|n[Reinkes]|n[Ronaldas]|n[Rynightes]|n[Sentarions]|n[Servius]|n[Sextus]|n[Shivas]|n[Skiterus]|n[Solitanis]|n[Sphingens]|n[Spurius]|n[Stoybaers]|n[Sugos]|n[Táliths]c[#0046FF]|n[Tanias]|n[Tantus]c[#E303E0]|n[Thorstens]|n[Tinothiels]|n[Titus]|n[Trafans]c[#0046FF5)]|n[Tûnêsés]|n[Umbros]|n[Umfetas]|n[Umilawens]|n[Uridos]|n[Uróthiens]|n[Vuthiels]|n[Watzmanns]|n[Xenphlames]|n[Xus]|n[Yas]|n[Zeindras]c[#0D960D]|n[Zickezackes]|n[Zimbris]|n[Zombers]';
+		var suffixList = 'n[No translation available]v[ ]';
+		var foodList = 'n[Ābols]|n[Banāni]|n[Maize]|n[Maizes rullīši]|n[Siers]|n[Cālis]|n[Zivs]|n[Dzīvības dzira]|n[Gaļas gurns]|n[Steiks]';
+		var tempImpList = 'n[Spēka pudele]c[blue]|n[HVZ pudele]c[yellow]|n[Veiklības pudele]c[green]|n[Konstitūcijas pudele]c[orange]|n[Valdzinājuma pudele]c[purple]|n[Inteliģences pudele]c[red]|n[Vilkābele]|n[Taigas sakne]';
+		var impList = 'n[Zilais pulveris]c[blue]|n[Tīrošā švamme]|n[Zaļais pulveris]c[green]|n[Galoda]|n[Oranžais pulveris]c[orange]|n[Aizsargājošs apģērbs]|n[Sarkanais pulveris]c[red]|n[Violetais pulveris]c[purple]|n[Dzletenais pulveris]c[yellow]';
+	}else if(GCAO_lang=='de'){
+		var prefixList = 'n[Adendathiels]|n[Amelias]|n[Amoviels]|n[Anchorons]|n[Appius]|n[Asayseths]|n[Asendacs]|n[Ashitills]|n[Bacias]|n[Barbekuus]|n[Beasthammers]|n[Berrys]|n[Bilgs]|n[Calódiens]c[#0D960D]|n[Chabdyns]|n[Chalinis]|n[Chealoths]|n[Cheggovs]|n[Chucks]|n[Ciallans]|n[Cisiens]|n[Dairus]|n[Decimus]|n[Denovs]|n[Dexterus]|n[Doitrems]|n[Doomeniks]|n[Elrarangs]|n[Elvilmandels]|n[Elywens]|n[Evotavs]|n[Fernabasts]|n[Fitschis]|n[Frabos]|n[Frickoys]|n[Frientas]|n[Fustriels]|n[Gadriewens]|n[Gaius]c[#E303E0]|n[Galarands]|n[Gidras]|n[Gonaks]|n[Granks]|n[Grasscrawlers]|n[Heudois]|n[Heuhois]|n[Ibiwans]|n[Ichorus]c[#E303E0]|n[Ismaels]|n[Isundels]|n[Jennifers]|n[Kedyssis]|n[Kerrannas]|n[Korks]|n[Kosmonas]|n[Leandronimus]|n[Liloels]|n[Lothays]|n[Lucius]c[#E303E0]|n[Lulus]|n[Lurtscharas]|n[Mandalus]|n[Manius]|n[Marcus]|n[Mateus]c[#E303E0]|n[Medonis]|n[Melanchaetas]|n[Melaneos]|n[Mermereus]|n[Mimas]|n[Monychustas]|n[Mooncruchers]|n[Nariths]|n[Opiehnzas]c[#E303E0]|n[Orlelds]|n[Peragos]|n[Phalangens]|n[Poirins]|n[Purmanns]|n[Rakrests]|n[Rayols]|n[Redos]|n[Reinkes]|n[Ronaldas]|n[Rynightes]|n[Sentarions]|n[Servius]|n[Sextus]|n[Shivas]|n[Skiterus]|n[Solitanis]|n[Sphingens]|n[Spurius]|n[Stoybaers]|n[Sugos]|n[Táliths]c[#0046FF]|n[Tanias]|n[Tantus]c[#E303E0]|n[Thorstens]|n[Tinothiels]|n[Titus]|n[Trafans]c[#0046FF5)]|n[Tûnêsés]|n[Umbros]|n[Umfetas]|n[Umilawens]|n[Uridos]|n[Uróthiens]|n[Vuthiels]|n[Watzmanns]|n[Xenphlames]|n[Xus]|n[Yas]|n[Zeindras]c[#0D960D]|n[Zickezackes]|n[Zimbris]|n[Zombers]';
+		var suffixList = 'n[Hölle]|n[Paradies]';
+		var foodList = 'n[Apfel]|n[Bananen]|n[Brot]|n[Brötchen]|n[Käse]|n[Hähnchen]|n[Fisch]|n[Heiltrank]|n[Fleischkeule]|n[Steak]';
+		var tempImpList = 'n[Flasche der Stärke]c[blue]|n[Flasche des Geschicks]c[yellow]|n[Flasche der Beweglichkeit]c[green]|n[Flasche der Konstitution]c[orange]|n[Flasche des Charismas]c[purple]|n[Flasche der Intelligenz]c[red]|n[Weißdornen]|n[Taigawurzel]|n[Gingkoblätter]';
+		var impList = 'n[Blaues Pulver]c[blue]|n[Reinigender Schwamm]|n[Grünes Pulver]c[green]|n[Schleifstein]|n[Orangenes Pulver]c[orange]|n[Rüstungsset]|n[Rotes Pulver]c[red]|n[Violettes Pulver]c[purple]|n[Gelbes Pulver]c[yellow]';
+	}else if(GCAO_lang=='nl'){
+		var prefixList = 'n[Adendathiels]|n[Amelias]|n[Amoviels]|n[Anchorons]|n[Appius]|n[Asayseths]|n[Asendacs]|n[Ashitills]|n[Bacias]|n[Barbekuus]|n[Beasthammers]|n[Berrys]|n[Bilgs]|n[Calódiens]c[#0D960D]|n[Chabdyns]|n[Chalinis]|n[Chealoths]|n[Cheggovs]|n[Chucks]|n[Ciallans]|n[Cisiens]|n[Dairus]|n[Decimus]|n[Denovs]|n[Dexterus]|n[Doitrems]|n[Doomeniks]|n[Elrarangs]|n[Elvilmandels]|n[Elywens]|n[Evotavs]|n[Fernabasts]|n[Fitschis]|n[Frabos]|n[Frickoys]|n[Frientas]|n[Fustriels]|n[Gadriewens]|n[Gaius]c[#E303E0]|n[Galarands]|n[Gidras]|n[Gonaks]|n[Granks]|n[Grasscrawlers]|n[Heudois]|n[Heuhois]|n[Ibiwans]|n[Ichorus]c[#E303E0]|n[Ismaels]|n[Isundels]|n[Jennifers]|n[Kedyssis]|n[Kerrannas]|n[Korks]|n[Kosmonas]|n[Leandronimus]|n[Liloels]|n[Lothays]|n[Lucius]c[#E303E0]|n[Lulus]|n[Lurtscharas]|n[Mandalus]|n[Manius]|n[Marcus]|n[Mateus]c[#E303E0]|n[Medonis]|n[Melanchaetas]|n[Melaneos]|n[Mermereus]|n[Mimas]|n[Monychustas]|n[Mooncruchers]|n[Nariths]|n[Opiehnzas]c[#E303E0]|n[Orlelds]|n[Peragos]|n[Phalangens]|n[Poirins]|n[Purmanns]|n[Rakrests]|n[Rayols]|n[Redos]|n[Reinkes]|n[Ronaldas]|n[Rynightes]|n[Sentarions]|n[Servius]|n[Sextus]|n[Shivas]|n[Skiterus]|n[Solitanis]|n[Sphingens]|n[Spurius]|n[Stoybaers]|n[Sugos]|n[Táliths]c[#0046FF]|n[Tanias]|n[Tantus]c[#E303E0]|n[Thorstens]|n[Tinothiels]|n[Titus]|n[Travans]c[#0046FF5)]|n[Tûnêsés]|n[Umbros]|n[Umfetas]|n[Umilawens]|n[Uridos]|n[Uróthiens]|n[Vuthiels]|n[Watzmanns]|n[Xenphlames]|n[Xus]|n[Yas]|n[Zeindras]c[#0D960D]|n[Zickezackes]|n[Zimbris]|n[Zombers]';
+		var suffixList = 'n[Hel]|n[Hemel]n[Profijt]';
+		var foodList = 'n[Appel]|n[Bananen]|n[Brood]|n[Brood rollen]|n[Kaas]|n[Kip]|n[Vis]|n[Levensdrankje]|n[Stuk vlees]|n[Biefstuk]';
+		var tempImpList = 'n[Flesje van kracht]c[blauw]|n[Flesje van doeltreffendheid]c[geel]|n[Flesje van de snelheid]c[groen]|n[Bottles of constitution]c[orange]|n[Flesje van charisma]c[paars]|n[Flesje van intelligentie]c[rood]|n[Howthorn]|n[Taigaroot]';
+		var impList = 'n[Blauw poeder]c[blue]|n[Reinigings spons]|n[Groen poeder]c[green]|n[Slijpsteen]|n[Oranje poeder]c[orange]|n[Beschermende uitrusting]|n[Rood poeder]c[red]|n[Paars poeder]c[purple]|n[Geel poeder]c[yellow]';
+	}else if(GCAO_lang=='hu'){
 		var prefixList = 'n[Adendathiels]|n[Amelias]|n[Amoviels]|n[Anchorons]|n[Appius]|n[Asayseths]|n[Asendacs]|n[Ashitills]|n[Bacias]|n[Barbekuus]|n[Beasthammers]|n[Berrys]|n[Bilgs]|n[Calodiens]c[#0D960D]|n[Chabdyns]|n[Chalinis]|n[Chealoths]|n[Cheggovs]|n[Chucks]|n[Ciallans]|n[Cisiens]|n[Dairus]|n[Decimus]|n[Denovs]|n[Dexterus]|n[Doitrems]|n[Doomeniks]|n[Elrarangs]|n[Elvilmandels]|n[Elywens]|n[Evotavs]|n[Fernabasts]|n[Fitschis]|n[Frabos]|n[Frickoys]|n[Frientas]|n[Fustriels]|n[Gadriewens]|n[Gaius]c[#E303E0]|n[Galarands]|n[Gidras]|n[Gonaks]|n[Granks]|n[Grasscrawlers]|n[Heudois]|n[Heuhois]|n[Ibiwans]|n[Ichorus]c[#E303E0]|n[Ismaels]|n[Isundels]|n[Jennifers]|n[Kedyssis]|n[Kerrannas]|n[Korks]|n[Kosmonas]|n[Leandronimus]|n[Liloels]|n[Lothays]|n[Lucius]c[#E303E0]|n[Lulus]|n[Lurtscharas]|n[Mandalus]|n[Manius]|n[Marcus]|n[Mateus]c[#E303E0]|n[Medonis]|n[Melanchaetas]|n[Melaneos]|n[Mermereus]|n[Mimas]|n[Monychustas]|n[Mooncruchers]|n[Nariths]|n[Opiehnzas]c[#E303E0]|n[Orlelds]|n[Peragos]|n[Phalangens]|n[Poirins]|n[Purmanns]|n[Rakrests]|n[Rayols]|n[Redos]|n[Reinkes]|n[Ronaldas]|n[Rynightes]|n[Sentarions]|n[Servius]|n[Sextus]|n[Shivas]|n[Skiterus]|n[Solitanis]|n[Sphingens]|n[Spurius]|n[Stoybaers]|n[Sugos]|n[Taliths]c[#0046FF]|n[Tanias]|n[Tantus]c[#E303E0]|n[Thorstens]|n[Tinothiels]|n[Titus]|n[Trafans]c[#0046FF5)]|n[Tuneses]|n[Umbros]|n[Umfetas]|n[Umilawens]|n[Uridos]|n[Urothiens]|n[Vuthiels]|n[Watzmanns]|n[Xenphlames]|n[Xus]|n[Yas]|n[Zeindras]c[#0D960D]|n[Zickezackes]|n[Zimbris]|n[Zombers]';
+		var suffixList = 'n[Hell]|n[Paradise]';
+		var foodList = 'n[Alma]|n[Banán]|n[Kenyér]|n[Kenyér szeletek]|n[Sajt]|n[Csirke]|n[Hal]|n[Életerő ital]|n[Comb hús]|n[Steak]';
+		var tempImpList = 'n[Az erő palackjai]c[blue]|n[A talpraesettség palackjai]c[yellow]|n[A mozgékonyság palackjai]c[green]|n[Az alkat palackjai]c[orange]|n[A karizma palackjai]c[purple]|n[Az intelligencia palackjai]c[red]|n[Howthorn]|n[Taigaroot]';
+		var impList = 'n[kék púder]c[blue]|n[tisztító szivacs]|n[zöld púder]c[green]|n[köszörűkő]|n[narancs púder]c[orange]|n[védőfelszerelés]|n[vörös púder]c[red]|n[lila púder]c[purple]|n[sárga púder]c[yellow]';
+	}else{
+		var prefixList = 'n[Adendathiels]|n[Amelias]|n[Amoviels]|n[Anchorons]|n[Appius]|n[Asayseths]|n[Asendacs]|n[Ashitills]|n[Bacias]|n[Barbekuus]|n[Beasthammers]|n[Berrys]|n[Bilgs]|n[Calódiens]c[#0D960D]|n[Chabdyns]|n[Chalinis]|n[Chealoths]|n[Cheggovs]|n[Chucks]|n[Ciallans]|n[Cisiens]|n[Dairus]|n[Decimus]|n[Denovs]|n[Dexterus]|n[Doitrems]|n[Doomeniks]|n[Elrarangs]|n[Elvilmandels]|n[Elywens]|n[Evotavs]|n[Fernabasts]|n[Fitschis]|n[Frabos]|n[Frickoys]|n[Frientas]|n[Fustriels]|n[Gadriewens]|n[Gaius]c[#E303E0]|n[Galarands]|n[Gidras]|n[Gonaks]|n[Granks]|n[Grasscrawlers]|n[Heudois]|n[Heuhois]|n[Ibiwans]|n[Ichorus]c[#E303E0]|n[Ismaels]|n[Isundels]|n[Jennifers]|n[Kedyssis]|n[Kerrannas]|n[Korks]|n[Kosmonas]|n[Leandronimus]|n[Liloels]|n[Lothays]|n[Lucius]c[#E303E0]|n[Lulus]|n[Lurtscharas]|n[Mandalus]|n[Manius]|n[Marcus]|n[Mateus]c[#E303E0]|n[Medonis]|n[Melanchaetas]|n[Melaneos]|n[Mermereus]|n[Mimas]|n[Monychustas]|n[Mooncruchers]|n[Nariths]|n[Opiehnzas]c[#E303E0]|n[Orlelds]|n[Peragos]|n[Phalangens]|n[Poirins]|n[Purmanns]|n[Rakrests]|n[Rayols]|n[Redos]|n[Reinkes]|n[Ronaldas]|n[Rynightes]|n[Sentarions]|n[Servius]|n[Sextus]|n[Shivas]|n[Skiterus]|n[Solitanis]|n[Sphingens]|n[Spurius]|n[Stoybaers]|n[Sugos]|n[Táliths]c[#0046FF]|n[Tanias]|n[Tantus]c[#E303E0]|n[Thorstens]|n[Tinothiels]|n[Titus]|n[Trafans]c[#0046FF5)]|n[Tûnêsés]|n[Umbros]|n[Umfetas]|n[Umilawens]|n[Uridos]|n[Uróthiens]|n[Vuthiels]|n[Watzmanns]|n[Xenphlames]|n[Xus]|n[Yas]|n[Zeindras]c[#0D960D]|n[Zickezackes]|n[Zimbris]|n[Zombers]';
 		var suffixList = 'n[No translation available]v[ ]';
 		var foodList = 'n[No translation available]v[ ]';
 		var tempImpList = 'n[No translation available]v[ ]';
@@ -2264,9 +3336,11 @@ function itemList(){
 	}
 	
 	if(document.getElementById('auction_filter')){
-		var L_food=document.getElementById('auction_filter').getElementsByTagName('tr')[2].getElementsByTagName('option')[9].innerHTML;
-		var L_upgrades=document.getElementById('auction_filter').getElementsByTagName('tr')[2].getElementsByTagName('option')[10].innerHTML;
-		var L_enisxisis=document.getElementById('auction_filter').getElementsByTagName('tr')[2].getElementsByTagName('option')[11].innerHTML;
+		if(!document.location.href.match('ttype=3')){
+			var L_food=document.getElementById('auction_filter').getElementsByTagName('tr')[2].getElementsByTagName('option')[9].innerHTML;
+			var L_upgrades=document.getElementById('auction_filter').getElementsByTagName('tr')[2].getElementsByTagName('option')[10].innerHTML;
+			var L_enisxisis=document.getElementById('auction_filter').getElementsByTagName('tr')[2].getElementsByTagName('option')[11].innerHTML;
+		}
 		var L_search=document.getElementById('auction_filter').getElementsByTagName('input')[1].value;
 	}
 	var L_selectEnixsiseis=L_select+' '+L_enisxisis;
@@ -2274,108 +3348,105 @@ function itemList(){
 	var L_selectFood=L_select+' '+L_food;
 	
 	if(document.getElementById('auction_filter') || document.getElementById('market_item_table')){
-		var img_clear = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAWCAYAAAC7ZX7KAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAI0SURBVFhH1ZdPSxtBGMZfU1Hrn2yWVugfUS+BkGM/gIJ4K+1H8WLOPfTiJd+h50JBsPTqd0gIwVKRlJ5KiFktTQ12dzvP1meyziqziePBFx5m9p1nXn++jpPs1N7ORiyO44k3J72zC8dVRVC34LrqcumxLPvzrssK606xwz8Lr5z8kM3VTlLnqHOajF/8XSd1d70PSZ1rwPV6/U7Fa7Wa3AR8+O7Nnepuvf8sBM4cicFgIJPIRhQMY5lEZl3nZ/g28EgtTCIrcBzHAhWLxUR8Nkdz3dbhSN1F0LP5R4n4bI7mem5gGj3Py0Ajx+AvYgeOFeToBn2xAOj/OQo5BnO5gfv9vvaWSiUNjTkDnrzAoWKFvv/6q/evLE4nOQhzBjzMW4GjKBKq1+tpv+/7AjGwlvbaOkwAjCfnI+i1pWmBGFhLe8cCBlC3282wIJeGxdwWl8qS1tdgBM29yJk+K3AQBGLK3JTHY+758VvE1CSezLUWhqGkVS6XM81DzvTZOjwMI0lr++XoGHAvcqbP2uH0n7pSqWh/u90WiIG1sc6wur/CK71endF1DjpDgRhYow9jbuBqtaq9rVZLw2HOgIfQtg4T4u36rLbun1xoOMwZ8NCfG5jGZrOZ+QdDjjEuMPd9Ov5zrZMARI6RG5j3aqPREOi2Tzpz3dph9QERKn38NkiE+U0y13N32Ly2bM82YKxHqovjyqz74L5ePswv8HhXcv1agzeO+6hbeP50wTkszt191f0Hfd8fmwxC+yAAAAAASUVORK5CYII%3D';
-
 		if(GCAO_mod=='auction'){ //auction
-            var itemType = Number(document.getElementById('auction_filter').getElementsByTagName('select')[1].innerHTML.match(/option value="(\d+)" selected="selected"/i)[1]);
-            document.getElementById('auction_filter').getElementsByTagName('input')[1].setAttribute('id', "submitButton");
-            var submitButton = document.getElementById('submitButton');
-            var clearButton = '<div id="Clear" style="background-image: url(' + img_clear + ');background-position: 0px 0px;position:absolute;margin-top:-24px;margin-left:208px;width:22px;height:22px;" onmouseover="document.getElementById(\'Clear\').setAttribute(\'style\',\'background-image: url(' + img_clear + ');background-position: 22px 0px;position:absolute;margin-top:-24px;margin-left:208px;width:22px;height:22px;\')" onmouseout="document.getElementById(\'Clear\').setAttribute(\'style\',\'background-image: url(' + img_clear + ');background-position: 0px 0px;position:absolute;margin-top:-24px;margin-left:208px;width:22px;height:22px;\')" onclick="document.getElementById(\'auction_filter\').getElementsByTagName(\'input\')[0].value=\'\'" title="Clear"></div>';
-            document.getElementById('auction_filter').getElementsByTagName('tr')[0].getElementsByTagName('td')[1].innerHTML += clearButton;
+			var itemType = Number(document.getElementById('auction_filter').getElementsByTagName('select')[1].innerHTML.match(/option value="(\d+)" selected="selected"/i)[1]);
+			document.getElementById('auction_filter').getElementsByTagName('input')[1].setAttribute('id', "submitButton");
+			var submitButton = document.getElementById('submitButton');
+			var clearButton = '<div id="Clear" style="background-image: url(' + img_clear + ');background-position: 0px 0px;position:absolute;margin-top:-24px;margin-left:208px;width:22px;height:22px;" onmouseover="document.getElementById(\'Clear\').setAttribute(\'style\',\'background-image: url(' + img_clear + ');background-position: 22px 0px;position:absolute;margin-top:-24px;margin-left:208px;width:22px;height:22px;\')" onmouseout="document.getElementById(\'Clear\').setAttribute(\'style\',\'background-image: url(' + img_clear + ');background-position: 0px 0px;position:absolute;margin-top:-24px;margin-left:208px;width:22px;height:22px;\')" onclick="document.getElementById(\'auction_filter\').getElementsByTagName(\'input\')[0].value=\'\'" title="Clear"></div>';
+			document.getElementById('auction_filter').getElementsByTagName('tr')[0].getElementsByTagName('td')[1].innerHTML += clearButton;
 
-            displayWarnGuildShorAuctionButton();
+			displayWarnGuildShorAuctionButton();
 
-            if(itemType <= 6 || itemType == 8 || itemType == 9){ //all, weapons, shields, armors, helmets, gloves, boots, rings, amulets
-                //prefixes
-                createElemenWithID("tr","prefix_search",document.getElementById('auction_filter').getElementsByTagName('tr')[1]);
-                document.getElementById('prefix_search').innerHTML = '<td style="width: 50%; text-align: center;">'+L_Items+':</td><td style="width: 50%;"><select id="SelectPrefix" name="SelectPrefix"><option value="SP">- '+L_selectItem+' -</option>\n' + makeOpitonsFromItemList(prefixList) + '</select></td>';
-                //suffixes
-                createElemenWithID("tr","suffix_search",document.getElementById('auction_filter').getElementsByTagName('tr')[2]);
-                document.getElementById('suffix_search').innerHTML = '<td style="width: 50%; text-align: center;">'+L_Type+':</td><td style="width: 50%;"><select id="SelectSuffix" name="SelectSuffix">\n<option value="SS">- '+L_selectType+' -</option>\n' + makeOpitonsFromItemList(suffixList) + '</select></td>';
+			if(itemType <= 6 || itemType == 8 || itemType == 9){ //all, weapons, shields, armors, helmets, gloves, boots, rings, amulets
+				//prefixes
+				createElemenWithID("tr","prefix_search",document.getElementById('auction_filter').getElementsByTagName('tr')[1]);
+				document.getElementById('prefix_search').innerHTML = '<td style="width: 50%; text-align: center;">'+L_Items+':</td><td style="width: 50%;"><select id="SelectPrefix" name="SelectPrefix"><option value="SP">- '+L_selectItem+' -</option>\n' + makeOpitonsFromItemList(prefixList) + '</select></td>';
+				//suffixes
+				createElemenWithID("tr","suffix_search",document.getElementById('auction_filter').getElementsByTagName('tr')[2]);
+				document.getElementById('suffix_search').innerHTML = '<td style="width: 50%; text-align: center;">'+L_Type+':</td><td style="width: 50%;"><select id="SelectSuffix" name="SelectSuffix">\n<option value="SS">- '+L_selectType+' -</option>\n' + makeOpitonsFromItemList(suffixList) + '</select></td>';
 
-                if (itemType == 1){ //weapons
-                    // minimal damage filter script
-                    createElemenWithID("script","damageFunction",document.getElementById('auction_filter'));
-                    document.getElementById('damageFunction').setAttribute('type', 'text/javascript');
-                    document.getElementById('damageFunction').innerHTML = "\n"+'function filterItemsByDamage(requiredDamage){'+"\n"+
-                    '   var items = document.getElementsByTagName(\'script\')[11].innerHTML;'+"\n"+
-                    '   var i=0;'+"\n"+
-                    '   var auctionItemCell;'+"\n"+
-                    '   //get items IDs'+"\n"+
-                    '   var itemsIDRegExp = /"auction_(\\d+)"/gi;'+"\n"+
-                    '   var itemsID=new Array();'+"\n"+
-                    '   var temp;'+"\n"+
-                    '   temp = itemsIDRegExp.exec(items);'+"\n"+
-                    '   while(temp != null){'+"\n"+
-                    '       itemsID[i]=temp[1];'+"\n"+
-                    '       //reset visibility'+"\n"+
-                    '       auctionItemCell = document.getElementById(\'auction_\'+itemsID[i]).parentNode.parentNode.parentNode.parentNode.parentNode;'+"\n"+
-                    '       auctionItemCell.setAttribute(\'style\',\'visibility:visible\');'+"\n"+
-                    '       if((i+2)%2!=0){'+"\n"+
-                    '           auctionItemCell.parentNode.setAttribute(\'style\',\'display:table-row\');'+"\n"+
-                    '       }'+"\n"+
-                    '       i++;'+"\n"+
-                    '       temp = itemsIDRegExp.exec(items);'+"\n"+
-                    '   }'+"\n"+
-                    ''+"\n"+
-                    '   //get items damage'+"\n"+
-                    '   var itemsDamageRegExp = /\.+? \\d+ - (\\d+)/gi;'+"\n"+
-                    '   var itemsDamage;'+"\n"+
-                    '   var itemsCount=0;'+"\n"+
-                    '   var hidden=false;'+"\n"+
-                    '   var y=0;'+"\n"+
-                    '   i=0;'+"\n"+
-                    '   itemsDamage = itemsDamageRegExp.exec(items);'+"\n"+
-                    '   while(itemsDamage != null){'+"\n"+
-                    '       if((i+2)%2==0){ //if we are on auction item, not owned'+"\n"+
-                    '          auctionItemCell = document.getElementById(\'auction_\'+itemsID[y]).parentNode.parentNode.parentNode.parentNode.parentNode;'+"\n"+
-                    '          if(Number(itemsDamage[1])<Number(requiredDamage)){ // did not match'+"\n"+
-                    '               auctionItemCell.setAttribute(\'style\',\'visibility:hidden\');'+"\n"+
-                    '               if((y+2)%2!=0 && hidden){ //2nd cell in row and 1st is hidden - hide whole row'+"\n"+
-                    '                   if(!document.getElementById("td1")){'+"\n"+
-                    '                      auctionItemCell.parentNode.setAttribute(\'style\',\'display:none\');'+"\n"+
-                    '                   }'+"\n"+
-                    '               }'+"\n"+
-                    '               hidden=true;'+"\n"+
-                    '          } else{ //match'+"\n"+
-                    '               itemsCount++;'+"\n"+
-                    '               hidden=false;'+"\n"+
-                    '          }'+"\n"+
-                    '       }'+"\n"+
-                    '       i++'+"\n"+
-                    '       if(((i+2)%2)==0){ //move to next itemID'+"\n"+
-                    '           y++;'+"\n"+
-                    '       }'+"\n"+
-                    '       itemsDamage = itemsDamageRegExp.exec(items);'+"\n"+
-                    '   }'+"\n"+
-                    '   //view result'+"\n"+
-                    '   document.getElementById(\'damageFilterResult\').innerHTML = \''+L_wearponsFound+': <b>\'+itemsCount+\'</b>\';'+"\n"+
-                    '   document.getElementById(\'damageFilterResult\').style.display = \'block\';'+"\n"+
-                    '}'+"\n";
-                    // minimal damage filter
-                    createElemenWithID("tr","Item_Damage_Search",document.getElementById('auction_filter').getElementsByTagName('tr')[3]);
-                    document.getElementById('Item_Damage_Search').innerHTML = '<td style="width: 50%; text-align: center;">'+L_minDamage+':</td><td style="width: 50%;"><input type="int" name="SelectDamage" id="SelectDamage" value="0" maxlength="5" size="3"><input style="margin-left:5px;" onclick="filterItemsByDamage(document.getElementById(\'SelectDamage\').value)" value="'+L_search+'" class="button3" type="button"><div id="damageFilterResult" class="title_box" style="display:none"></div></td>';
-                }
-                submitButton.setAttribute('onclick',"if(document.getElementById('SelectPrefix').value!='SP'){document.getElementById('auction_filter').getElementsByTagName('input')[0].value=document.getElementById('SelectPrefix').value;}if(document.getElementById('SelectSuffix').value!='SS' && document.getElementById('SelectPrefix').value!='SP'){document.getElementById('auction_filter').getElementsByTagName('input')[0].value+= ' '+document.getElementById('SelectSuffix').value;}else if(document.getElementById('SelectSuffix').value!='SS'){document.getElementById('auction_filter').getElementsByTagName('input')[0].value=document.getElementById('SelectSuffix').value;}");
-            } else if(itemType == 7){ //food
-                createElemenWithID("tr","Food_Search",document.getElementById('auction_filter').getElementsByTagName('tr')[1]);
-                document.getElementById('Food_Search').innerHTML = '<td style="width: 50%; text-align: center;">'+L_food+':</td><td style="width: 50%;"><select id="SelectFood" name="SelectFood">\n<option value="SF">- '+L_selectFood+' -</option>\n' + makeOpitonsFromItemList(foodList) + '</select></td>';
-                submitButton.setAttribute('onclick',"if(document.getElementById('SelectFood').value!='SF'){document.getElementById('auction_filter').getElementsByTagName('input')[0].value=document.getElementById('SelectFood').value;}");
-            } else if(itemType == 11){ //temporary improvements
-                createElemenWithID("tr","TempImp_Search",document.getElementById('auction_filter').getElementsByTagName('tr')[1]);
-                document.getElementById('TempImp_Search').innerHTML = '<td style="width: 50%; text-align: center;">'+L_upgrades+':</td><td style="width: 50%;"><select id="SelectTempImp" name="SelectTempImp">\n<option value="STI">- '+L_selectUpgrades+' -</option>\n' + makeOpitonsFromItemList(tempImpList) + '</select></td>';
-                submitButton.setAttribute('onclick',"if(document.getElementById('SelectTempImp').value!='STI'){document.getElementById('auction_filter').getElementsByTagName('input')[0].value=document.getElementById('SelectTempImp').value;}");
-            } else if(itemType == 12){ //improvements
-                createElemenWithID("tr","Imp_Search",document.getElementById('auction_filter').getElementsByTagName('tr')[1]);
-                document.getElementById('Imp_Search').innerHTML = '<td style="width: 50%; text-align: center;">'+L_enisxisis+':</td><td style="width: 50%;"><select id="SelectImp" name="SelectImp">\n<option value="SI">- '+L_selectEnixsiseis+' -</option>\n' + makeOpitonsFromItemList(impList) + '</select></td>';
-                submitButton.setAttribute('onclick',"if(document.getElementById('SelectImp').value!='SI'){document.getElementById('auction_filter').getElementsByTagName('input')[0].value=document.getElementById('SelectImp').value;}");
-            } else if(itemType == 15){ //mercenaries
-            //todo filter by values
-            }
+				if(itemType == 1){ //weapons
+					// minimal damage filter script
+					createElemenWithID("script","damageFunction",document.getElementById('auction_filter'));
+					document.getElementById('damageFunction').setAttribute('type', 'text/javascript');
+					document.getElementById('damageFunction').innerHTML = "\n"+'function filterItemsByDamage(requiredDamage){'+"\n"+
+					'var itemNum=document.forms.length-1;'+"\n"+
+					'var i=1;'+"\n"+
+					'var itemsCount=0;'+"\n"+
+					'var damage="";'+"\n"+
+					'while(i<=itemNum && i<501){'+"\n"+
+					'	if(document.getElementById("damageFilterResult").style.display = "block"){'+"\n"+
+					'		document.getElementById("auction_table").getElementsByTagName("td")[i-1].setAttribute("style","opacity:1;");'+"\n"+
+					'	}'+"\n"+
+					'	damage=document.getElementById("auction_table").getElementsByTagName("td")[i-1].getElementsByTagName("div")[4].getAttribute("onmouseover");'+"\n"+
+					'	damage=damage.match(/ (\\d+) - (\\d+)<\\/td>/i)[2]*1;'+"\n"+
+					'	if(damage<requiredDamage){'+"\n"+
+					'		document.getElementById("auction_table").getElementsByTagName("td")[i-1].setAttribute("style","opacity:0.5;");'+"\n"+
+					'		itemsCount++;'+"\n"+
+					'	}'+"\n"+
+					'	i++;'+"\n"+
+					'}'+"\n"+
+					'itemsCount=i-itemsCount-1;'+"\n"+
+					'document.getElementById("damageFilterResult").innerHTML = "'+L_weaponsFound+': <b>"+itemsCount+"</b>";'+"\n"+
+					'document.getElementById("damageFilterResult").style.display = "block";'+"\n"+
+					'}'+"\n";
+					
+					// minimal damage filter
+					createElemenWithID("tr","Item_Damage_Search",document.getElementById('auction_filter').getElementsByTagName('tr')[3]);
+ 					document.getElementById('Item_Damage_Search').innerHTML = '<td style="width: 50%; text-align: center;">'+L_minDamage+':</td><td style="width: 50%;"><input type="int" name="SelectDamage" id="SelectDamage" value="0" maxlength="5" size="3"><input style="margin-left:5px;" onclick="filterItemsByDamage(document.getElementById(\'SelectDamage\').value)" value="'+L_search+'" class="button3" type="button"><div id="damageFilterResult" class="title_box" style="display:none"></div></td>';
+				}
+				submitButton.setAttribute('onclick',"if(document.getElementById('SelectPrefix').value!='SP'){document.getElementById('auction_filter').getElementsByTagName('input')[0].value=document.getElementById('SelectPrefix').value;}if(document.getElementById('SelectSuffix').value!='SS' && document.getElementById('SelectPrefix').value!='SP'){document.getElementById('auction_filter').getElementsByTagName('input')[0].value+= ' '+document.getElementById('SelectSuffix').value;}else if(document.getElementById('SelectSuffix').value!='SS'){document.getElementById('auction_filter').getElementsByTagName('input')[0].value=document.getElementById('SelectSuffix').value;}");
+			}else if(itemType == 7){ //food
+				createElemenWithID("tr","Food_Search",document.getElementById('auction_filter').getElementsByTagName('tr')[1]);
+				document.getElementById('Food_Search').innerHTML = '<td style="width: 50%; text-align: center;">'+L_food+':</td><td style="width: 50%;"><select id="SelectFood" name="SelectFood">\n<option value="SF">- '+L_selectFood+' -</option>\n' + makeOpitonsFromItemList(foodList) + '</select></td>';
+				submitButton.setAttribute('onclick',"if(document.getElementById('SelectFood').value!='SF'){document.getElementById('auction_filter').getElementsByTagName('input')[0].value=document.getElementById('SelectFood').value;}");
+			}else if(itemType==11 || itemType==12){ //temporary improvements && improvements
+				createElemenWithID("script","plusFunction",document.getElementById('auction_filter'));
+				document.getElementById('plusFunction').setAttribute('type', 'text/javascript');
+				document.getElementById('plusFunction').innerHTML = "\n"+'function filterItemsByPlus(requiredPlus){'+"\n"+
+				'var itemNum=document.forms.length-1;'+"\n"+
+				'var i=1;'+"\n"+
+				'var itemsCount=0;'+"\n"+
+				'var plus="";'+"\n"+
+				'while(i<=itemNum && i<501){'+"\n"+
+				'	if(document.getElementById("plusFilterResult").style.display = "block"){'+"\n"+
+				'		document.getElementById("auction_table").getElementsByTagName("td")[i-1].setAttribute("style","opacity:1;");'+"\n"+
+				'	}'+"\n"+
+				'	plus=document.getElementById("auction_table").getElementsByTagName("td")[i-1].getElementsByTagName("div")[4].getAttribute("onmouseover");'+"\n"+
+				'	if(plus.match(/: \\+(\\d+)/i)){'+"\n"+
+				'		plus=plus.match(/: \\+(\\d+)/i)[1]*1;'+"\n"+
+				'	}else{'+"\n"+
+				'		plus=0;'+"\n"+
+				'	}'+"\n"+
+				'	if(plus<requiredPlus){'+"\n"+
+				'		document.getElementById("auction_table").getElementsByTagName("td")[i-1].setAttribute("style","opacity:0.5;");'+"\n"+
+				'		itemsCount++;'+"\n"+
+				'	}'+"\n"+
+				'	i++;'+"\n"+
+				'}'+"\n"+
+				'itemsCount=i-itemsCount-1;'+"\n"+
+				'document.getElementById("plusFilterResult").innerHTML = "'+L_improvementsFound+': <b>"+itemsCount+"</b>";'+"\n"+
+				'document.getElementById("plusFilterResult").style.display = "block";'+"\n"+
+				'}'+"\n";
+				//+?
+				createElemenWithID("tr","Item_Plus_Search",document.getElementById('auction_filter').getElementsByTagName('tr')[3]);
+				document.getElementById('Item_Plus_Search').innerHTML = '<td style="width: 50%; text-align: center;">+???:</td><td style="width: 50%;"><input type="int" name="SelectPlus" id="SelectPlus" value="0" maxlength="5" size="3"><input style="margin-left:5px;" onclick="filterItemsByPlus(document.getElementById(\'SelectPlus\').value)" value="'+L_search+'" class="button3" type="button"><div id="plusFilterResult" class="title_box" style="display:none"></div></td>';
+				if(itemType==11){ //temporary improvements
+					createElemenWithID("tr","TempImp_Search",document.getElementById('auction_filter').getElementsByTagName('tr')[1]);
+					document.getElementById('TempImp_Search').innerHTML = '<td style="width: 50%; text-align: center;">'+L_upgrades+':</td><td style="width: 50%;"><select id="SelectTempImp" name="SelectTempImp">\n<option value="STI">- '+L_selectUpgrades+' -</option>\n' + makeOpitonsFromItemList(tempImpList) + '</select></td>';
+					submitButton.setAttribute('onclick',"if(document.getElementById('SelectTempImp').value!='STI'){document.getElementById('auction_filter').getElementsByTagName('input')[0].value=document.getElementById('SelectTempImp').value;}");
+				}else{//improvements
+					createElemenWithID("tr","Imp_Search",document.getElementById('auction_filter').getElementsByTagName('tr')[1]);
+					document.getElementById('Imp_Search').innerHTML = '<td style="width: 50%; text-align: center;">'+L_enisxisis+':</td><td style="width: 50%;"><select id="SelectImp" name="SelectImp">\n<option value="SI">- '+L_selectEnixsiseis+' -</option>\n' + makeOpitonsFromItemList(impList) + '</select></td>';
+					submitButton.setAttribute('onclick',"if(document.getElementById('SelectImp').value!='SI'){document.getElementById('auction_filter').getElementsByTagName('input')[0].value=document.getElementById('SelectImp').value;}");
+				}
+			}else if(itemType == 15){ //mercenaries
+				//todo filter by values
+			}
 		}else if(GCAO_mod=='market'){ //market
-            var clearButton = '<div id="Clear" style="background-image: url(' + img_clear + ');background-position: 0px 0px;position:absolute;margin-top:-24px;margin-left:208px;width:22px;height:22px;" onmouseover="document.getElementById(\'Clear\').setAttribute(\'style\',\'background-image: url(' + img_clear + ');background-position: 22px 0px;position:absolute;margin-top:-24px;margin-left:208px;width:22px;height:22px;\')" onmouseout="document.getElementById(\'Clear\').setAttribute(\'style\',\'background-image: url(' + img_clear + ');background-position: 0px 0px;position:absolute;margin-top:-24px;margin-left:208px;width:22px;height:22px;\')" onclick="document.getElementById(\'content\').getElementsByTagName(\'input\')[5].value=\'\'" title="Clear"></div>';
-            document.getElementById('content').getElementsByTagName('tr')[8].getElementsByTagName('td')[1].innerHTML += clearButton;
-            createElemenWithID("tr","Item_Name_Search",document.getElementById('content').getElementsByTagName('tr')[9]);
+			var clearButton = '<div id="Clear" style="background-image: url(' + img_clear + ');background-position: 0px 0px;position:absolute;margin-top:-24px;margin-left:208px;width:22px;height:22px;" onmouseover="document.getElementById(\'Clear\').setAttribute(\'style\',\'background-image: url(' + img_clear + ');background-position: 22px 0px;position:absolute;margin-top:-24px;margin-left:208px;width:22px;height:22px;\')" onmouseout="document.getElementById(\'Clear\').setAttribute(\'style\',\'background-image: url(' + img_clear + ');background-position: 0px 0px;position:absolute;margin-top:-24px;margin-left:208px;width:22px;height:22px;\')" onclick="document.getElementById(\'content\').getElementsByTagName(\'input\')[5].value=\'\'" title="Clear"></div>';
+			document.getElementById('content').getElementsByTagName('tr')[8].getElementsByTagName('td')[1].innerHTML += clearButton;
+			createElemenWithID("tr","Item_Name_Search",document.getElementById('content').getElementsByTagName('tr')[9]);
 			document.getElementById('Item_Name_Search').innerHTML = '<td style="width: 50%; text-align: center;">'+L_Items+':</td><td style="width: 50%;">\n<select id="SelectItem" name="SelectItem"><option value="SI">- '+L_selectItem+' -</option>\n' + makeOpitonsFromItemList(prefixList) + '</select></td>';
 			document.getElementById('content').getElementsByTagName('input')[6].setAttribute('onclick',"if(document.getElementById('SelectItem').value!='SI'){document.getElementById('content').getElementsByTagName('input')[5].value=document.getElementById('SelectItem').value;}")
 		}
@@ -2411,11 +3482,14 @@ function createElemenWithID(element,id,location){
 function displayWarnGuildShorAuctionButton(){
 	var time= document.getElementById('header_game').getElementsByTagName('span')[6].innerHTML.match(/(\d+:\d+)/i)[1];
 	var L_Auction = document.getElementById('sidebar_inner').innerHTML.match('class="submenuitem_aktive" target="_self">([^<]+)</a>')[1];
-	var L_AuctionType = document.getElementById('mainnav').innerHTML.match('current" style="cursor:pointer;">([^<]+)</a>')[1];
-    var message='['+time+'] '+L_Auction+' ('+L_AuctionType+') : '+L_veryShort;
-	var auctionStatus = document.getElementById('content').getElementsByTagName('p')[1].innerHTML;
+	if(document.getElementById('mainnav').innerHTML.match('current" style="cursor:pointer;">([^<]+)</a>')){
+		var L_AuctionType=document.getElementById('mainnav').innerHTML.match('current" style="cursor:pointer;">([^<]+)</a>')[1];
+    }else{
+		var L_AuctionType="Type of auction was not found";
+    }
+	var message='['+time+'] '+L_Auction+' ('+L_AuctionType+') : '+L_veryShort;
 
-	if ((auctionStatus.match(/<span class="description_span_right"><b>(.+?)<\/b><\/span>/i)[1])==L_veryShort){
+	if ((document.getElementById('content').getElementsByTagName('p')[2].innerHTML.match(/class="description_span_right"><b>(.+?)<\/b><\/span>/i)[1])==L_veryShort){
 		createElemenWithID("div","warn_guild_div",document.getElementById('content').getElementsByTagName('p')[2]);
 		document.getElementById('warn_guild_div').style.margin = "0px 45%";
 		document.getElementById('warn_guild_div').innerHTML = '<input id="announButton" value="'+L_anunGuild+'" class="button1" type="submit" name="sendmails" /><span id="messageText" style="display:none;">'+message+'</span>';
@@ -2711,11 +3785,11 @@ function links(){
 	'</td>' +
 	'<td id="InfoLinks" style="display:none;">' +
 	'<a href="http://s1.gladiatus.gr/game/index.php?mod=guild_main&submod=link&id=4344" target="_blank" title="Homepage"><img src="' + img_homepage + '" style="margin:3px;width:26px;" border="0px">' +
-	'<a href="http://www.epiratiko.webs.com/simulator.htm" target="_blank" title="Simulator"><img src="' + img_simulator + '" style="margin:3px;width:26px;" border="0px">' +
-	'<a href="http://www.epiratiko.webs.com/counters.htm" target="_blank" title="Counters"><img src="' + img_counters + '" style="margin:3px;width:26px;" border="0px">' +
-	'<a href="http://www.epiratiko.webs.com/persons.htm" target="_blank" title="Photos"><img src="' + img_photos + '" style="margin:3px;width:26px;" border="0px">' +
-	'<a href="http://www.epiratiko.webs.com/dungeons.htm" target="_blank" title="Dungeons"><img src="' + img_dungeons + '" style="margin:3px;width:26px;" border="0px">' +
-	'<a href="http://www.epiratiko.webs.com/comments.htm" target="_blank" title="Comments"><img src="' + img_comments + '" style="margin:3px;width:26px;" border="0px"></a>' +
+	'<a href="http://www.epeiratiko.webou.com/index.php?s=simulator" target="_blank" title="Simulator"><img src="' + img_simulator + '" style="margin:3px;width:26px;" border="0px">' +
+	'<a href="http://www.epeiratiko.webou.com/index.php?s=counters" target="_blank" title="Counters"><img src="' + img_counters + '" style="margin:3px;width:26px;" border="0px">' +
+	'<a href="http://www.epeiratiko.webou.com/index.php?s=monsters" target="_blank" title="Photos"><img src="' + img_photos + '" style="margin:3px;width:26px;" border="0px">' +
+	'<a href="http://www.epeiratiko.webou.com/index.php?s=dungeons" target="_blank" title="Dungeons"><img src="' + img_dungeons + '" style="margin:3px;width:26px;" border="0px">' +
+	'<a href="http://www.epeiratiko.webou.com/index.php?s=contact" target="_blank" title="Comments"><img src="' + img_comments + '" style="margin:3px;width:26px;" border="0px"></a>' +
 	'</td>' +
 	'</tr></table>';
 }
@@ -2810,6 +3884,12 @@ function guildSafeLog(){
 		style.innerHTML = '.notInGuild {display:none;}';
 		document.getElementById('content').appendChild(style);
 		
+		/*var pieBox = document.createElement("div");
+		pieBox.setAttribute('class', 'contentItem');
+		pieBox.setAttribute('style', 'margin-left:20px;width:500px;');
+		pieBox.innerHTML = '<h3 style="width:476px;">Statistic Pie</h3><div class="contentItem_content" style="width:468px;"><img id="pieImg" style="position:absolute;"><div style="margin-left:140px;">1. <font id="Name1" color="red"> - </font><br/>2. <font id="Name2" color="green"> - </font><br/>3. <font id="Name3" color="blue"> - </font><br/>4. <font id="Name4" style="color:yellow;text-shadow: 0pt 0pt 2px #000000;"> - </font><br/>5. <font id="Name5" color="fuchsia"> - </font><br/>6. <font id="Name6" color="aqua"> - </font><br/><br/><div style="position:absolute;margin-left:170px;margin-top:-126px;">7. <font id="Name7" style="color:#FFB700;text-shadow: 0pt 0pt 2px #000000;"> - </font><br/>8. <font id="Name8" style="color:#D2B48C;text-shadow: 0pt 0pt 2px #000000;"> - </font><br/>9. <font id="Name9" style="color:#FFD700;text-shadow: 0pt 0pt 2px #000000;"> - </font><br/>10. <font id="Name10" color="#7F7F7F"> - </font><br/>11. <font id="Name11" color="#BF0000"> - </font><br/>12. <font id="Name12" color="#00BF00"><b>Others</b></font><br/><br/></div></div>';
+		document.getElementById('content').appendChild(pieBox);*/
+		
 		var num=document.getElementById('content').getElementsByTagName('table')[0].getElementsByTagName('tr').length;
 		var sum=0;
 		var temp='';
@@ -2830,6 +3910,30 @@ function guildSafeLog(){
 			}
 		}
 		document.getElementById('content').getElementsByTagName('div')[2].innerHTML+= ' <font style="float:right;padding-right:10px;">('+L_total+': '+dottedNumber(sum)+' <img border="0" align="absmiddle" src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif">)</font>'
+		
+		var hisMoney=0;
+		var percent=0;
+		var othersPerCent=100;
+		//var code='http://www.webou.net:2082/backend/piegraph.cgi?';
+		var name='';
+		for(i=1;i<num;i++){
+			hisMoney=document.getElementById('content').getElementsByTagName('table')[0].getElementsByTagName('tr')[i].getElementsByTagName('td')[2].innerHTML.replace(/\./gi,'')*1;
+			percent=Math.round((hisMoney/sum)*1000)/10;
+			document.getElementById('content').getElementsByTagName('table')[0].getElementsByTagName('tr')[i].getElementsByTagName('td')[2].innerHTML+=' <b>('+percent+'%)</b>';
+			/*if(i<=11){
+				name=document.getElementById('content').getElementsByTagName('table')[0].getElementsByTagName('tr')[i].getElementsByTagName('td')[0].innerHTML;
+				if(name.match(/">([^<]+)<\/a>/i)){
+					name=name.match(/">([^<]+)<\/a>/i)[1];
+				}
+				document.getElementById('Name'+i).innerHTML='<b>'+name+'</b> <font style="color:#612D04;text-shadow: 0pt 0pt 0px #ffffff;">('+percent+'%)</font>';
+				code+=i+'='+(percent*10)+'&';
+				othersPerCent=othersPerCent-percent;
+			}*/
+		}
+		//othersPerCent=Math.round(othersPerCent*10)/10;
+		//document.getElementById('Name12').innerHTML+=' <font color="#612D04">('+othersPerCent+'%)</font>';
+		//code+='12='+(othersPerCent*10)+'&action=pie';
+		//document.getElementById('pieImg').setAttribute('src',code);
 	}
 	if(document.getElementById('content').getElementsByTagName('table')[1]){
 		var num2=document.getElementById('content').getElementsByTagName('table')[1].getElementsByTagName('tr').length;
@@ -2845,82 +3949,76 @@ function guildSafeLog(){
 //## PACKAGE COUNTERS
 //################################################################################################################################
 function packetCounters(){
-	var counterBar=document.createElement("tr");
-	counterBar.innerHTML='<td><div class="title2_box"><div class="title2_inner"><table><tr><td valign="top">'+
-	'&bull; <b>'+L_Packages+': <span id="paket_number">0</span></b>'+
-	'<table id="paket_counter_table1" style="display:none;padding-left:4px;"><tr><td>'+L_packedValue+'</td><td>:</td><td id="paket_value_1"></td></tr><tr><td>'+L_PackedGold+'</td><td>:</td><td id="paket_value_2"></td></tr></table>'+
-	'</td><td style="width:10px;"></td><td valign="top">'+
-	'&bull; <b>'+L_invItems+': <span id="inv_number">0</span></b>'+
-	'<table id="paket_counter_table2" style="display:none;padding-left:4px;"><tr><td>'+L_invValue+'</td><td>:</td><td id="inventory_value_1"></td></tr></table>'+
-	'</td></tr></table></div></div></td>';
-	
-	var counterBar2=document.createElement("tr");
-	counterBar2.setAttribute('id','searchTotPakBox');
-	counterBar2.innerHTML='<td><div class="title2_box"><div class="title2_inner"><table><tr><td valign="top" width="150px">'+
-	'<input id="searchTotPakValue" type="button" class="button3" value="'+L_total+'"><input id="hasBeenLaunched" type="hidden" value="0"></td> <td width="150"><span align="center" id="total_pak_value" value="0"></span>  <img id="totalImage" style="display:none;" src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif"/></td> <td text-align="right"> <span align="right" style="display:none;" id="total_page"><input type="hidden" id="currentPage" value="0"><input type="hidden" id="maxPage" value="0"></div></span> ' +
-	'</td></tr></table></div></div></td>';
-	
-	document.getElementById('content').getElementsByTagName('table')[1].appendChild(counterBar);
-	document.getElementById('content').getElementsByTagName('table')[1].appendChild(counterBar2);
-	
-	if(document.body.getElementsByTagName('script')[10].innerHTML.match('AddCharDiv')){var x=10;}
-	else if(document.body.getElementsByTagName('script')[11].innerHTML.match('AddCharDiv')){var x=11;}
-	else if(document.body.getElementsByTagName('script')[12].innerHTML.match('AddCharDiv')){var x=12;}
-	else if(document.body.getElementsByTagName('script')[13].innerHTML.match('AddCharDiv')){var x=13;}
-	else if(document.body.getElementsByTagName('script')[14].innerHTML.match('AddCharDiv')){var x=14;}
-	
-	if(document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("paket_\w+.*?\/table/i)){
-		if(document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("paket_\w+.*?\/table/g).length>0){
-			var pakets=document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("paket_\w+.*?\/table/g).length;
-			document.getElementById('paket_number').innerHTML=pakets;
-			var sumValues=0;
-			var sumValues2=0;
-			for(i=0;i<pakets;i++){
-				if(document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("paket_\w+.*?\/table/g)[i]){
-					var txt=document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("paket_\w+.*?\/table/g)[i];
-					if(txt.match(/<img/g)){
-						var value=document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("paket_\w+.*?\/table/g)[i].match(/>([^<]+)<img/i)[1].replace(/\./g,'').match(/(\d+)/i)[1];
-						sumValues=parseInt(sumValues)+parseInt(value);
-					}
-					else if(txt.match(/>\d+[^<]+</i)){
-						var value=txt.match(/>(\d+[^<]+)</i)[1].replace(/\./g,'').match(/(\d+)/i)[1];
-						sumValues2=parseInt(sumValues2)+parseInt(value);
-					}else{
-						var value = 0 ;
+	if(document.getElementById('content').getElementsByTagName('table')[1]){
+		var counterBar=document.createElement("tr");
+		counterBar.innerHTML='<td><div class="title2_box"><div class="title2_inner"><table><tr><td valign="top">'+
+		'&bull; <b>'+L_Packages+': <span id="paket_number">0</span></b>'+
+		'<table id="paket_counter_table1" style="display:none;padding-left:4px;"><tr><td>'+L_packedValue+'</td><td>:</td><td id="paket_value_1"></td></tr><tr><td>'+L_PackedGold+'</td><td>:</td><td id="paket_value_2"></td></tr></table>'+
+		'</td><td style="width:10px;"></td><td valign="top">'+
+		'&bull; <b>'+L_invItems+': <span id="inv_number">0</span></b>'+
+		'<table id="paket_counter_table2" style="display:none;padding-left:4px;"><tr><td>'+L_invValue+'</td><td>:</td><td id="inventory_value_1"></td></tr></table>'+
+		'</td></tr></table></div></div></td>';
+		
+		var counterBar2=document.createElement("tr");
+		counterBar2.setAttribute('id','searchTotPakBox');
+		counterBar2.innerHTML='<td><div class="title2_box"><div class="title2_inner"><table><tr><td valign="top" width="150px">'+
+		'<input id="searchTotPakValue" type="button" class="button3" value="'+L_total+'"><input id="hasBeenLaunched" type="hidden" value="0"></td> <td width="150"><span align="center" id="total_pak_value" value="0"></span>  <img id="totalImage" style="display:none;" src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif"/></td> <td text-align="right"> <span align="right" style="display:none;" id="total_page"><input type="hidden" id="currentPage" value="0"><input type="hidden" id="maxPage" value="0"></div></span> ' +
+		'</td></tr></table></div></div></td>';
+		document.getElementById('content').getElementsByTagName('table')[1].appendChild(counterBar);
+		document.getElementById('content').getElementsByTagName('table')[1].appendChild(counterBar2);
+		
+		var x=0;
+		while(!document.body.getElementsByTagName('script')[x].innerHTML.match('AddCharDiv') && (x<100)){x++;}
+		
+		if(document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("paket_\w+.*?\/table/i)){
+			if(document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("paket_\w+.*?\/table/g).length>0){
+				var pakets=document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("paket_\w+.*?\/table/g).length;
+				document.getElementById('paket_number').innerHTML=pakets;
+				var sumValues=0;
+				var sumValues2=0;
+				for(i=0;i<pakets;i++){
+					if(document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("paket_\w+.*?\/table/g)[i]){
+						var txt=document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("paket_\w+.*?\/table/g)[i];
+						if(txt.match(/<img/g)){
+							var value=document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("paket_\w+.*?\/table/g)[i].match(/>([^<]+)<img/i)[1].replace(/\./g,'').match(/(\d+)/i)[1];
+							sumValues=parseInt(sumValues)+parseInt(value);
+						}
+						else if(txt.match(/>\d+[^<]+</i)){
+							var value=txt.match(/>(\d+[^<]+)</i)[1].replace(/\./g,'').match(/(\d+)/i)[1];
+							sumValues2=parseInt(sumValues2)+parseInt(value);
+						}else{
+							var value = 0 ;
+						}
 					}
 				}
+				document.getElementById('paket_counter_table1').style.display='block';
+				document.getElementById('paket_value_1').innerHTML=dottedNumber(sumValues)+' <img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif"/>';
+				document.getElementById('paket_value_2').innerHTML=dottedNumber(sumValues2)+' <img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif"/>';
 			}
-			document.getElementById('paket_counter_table1').style.display='block';
-			document.getElementById('paket_value_1').innerHTML=dottedNumber(sumValues)+' <img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif"/>';
-			document.getElementById('paket_value_2').innerHTML=dottedNumber(sumValues2)+' <img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif"/>';
 		}
-	}
-	if(document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("p\w+_\w+_\w+".*?\/table/g)){
-		if(document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("p\w+_\w+_\w+".*?\/table/g).length>0){
-			var inv=document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("p\w+_\w+_\w+".*?\/table/g).length;
-			document.getElementById('inv_number').innerHTML=inv;
-			var sumValues=0;
-			for(i=0;i<inv;i++){
-				try{var value=document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("p\w+_\w+_\w+".*?\/table/g)[i].match(/>([^<]+)<img/i)[1].replace(/\./g,'').match(/(\d+)/i)[1];}
-				catch(err){var value=0;}
-				sumValues=parseInt(sumValues)+parseInt(value);
+		if(document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("p\w+_\w+_\w+".*?\/table/g)){
+			if(document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("p\w+_\w+_\w+".*?\/table/g).length>0){
+				var inv=document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("p\w+_\w+_\w+".*?\/table/g).length;
+				document.getElementById('inv_number').innerHTML=inv;
+				var sumValues=0;
+				for(i=0;i<inv;i++){
+					try{var value=document.body.getElementsByTagName('script')[x].innerHTML.match(/AddCharDiv\("p\w+_\w+_\w+".*?\/table/g)[i].match(/>([^<]+)<img/i)[1].replace(/\./g,'').match(/(\d+)/i)[1];}
+					catch(err){var value=0;}
+					sumValues=parseInt(sumValues)+parseInt(value);
+				}
+				document.getElementById('paket_counter_table2').style.display='block';
+				document.getElementById('inventory_value_1').innerHTML=dottedNumber(sumValues)+' <img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif"/>';
 			}
-			document.getElementById('paket_counter_table2').style.display='block';
-			document.getElementById('inventory_value_1').innerHTML=dottedNumber(sumValues)+' <img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif"/>';
 		}
+		
+		document.getElementById('searchTotPakValue').addEventListener('click', function(){searchTotPakValue();}, true);
+		if(!document.getElementById('content').innerHTML.match(/page=\d+">\d+</g)){
+			document.getElementById('searchTotPakBox').style.display='none';
+		}
+		var bar = document.createElement('div');
+		bar.innerHTML = '<div style="margin-left:-20px;margin-top:-10px;cursor:pointer;background-image:url(\'http://s1.gladiatus.gr/game/img/ui/bar.jpg\');height:21px;overflow:hidden;position:absolute;width:140px;"><div id="pageBar" style="width: 0%;" class="cooldown_bar_fill cooldown_bar_fill_progress"></div><div style="color: #C8B38A;font-size: 12px;font-weight: bold;height: 100%;left: 0;padding-top: 1px;position: absolute;text-align: center;width: 100%;" id="cooldown_bar_fill_page">0</div></div>';
+		document.getElementById('total_page').appendChild(bar);
 	}
-	
-	document.getElementById('searchTotPakValue').addEventListener('click', function(){searchTotPakValue();}, true);
-	if(!document.getElementById('content').innerHTML.match(/page=\d+">\d+</g)){
-		document.getElementById('searchTotPakBox').style.display='none';
-	}
-	var bar = document.createElement('div');
-	if(document.getElementById('banner_top') && document.getElementById('banner_event'))
-		var top = 847;
-	else
-		var top = 847-25;
-	bar.innerHTML = '<div class="cooldown_bar" style="left:580px;top:'+top+'px;cursor:pointer;"><div id="pageBar" style="width: 0%;" class="cooldown_bar_fill cooldown_bar_fill_progress"></div><div class="cooldown_bar_text" id="cooldown_bar_fill_page">0</div></div>';
-	document.getElementById('total_page').appendChild(bar);
 }
 
 function searchTotPakValue(){
@@ -3049,34 +4147,37 @@ function priceRatio(){
 		var x=0;
 		while(!document.body.getElementsByTagName('script')[x].innerHTML.match('AddCharDiv') && (x<100)){x++;}
 		var dataScript = document.getElementsByTagName('script')[x].innerHTML;
-			
-		for(i=1;i<=items;i++){
-			ratioTd=document.createElement('td');
-			ratioTd.setAttribute('style','text-align:right;padding-right:5px;padding-left:0px;');
-			sellPrice=document.getElementById('market_item_table').getElementsByTagName('tr')[i].getElementsByTagName('td')[2].innerHTML.replace(/\./g,'').match(/(\d+)/i)[1];
-			data=dataScript.match(/AddCharDiv..buy.[^"]+.([^"]+)./i)[1].replace(/\./g,'');
-			foodratio='';
-			kathetos='';
-			if(data.match(/\d+ [^<]+<\/td>[^\+]+\+\d+ /i)){
-				life=data.match(/(\d+) [^<]+<\/td>[^\+]+\+\d+ /i)[1]*1;
-				intel=data.match(/\d+ [^<]+<\/td>[^\+]+\+(\d+) /i)[1]*1;
-				foodratio=life/sellPrice;
-				foodratio=roundNumber(foodratio);
-				foodratio='<b color="black">'+foodratio+'</b>';
-				kathetos=' | ';
+		var i=1;
+		while(i<=items){
+			if(dataScript.match(/AddCharDiv..buy.[^"]+.([^"]+)./i)){
+				ratioTd=document.createElement('td');
+				ratioTd.setAttribute('style','text-align:right;padding-right:5px;padding-left:0px;');
+				sellPrice=document.getElementById('market_item_table').getElementsByTagName('tr')[i].getElementsByTagName('td')[2].innerHTML.replace(/\./g,'').match(/(\d+)/i)[1];
+				data=dataScript.match(/AddCharDiv..buy.[^"]+.([^"]+)./i)[1].replace(/\./g,'');
+				foodratio='';
+				kathetos='';
+				if(data.match(/\d+ [^<]+<\/td>[^\+]+\+\d+ /i)){
+					life=data.match(/(\d+) [^<]+<\/td>[^\+]+\+\d+ /i)[1]*1;
+					intel=data.match(/\d+ [^<]+<\/td>[^\+]+\+(\d+) /i)[1]*1;
+					foodratio=life/sellPrice;
+					foodratio=roundNumber(foodratio);
+					foodratio='<b color="black">'+foodratio+'</b>';
+					kathetos=' | ';
+				}
+				price=data.match(/\d+ <img/g)[0].match(/\d+/i);
+				value=data.match(/\d+ <img/g)[1].match(/\d+/i);
+				dataScript=dataScript.replace("AddCharDiv('buy",'[DONE]');
+				ratio=sellPrice/((parseInt(price)+parseInt(value))/2);
+				ratio=roundNumber(ratio);
+				if(ratio<0.3){color='green';}
+				else if(ratio<5.99){color='gray';}
+				else if(ratio<9.99){color='#FF9000';}
+				else{color='red';}
+				if(GM_getValue('rr', false) == false){if(kathetos==''){ratio='<center>-</center>';color='black';}else{ratio='';kathetos='';}}
+				ratioTd.innerHTML=foodratio+kathetos+'<font color="'+color+'"><b>'+ratio+'</b></font>';
+				document.getElementById('market_item_table').getElementsByTagName('tr')[i].insertBefore(ratioTd , document.getElementById('market_item_table').getElementsByTagName('tr')[i].getElementsByTagName('td')[5]);
+				i++;
 			}
-			price=data.match(/\d+ <img/g)[0].match(/\d+/i);
-			value=data.match(/\d+ <img/g)[1].match(/\d+/i);
-			dataScript=dataScript.replace("AddCharDiv('buy",'[DONE]');
-			ratio=sellPrice/((parseInt(price)+parseInt(value))/2);
-			ratio=roundNumber(ratio);
-			if(ratio<0.3){color='green';}
-			else if(ratio<5.99){color='gray';}
-			else if(ratio<9.99){color='#FF9000';}
-			else{color='red';}
-			if(GM_getValue('rr', false) == false){if(kathetos==''){ratio='<center>-</center>';color='black';}else{ratio='';kathetos='';}}
-			ratioTd.innerHTML=foodratio+kathetos+'<font color="'+color+'"><b>'+ratio+'</b></font>';
-			document.getElementById('market_item_table').getElementsByTagName('tr')[i].insertBefore(ratioTd , document.getElementById('market_item_table').getElementsByTagName('tr')[i].getElementsByTagName('td')[5]);
 		}
 	}
 }
@@ -3114,18 +4215,6 @@ function auctionExtendTable(){
 }
 
 //################################################################################################################################
-//## AUCTION DETAIL VIEW
-//################################################################################################################################
-function detailView(){/*
-	var itemNum=document.forms.length - 1;
-	var itemId=document.getElementById('auction_table').getElementsByTagName('input')[0].value;
-	var statsTableInnerHTML=document.getElementById('tOoLtIp_auction_'+itemId).innerHTML;
-	var statsBox=document.createElement('span');
-	statsBox.innerHTML=statsTableInnerHTML;
-	document.getElementById('auction_table').getElementsByTagName('input')[0].parentNode.appendChild(statsBox);*/
-}
-
-//################################################################################################################################
 //## MORE PLAYER STATS
 //################################################################################################################################
 function morePlayerStats(){
@@ -3134,8 +4223,8 @@ function morePlayerStats(){
 	var L_win = document.getElementById('content').getElementsByTagName('th')[1].innerHTML.replace(/:/g, '');
 	var blost = document.getElementById('content').getElementsByTagName('td')[2].innerHTML.replace(/\./g, '');
 	var L_lost = document.getElementById('content').getElementsByTagName('th')[2].innerHTML.replace(/:/g, '');
-	var wgold = document.getElementById('content').getElementsByTagName('td')[4].innerHTML.replace(/\./g, '').replace(/ <(.+)>/g, '');
-	var lgold = document.getElementById('content').getElementsByTagName('td')[5].innerHTML.replace(/\./g, '').replace(/ <(.+)>/g, '');
+	var wgold = document.getElementById('content').getElementsByTagName('td')[10].innerHTML.replace(/\./g, '').replace(/ <(.+)>/g, '');
+	var lgold = document.getElementById('content').getElementsByTagName('td')[11].innerHTML.replace(/\./g, '').replace(/ <(.+)>/g, '');
 	if(blost==0){var ratio = 0;}
 	else{var ratio = Math.round(((bwin*1)/(blost*1))*100)/100;}
 	if(battles==0){var posostonikon = 0;}
@@ -3173,17 +4262,11 @@ function morePlayerStats(){
 	statsNewElement.innerHTML = '&nbsp';
 	LocationLink.parentNode.insertBefore(statsNewElement, LocationLink);
 	
-	LocationLink = document.getElementById('content').getElementsByTagName('tr')[9];
+	LocationLink = document.getElementById('content').getElementsByTagName('tr')[13];
 	statsNewElement = document.createElement('tr');
 	statsNewElement.setAttribute('Id','WinGold');
 	LocationLink.parentNode.insertBefore(statsNewElement, LocationLink);
 	document.getElementById('WinGold').innerHTML = '<th>'+L_totalGold+':</th><td style="white-space: nowrap; color: ' + color3 + ';">' + sWGold + ' <img border="0" align="absmiddle" src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/res2.gif"></td>';
-	
-	LocationLink = document.getElementById('content').getElementsByTagName('tr')[10];
-	statsNewElement = document.createElement('tr');
-	statsNewElement.setAttribute('Id','empty');
-	statsNewElement.innerHTML = '&nbsp';
-	LocationLink.parentNode.insertBefore(statsNewElement, LocationLink);
 	
 	if (document.getElementById('stats_wealth')){
 		var aksia1 = document.getElementById('stats_wealth').getElementsByTagName('td')[0].innerHTML.replace(/\./g, '').replace(/ <(.+)>/g, '');
@@ -3531,45 +4614,34 @@ function seeGCANews(){
 		document.getElementById('mainnav').childNodes[i].firstChild.className='pngfix ';
 	document.getElementById('mainnav').childNodes[document.getElementById('mainnav').childNodes.length-1].firstChild.className='pngfix  current';
 	document.getElementById('content').innerHTML = '<div class="title_box"><div class="title_inner">Gladiatus Crazy Add-on News</div></div>';
-	document.getElementById('content').innerHTML += '<div class="title2_box"><div class="title2_inner" style="margin-left: -6px;">'
-	+'<table width="100%"><tbody id="GCAO_CommentBox"></tbody></table></div></div>';
+	document.getElementById('content').innerHTML += '<div class="title2_box"><div class="title2_inner" style="margin-left:0px;margin-right:5px;" id="GCAO_CommentBox"></div></div>';
 	document.getElementById('GCAO_CommentBox').innerHTML='<center>Downloading the latest news.</center>';
 	GM_xmlhttpRequest({
 		method: "GET",
-		url: 'http://epiratiko.webs.com/apps/util/Comments/listPagedCommentsJS.jsp?userID=57974758&limit=20&pageNumber=1&commentSettingID=16841277&callBack=fw.Instances.get("fwRb16841277-comments").populateCommentDiv&loadRatings=false&ratingCallback=fw.Instances.get("fwRb16841277-comments").instance.parent.getRatingCallback&rand=0.23108505620818276&repeatLimit=40',
+		url: 'http://epeiratiko.webou.net/gca/News.txt',
 		onload: function(response){
-			document.getElementById('GCAO_CommentBox').innerHTML='';
-			//.replace(/class=..blogCommentProfileImage../g,'style="display:none;"')
-			var comments = response.responseText.replace(/"/g, '').split('[');
-			// For each comment
-			for(var i = 1;i<comments.length;i++){
-				var comment = comments[i].split(',');
-				var name = comment[2];
-				var message = '';
-				// if there are colons in the message... 
-				for(var j = 3;j<comment.length-4;j++){
-					message += comment[j];
-					if((comment.length-5)!=j) message +=',';
-				}
-				var time = comment[comment.length-4];
-				document.getElementById('GCAO_CommentBox').innerHTML += newComment(name,message,time);
+			var data=response.responseText;
+			var displayed='';
+			var name='Name';
+			var text='Text';
+			var code='Date';
+			while(data.match(/##C=([^#]+)##/i)){
+				code=data.match(/##C=([^#]+)##/i)[1];
+				name=data.match(/##N=([^#]+)##/i)[1];
+				text=data.match(/##T=([^#]+)##/i)[1];
+				data=data.replace('##C=','##CDONE=').replace('##N=','##NDONE=').replace('##T=','##TDONE=');
+				var checkname=name.toLowerCase();
+				if(checkname.match(/gif.>(\w+)/i)){checkname=checkname.match(/gif.>(\w+)/i)[1];}
+				else if(checkname.match(/>(\w+)<.a/i)){checkname=checkname.match(/>(\w+)<.a/i)[1];}
+				if(checkname=='greatapo'){var image='http://board.gladiatus.fr/wcf/images/avatars/avatar-2288.jpg'}
+				else if(checkname=='djor'){var image='http://board.gladiatus.fr/wcf/images/avatars/avatar-2336.jpg'}
+				else if(checkname=='darkthanos'){var image='http://board.gladiatus.fr/wcf/images/avatars/avatar-2287.jpg'}
+				else{var image='http://images.webs.com/static/global/profile_images/noProfilePic_male_100x100.gif'}
+				displayed+='<div style=\"position:absolute;margin:5px;\"><b>'+name+'</b></div><font style=\"position:absolute;margin-left:450px;margin-top:5px;\">('+code+')</font><div id=\"'+code+'\" style=\"background-color:#EFEAD5;border:1px solid #BBA86E;padding:5px;min-height:100px;\"><img src=\"'+image+'\" style=\"margin-top:20px;margin-left:0px;width:70px;position:absolute;\"><div style=\"margin-left:80px;margin-top:20px;\">'+text+'</div></div><br/>';
 			}
+			document.getElementById('GCAO_CommentBox').innerHTML=displayed;
 		}
 	});
-}
-
-function newComment(name,message,time){
-	var checkname=name.toLowerCase();
-	if(checkname.match(/gif.>(\w+)/i)){checkname=checkname.match(/gif.>(\w+)/i)[1];}
-	else if(checkname.match(/>(\w+)<.a/i)){checkname=checkname.match(/>(\w+)<.a/i)[1];}
-	if(checkname=="greatapo"){var image="http://board.gladiatus.fr/wcf/images/avatars/avatar-2288.jpg"}
-	else if(checkname=="djor"){var image="http://board.gladiatus.fr/wcf/images/avatars/avatar-2336.jpg"}
-	else if(checkname=="darkthanos"){var image="http://board.gladiatus.fr/wcf/images/avatars/avatar-2287.jpg"}
-	else{var image="http://images.webs.com/static/global/profile_images/noProfilePic_male_100x100.gif"}
-	name=name.replace(/<img[^>]+>/g,'');
-	return '<table class="commentTable fw-even" title="posted '+time+'"><tbody><tr>'
-	+'<td style="border:1px solid #af8e50;background-color:#ded8c6;padding:5px;width:449px;"><b><img border="0" align="left" src="'+image+'" class="blogCommentProfileImage" valign="top" style="margin-right:10px; width:40px;">'
-	+name+':</b> <br>'+message+'</td></tr></tbody></table>';
 }
 
 //################################################################################################################################
@@ -3578,11 +4650,11 @@ function newComment(name,message,time){
 function checkForNews(){
 	GM_xmlhttpRequest({
 		method: "GET",
-		url: 'http://epiratiko.webs.com/apps/util/Comments/listPagedCommentsJS.jsp?userID=57974758&limit=20&pageNumber=1&commentSettingID=16841277&callBack=fw.Instances.get("fwRb16841277-comments").populateCommentDiv&loadRatings=false&ratingCallback=fw.Instances.get("fwRb16841277-comments").instance.parent.getRatingCallback&rand=0.23108505620818276&repeatLimit=40',
+		url: 'http://epeiratiko.webou.net/gca/News.txt',
 		onload: function(response){
-			var comments = response.responseText.replace(/"/g, '').split('[');
-			if(comments[1].match(/(\d+),/gi)){
-				var commentNumber = comments[1].match(/(\d+),/gi)[1].replace(',','');
+			var comments = response.responseText;
+			if(comments.match(/##C=[^#]+##/i)){
+				var commentNumber = comments.match(/##C=([^#]+)##/i)[1].replace(/\//gi,'');
 				if(commentNumber!=GM_getValue('LastCommentNumber',0)){
 					GM_setValue('dayChecked',day.getDate());
 					GM_setValue('LastCommentNumber',commentNumber);
@@ -3611,32 +4683,32 @@ function changeTheCursor(){
 	
 	if(choosedCur==1){
 	//WoW
-		var normalCur='http://epiratiko.webs.com/GCAO/cursors/hand.cur';
-		var pointerCur='http://epiratiko.webs.com/GCAO/cursors/greyhand.cur';
-		var moveCur='http://epiratiko.webs.com/GCAO/cursors/bluehand.cur';
-		var textCur='http://epiratiko.webs.com/GCAO/cursors/blacktext.cur';
-		var attackCur='http://epiratiko.webs.com/GCAO/cursors/sword.cur';
+		var normalCur='data:image/png;base64,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%3D';
+		var pointerCur='data:image/png;base64,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%3D';
+		var moveCur='data:image/png;base64,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%3D%3D';
+		var textCur='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgEAYAAAAj6qa3AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAgAAAAIACH+pydAAAB7klEQVRo3u2XP27CMBTGTTANTWnThYW2QgwIcQEGrpIjdOwxeoQsmVIp92BCFWJBXKIL/woEcIcvn1AsKIxx62/5ybEj5X15fn4uCSGEEI5zmqWSOCmlwMMhTz4niy8JVCrgzQ14ews+PIDlMrjbgbMZuF6D2y2YpqeNKrzu78HnZ3AykVJKKZXyPM/zPKU4xvxgAD495Y2ikecyp3jKMoB/uNUCu904juM4Pi5M0zRNUyGCIAiCoN/H02YTnE5NC1wT/yANGI993/d9X6kkSZIkUYpjzH9+gu02+PgImpcBWbHj3l0uwddX/PHNhgsx5p5/ewMXC5A1gMXQHGUGsLgxYAZ6TqsV+P2dN1A/DYovJ//hNGK///01veqbF7hmgH6uXzKAMu/cP2PAucD+vjQDrg2cx6Y51f5KA641ggZcapmLL80ABnIpIBpgfiZolx82MlL+/hrXkeYa4eQDvrsDPz5A180vr1bB93eQlyYaYd6W0Axgb9/pRFEURdFxYRiGYRhy1OuBjUb+fccRZqpWA19ewNHIdV3XdY93AI4xPxyCvDv4PmjeXSD7UKY6U5wB1esgU52t79cXOJ/nn7OVNqczzAzQq7p+zOliYOwYdRY/cM0APWUvjfUAzW+JraysrKysrKysrKz+l34ACqm63RQ76CMAAAAldEVYdGNyZWF0ZS1kYXRlADIwMTEtMDYtMTRUMjA6NTg6MDMrMDA6MDByJ56bAAAAJXRFWHRtb2RpZnktZGF0ZQAyMDExLTA2LTE0VDIwOjU4OjAzKzAwOjAwLZborwAAAABJRU5ErkJggg%3D%3D';
+		var attackCur='data:image/png;base64,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%3D';
 	}else if(choosedCur==2){
 	//Oxygen Black
-		var normalCur='http://epiratiko.webs.com/GCAO/cursors/blackcur.cur';
-		var pointerCur='http://epiratiko.webs.com/GCAO/cursors/backhand.cur';
-		var moveCur='http://epiratiko.webs.com/GCAO/cursors/blackmove.cur';
-		var textCur='http://epiratiko.webs.com/GCAO/cursors/blacktext.cur';
-		var attackCur='http://epiratiko.webs.com/GCAO/cursors/backhand.cur';
+		var normalCur='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgEAYAAAAj6qa3AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAgAAAAIACH+pydAAAEKklEQVRo3u2Xy6tSWxzHf9tHvvCVooEROAgkIQwhHOggETEQFEeN+zsaNrGhDW1UA3FggzAKIhy0JRKkM3JQSkiSCiq+37ru4Hd+d3Hsyj3d27n7wN3fyceNa6+9vt/9W48NAAAAJyfIr1+Rbjf8v8RYNBqNRqOM4fW3b8jr16Ue2X8WQD6fz+fzjIXD4XA4TEF8+YK8dk3qEV6UFBTAfD6fz+cA8Xg8Ho8DBAKBQCBw8yb+//490m6XesAXFAAABZBOp9PpNEAikUgkEgA+n8/n8926ha3evUNarVIP/DcHwNhsNpvNZgDdbrfb7QJkMplMJgOQTCaTySSAx+PxeDw+H7Z/+xZpMklt4DcFwCuA1G632+02QDabzWazPAi32+12u+/exVavXyMNBqmN/MsAGFssFovFAsBgMBgMBgCj0Wg0GgEGg8FgMADI5XK5XI5PDZfL5XK5gkG8/9UrpFYrtaF/GADAZrPZbDYAZrPZbDZzWiwWi8UCMJ1Op9MpQLFYLBaLfLF0OBwOhyMcxl5evkReuSK1sXMHIAiCIAiMbbfb7XYLYDKZTCYTD8BqtVqtVh7EZDKZTCYApVKpVCoBxGKxWCxG7e7fx27zeaRKJbXBcwYAsN/v9/s9L30yfIzj8Xg8HgOUy+VyuQwQiUQikQgFmExi9y9eIJVKqY0eDQDB2G632+12PACqhGMBUIUMh8PhcAhQqVQqlQpAKBQKhUIAer1er9c/eID9P316+jjFrw/xggM4rABaBA8DOJwKFAC16/V6vV4PoNFoNBoNAL/f7/f76THRKFKjkdrwoU7nKGMUAL45bkylUqlUKr5IKpVKpVIJQBWzWq1WqxXAer1er9c8qFqtVqvV6DF0gKJdYrGQ2vifARxWgEaj0Wg0vBJ0Op1OpwOgRVKhUCgUCm6Ytk+73W632wHq9Xq9Xgfo9/v9fp8+qp49Q+73Uhv+KQD6QQbVarVarQbQarVarZZXAgXEGGOMASyXy+Vyya/p4NRsNpvN5maDvT5+jGy3kcul1IaPBCAI9CadTqfT6eRTgRZFmgoUFB2d6brVarVaLer2zRukKCKHQ+R6LbXhnwJAA6JYKBQKhcK9e1T6tMjZbDabzQaQSqVSqRQPZDQajUYjHgSdD1AfP541vloh6TP78uh0f/70CUv582dc1E5OcJ9vNDqdTqfTmc1EURRF8cYNPPkJAgVEAVSr1Wq1yk715An2+/078vKV/oFodaavO5sN6XIhb99GPnqEi+ZoFAwGg8EgY16v1+v10put15F37iDpI0kQpHZ4TMJfD5AOLES9Hul0ImmHf/jw7P3PnyM/fED++IGkKXD59DdvhoxREDod8upVJFUKieZ8v4+cTpGXb/s7ZwCHoiDU6rMk0fa33SJ3O6kNypIlS5YsWbJkyTqiPwCUGA4R3JOCsgAAACV0RVh0Y3JlYXRlLWRhdGUAMjAxMS0wNi0xNFQyMDo1ODowNCswMDowMLeAoBUAAAAldEVYdG1vZGlmeS1kYXRlADIwMTEtMDYtMTRUMjA6NTg6MDQrMDA6MDDoMdYhAAAAAElFTkSuQmCC';
+		var pointerCur='data:image/png;base64,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%3D%3D';
+		var moveCur='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgEAYAAAAj6qa3AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAgAAAAIACH+pydAAAHf0lEQVRo3uVZa0jkVRQ/89dxZhpfzYzvGc18m8Ioiq/QMNfxsU4buJHBBBmUFeQuSAShfYgFWQj6sBEFLfYpylVcN1H8UOvuqiiKuKDiG1Mh0cnxNa46evvw6zS4ZFn5H6nOl58zc++55557Hr97JTpXUavPd32PiyQB795VKBQKhWJ1FZ9TUs7bMg/Jm28WFRUVFRUJUV9fX19fLwS+7+8/7iDPiYcW1Om8vb29vb2vXausrKysrCSKi4uLi4sjSklJSUlJyc7GuHfe+Y864KOPrFar1WrV61dXV1dXV4kGBwcHBweJqqqqqqqqiJAS165hvMnkKQd4yavebA4MDAwMDPzii+Li4uLiYknq6enp6ekhmpqampqaItLpdDqdjiggICAgIEClmpubm5ubi4vD/K+/9pQjZJL79znn8/Pz8/PzhYBDhNBoNBqNRoigoKCgoCAhampqampq3L9j/ksvyW2hTClgs2Fjzz67u7u7u7tL1NfX19fXR4RaQGQwGAwGA5FSqVQqlUT9/f39/f1EaWlpaWlprOfGDWBgoFwO8JZHbVXV4eHh4eEh0fz8/Pz8PFFGRkZGRgaRSqVSqVRuR/j5+fn5+bkdsbS0tLS0ROTj4+Pj4xMUtL+/v7+/HxsLvUNDZ22pTDVgYQEnHx29tbW1tbVlMm1vb29vb0tSZmZmZmYmUXR0dHR0NJHD4XA4HESdnZ2dnZ1CwGHDw3Dg++9DX1eXPHb+Y1Eq//h3hQIYEwO8dy8yMjIyMlIIVH8hcPJOJ36/ePF0enU6YGiohzfMC7a0APf3gS+/fHzDJzkiJAT42WfAO3eAFy4Avf4kIjUa4NQUUsjlwuePPwY+8YRMG6+uBv78c0JCQkJCghAIZa7WExPA03J7dshfZX42G9qlEKWlpaWlpUIgldiOuTlgUdFpNZ7g8aefBjY36/V6vV5/5Up5eXl5eblGExwcHBwcTKTVarVaLdHi4uLi4qLBcHBwcHBwMDiIeTMzQDaMhUPbZgO++y7QYACOjQEPD4/P45O9ccNsNpvNZqMRxIkoJiYmJiaGKCkpKSkp6cknl5eXl5eXX311b29vb2/vqacw7/594O7uCQ7g0Lt61cvLy8vLq7m5pKSkpKQkIcFisVgsFnc1X1lZWVlZcbcxJjILCwsLCwulpdAzMABcXDzuiJs30R4//BARZDbje6t1Y2NjY2MjPh6fb90CqlTAb74xGo1Go/H55/Py8vLy8tx2jI+Pj4+Pc9cgstlsNpuNSK1Wq9Vqs3lmZmZmZua116Dnxx+PO/o3B9y6lZqampqaeuVKXV1dXV2dUul0Op1OJ1F7e3t7ezuRy+VyuVxEHAEIRfY8UXh4eHh4uFo9NjY2NjbGt7umJqBeL0mSJElffZWVlZWVlSVJvIHs7Ozs7GwiGPrMM4ikL7/EvMRErHf9em1tbW1tLRG3V+YXOzs7Ozs7RKOjo6Ojo0R2u91utxNVVFRUVFQQlZWVlZWVabXT09PT09OXL6+vr6+vr3OqPHz4aw4ajdyW2JNra2tra2tEaGNuB7AB2JB7vBBCuAOe/+IixREmSTzeZDKZTCb3OpjPtYHH2+1Y3+XijXLqsR7mE2yPr6+vr68vESLZrR8Rxqlltz8WAc3Nk5OTk5OTGk1vb29vb29GBoqdJCEy3CHHnvf39/f39ycaGRkZGRkh6u7u7u7u3tiAvpqa47VgexsbNJvhyMTE5OTk5ORkouHh4eHhYTaU+/2nnwI3NzHe6YRdhYURERERERGSxHYwj+BIjI+Pj4+PJ2ppaWlpaSFqa2tra2u7dw/jL12C3gcP6I+FQ/iHH8LCwsLCwoQoKCgoKCgQIj09PT09XYjc3Nzc3Fzu43zir78O9D6BYWq1QCY4nZ3ADz4A+vn9/jxfX+C338bGxsbGxgqB2iREYWFhYWGhELhesx3Ly8BXXqGzEe7zS0vIdSHQHXjBtTWgv//p9HH7467wZ/2f5cUX2eEoikIgBZiPXL9+3GFnLqy4sRHocAD5BE/q6xwRycnA7m4g84e33gJy1T9JAgKA7e3AtjZgYqJMGz6tnMQAeUNMcScnUVOEaGhoaGhoEAKXIS5O770H5FR5XO9J6/x9kekyZLUCv/sOhOXtt6OioqKiovR6vAwRIYX4UqRQgFBduIBLE9cSPvG7d4GPE6t/LmfuUUhXFx42LBZud8hZN3/gdsZt7Ojo6OjoiIifzDo6Ojo6OojAC7KyoJeZ5tmJTO8Bn3wCvmCxcH+emJiYmJhwM0d2APMK/n5zc3Nzc5M3PjsLfQ8fymOnbC9CXV0gMLdvMyFBRBDNzs7Ozs663wT5xENDQ0NDQ4kGBgYGmEgTvfEG8NGjf5kDWK5eBTV+9CgnJycnJ4coJCQkJCTETajQx4mGhoaGhoaIcIm5eRPzv/9eXvtkfxV2OBDiSiUuJ889B27uPnEuhq2tra2trT/9hHkvvACU7+Q9LPyQMT/f2NjY2NgoRFNTU1NTkxCgtlzdL18+b0tllkuX8J8gIaqrq6urq3njt2+ft2Uels8/B/K9PCLivC3638ovd1yQU1Gkz24AAAAldEVYdGNyZWF0ZS1kYXRlADIwMTEtMDYtMTRUMjA6NTg6MDQrMDA6MDC3gKAVAAAAJXRFWHRtb2RpZnktZGF0ZQAyMDExLTA2LTE0VDIwOjU4OjA0KzAwOjAw6DHWIQAAAABJRU5ErkJggg%3D%3D';
+		var textCur='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgEAYAAAAj6qa3AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAgAAAAIACH+pydAAAB7klEQVRo3u2XP27CMBTGTTANTWnThYW2QgwIcQEGrpIjdOwxeoQsmVIp92BCFWJBXKIL/woEcIcvn1AsKIxx62/5ybEj5X15fn4uCSGEEI5zmqWSOCmlwMMhTz4niy8JVCrgzQ14ews+PIDlMrjbgbMZuF6D2y2YpqeNKrzu78HnZ3AykVJKKZXyPM/zPKU4xvxgAD495Y2ikecyp3jKMoB/uNUCu904juM4Pi5M0zRNUyGCIAiCoN/H02YTnE5NC1wT/yANGI993/d9X6kkSZIkUYpjzH9+gu02+PgImpcBWbHj3l0uwddX/PHNhgsx5p5/ewMXC5A1gMXQHGUGsLgxYAZ6TqsV+P2dN1A/DYovJ//hNGK///01veqbF7hmgH6uXzKAMu/cP2PAucD+vjQDrg2cx6Y51f5KA641ggZcapmLL80ABnIpIBpgfiZolx82MlL+/hrXkeYa4eQDvrsDPz5A180vr1bB93eQlyYaYd6W0Axgb9/pRFEURdFxYRiGYRhy1OuBjUb+fccRZqpWA19ewNHIdV3XdY93AI4xPxyCvDv4PmjeXSD7UKY6U5wB1esgU52t79cXOJ/nn7OVNqczzAzQq7p+zOliYOwYdRY/cM0APWUvjfUAzW+JraysrKysrKysrKz+l34ACqm63RQ76CMAAAAldEVYdGNyZWF0ZS1kYXRlADIwMTEtMDYtMTRUMjA6NTg6MDMrMDA6MDByJ56bAAAAJXRFWHRtb2RpZnktZGF0ZQAyMDExLTA2LTE0VDIwOjU4OjAzKzAwOjAwLZborwAAAABJRU5ErkJggg%3D%3D';
+		var attackCur='data:image/png;base64,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%3D%3D';
 	}else if(choosedCur==3){
 	//Oxygen White
-		var normalCur='http://epiratiko.webs.com/GCAO/cursors/whitecur.cur';
-		var pointerCur='http://epiratiko.webs.com/GCAO/cursors/whitehand.cur';
-		var moveCur='http://epiratiko.webs.com/GCAO/cursors/whiremove.cur';
-		var textCur='http://epiratiko.webs.com/GCAO/cursors/whitetext.cur';
-		var attackCur='http://epiratiko.webs.com/GCAO/cursors/whitehand.cur';
+		var normalCur='data:image/png;base64,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%3D%3D';
+		var pointerCur='data:image/png;base64,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%3D%3D';
+		var moveCur='data:image/png;base64,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%3D%3D';
+		var textCur='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgEAYAAAAj6qa3AAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAgAAAAIACH+pydAAACZ0lEQVRo3u1Xu04rMRC19+kAIgHBH1CQBiHSBKSIdEjQICEBLQ0NJZ/Bh/AP1Cg0CEVbAiUpIESIENbrNawpJsNVfPMq1/f6NGfX6ynm7Iw9hxJCCCGOM5wpJUOhFHCWDTKuI+cfHpDvAwcBcKEAPD8P7LrAX1/A3S5wkgCnKbCUw4XKLzxMnFJKKS0WV1c3Nra3r66KxYWFpaVyOQzDMAwJEUIIIQh5fX15abUajcfHKLq5OTyE+I8PYKwEFMoYlEpBwNjMTK1WqdTr+/vqL6RpmqapUvjd94OAsa0tiF9cRCGBR7VO/tDv9SyTUgjOn556vff3TieKdnYODk5O/mzc2zs6Oj0lpNt9e2u37+6klFKIdhvjgfNf8iMEkBL+8+fn/X2zeX19dsZ5HHMuBG5MEs7jOEkeHqKo0Tg/J0QppXo9+IpnAAphDvoCYM8KAULg4TYMSikVx/DMOQo4KIA5lfDbAoNCfH+PD9NPffMS1wTQ7/VJAiDMu/dHCDAqsX8fmgDTJo6DkTnX3ZQCTCsECjBpZM4/NAEwkUkJoQDmV4JmftATeN74MNyHbK4QDiYMXmB2tlyuVOr1y0vX9TzPC0Pc6Lqe5/uMraysrW1uXlzAKpomFMLYlpibAy9QrY7zAlLqXqBahfhSaVAIcwT4LXXwAq0WeIFms1bb3T0+Xl8vFBhjjBDOOU8S9AK3t+AFnp8h2txrs/+nsNQZQ1tMKaWOs7wM61jqnGeZUlnW6cBIjDYYR2L0DuZMhn0B9FNdv+Z0YGI4Meqc/8Q1AfSenfSuJ2j+SGxhYWFhYWFhYWFh8X/hB44XViYGricpAAAAJXRFWHRjcmVhdGUtZGF0ZQAyMDExLTA2LTE0VDIwOjU5OjAwKzAwOjAwrA3vOAAAACV0RVh0bW9kaWZ5LWRhdGUAMjAxMS0wNi0xNFQyMDo1OTowMCswMDowMPO8mQwAAAAASUVORK5CYII%3D';
+		var attackCur='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgEAYAAAAj6qa3AAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAgAAAAIACH+pydAAAGdElEQVRo3u1YS4wUVRQ9Xe9VdVc3k6aHpufDDGlAIoEow3ySjsAkBFQ2omZcqRsTEuKOZFiAmpiAEGThwg2QGHcGjSYkfMIQEAytBkNYaMQPmSEDMjb9nf7Vp+v3XDxfimlRx0g7kvRJOjf16la9e8+9795bTTBPKEowqKr9/cuWrVq1bt3hwyMjmzZt2/bhh47DmCStXGkY9Xq1+t13ruu6jlOtzve9jwxWrFi7dnj4xIlLl9Lpb75hzLZt23EY++GHmzenphgT9xfazhYhEBgcHB3dsaPR0DRdNwzGLl5Mp69dY8xxXNd1GUultm4dG2s0hP5CWzxfSH/nOJeKEghIkiQpSiAQCAQCgG07juMAAGMAQAillCqK0H9UiJgnAdGoWOGpD3ie53keYJqNhoi7j1iMS0L+70T8DQHS7/c7OsRKo2Hbtg14HmOMAYZhmpwA7uTjjw8Ojo5OTHR19fevXv3mm4RQKsuJxIMJWXhi6PwICAZ9AhoNywIY8zzGeAZYFrBr12uvvfwysHFjKjU0tH79mTMTE5cvr19/9Ojx4x988MILAMCY61YqpVIud+FCPj8zc+vW++87jm1bVi7H3+55c/fnx2sBCRDwI2VZPAMIoZQQ/0iMjAwOPvkkkMlks8Ui8NJLzz+/fTuwfHlfX0/PwEAqNTIyMAB8+eXVq9evDw299dbbbx88+Mwz/M2eVy4Xi5nM6dP5/K+/Tk8fO+a6jmPb+XyriSB/7TD9naB4vLc3mVyz5vXXX3zxueeefRao1TRN1wFZlmVZBmZnK5VaDeBdAYhEVDUUArq6Eol4HLh7N5PJ54FUamjoiSeAZDKZXLGip+fIkQMH3nijtzce7+7u79+y5dtvb9z4+efe3kqlWLx37+xZvn9zZjw8NNWAQICf2aVLu7uXL1+9et++NWs2bBgd/egjoSEclGVKKQXK5Wq1VgNEd1AUTkg2WyjMzgKZTC5XLPpdQ9d13TSB7du3bt28Gfjxx8nJ27eBnTtffXVsDEgkli1LJsfG+G6i+LauVtC5GyhKX9+qVevWvffe+Pj4+Pj4K6889VQqNTwMXLhw6VI6DXR0RCKRCBCNdnQsWgQYhmGYJsDbJBCJhMOhEKBp3FGBcDgUCgaBarVe13VOXL0OJBJLlixezG0IBABKKZXlUIg/JYpvqdSqTJDmEhCNxmKJRH//2NjTT2/ZsmkTUK9zR7Zt49eGwdteJpPLFQo8sq4LOA6PcKFQLFYqgOu6ruf569lsoVAq+TXENC3LtoE7d2ZmslngwedcFF9Jmo8z/yID/HZHCCGEhEKU8hT3PJ7yhmGalsW16nVAknjERWrz53hxlCTAdT3Pdfm8wNgf9UXxFJF/MAWtb5NNBPjtjhBusDCcUu6gOOuiBlDKu4G4L/QFxMDkOJIUCPjPM8bnCEHQQqGpDfqMi4gKhwgh5H4ihOPNRPwZAcLx5nXXJaR1Nf4fE8CYZZmmrpdKmqZput7ZqarBYDDIi9z9xAgiBAGyLMt/TQD/icgLx8NhVSXE19N1TavVRNFrfW5IwkwuTbNYvHfvzp10+syZ8+cvXwa6upYujcWAYDAYVBQ/E3wixBHgRIg2KKRYF3riOdEtHnssmezrAz7++OTJc+eAfH5mZno6nRb2zLXv4aNpEJIkw9C0arVQmJ6emcnnR0YYkyRKOztTqeHhgQFg0aJIJBwGgkHfUeH4/dI/GoTwdUWh1G+jsVg02tEBfPbZqVMTE8A77xw6dOTI5OTdu1NT33//7rue53muOznJ7dL1VmVEEwGuyzcul0ulbPaXX65cuXlzaur27e7uiYkvvrh6NZms1ep1TSMkFotGo1FAVXl/D4dVVVWBUCgUUhSe6oD/sZTLFQrFIvD551eufP01sHv33r3799v2p59+8smJE+fPT0//9NP163v28K5z4wa3p1wWdrUqA5rajChTssxlOMxlZ6ckEULpypWLF8fjPT07dsRi8XhPz8aNiqKq4XAioSiKEgpFo5TKsqJEIvwjR9Msy7JMs1KxLMPQ9VxudrZQyGS++qpcLhQymVOnPM91HefWLb6POPsi4rbdqsj/CQHNRDR/E6gql2JCE9eifQop9HmnB8Q/BkIaBpe12txroS8cbn0RnOeg0UyIkKLeCym+96Wm4ipSWFwL2ezofz8RPKRJa74T20KOPG200UYbbbTRRhttzMFvjqxEdLbq6UEAAAAldEVYdGNyZWF0ZS1kYXRlADIwMTEtMDYtMTRUMjA6NTg6NTkrMDA6MDCet8+xAAAAJXRFWHRtb2RpZnktZGF0ZQAyMDExLTA2LTE0VDIwOjU4OjU5KzAwOjAwwQa5hQAAAABJRU5ErkJggg%3D%3D';
 	}else if(choosedCur==4){
 	//Sword
-		var normalCur='http://epiratiko.webs.com/GCAO/cursors/Sword_main.cur';
-		var pointerCur='http://epiratiko.webs.com/GCAO/cursors/Sword_link.cur';
-		var moveCur='http://epiratiko.webs.com/GCAO/cursors/Sword_move.cur';
-		var textCur='http://epiratiko.webs.com/GCAO/cursors/Sword_text.cur';
-		var attackCur='http://epiratiko.webs.com/GCAO/cursors/Sword_backgroundactivity.cur';
+		var normalCur='data:image/png;base64,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%3D%3D';
+		var pointerCur='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgEAYAAAAj6qa3AAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAgAAAAIACH+pydAAAL+klEQVRo3t1Za0xU1xZeZ+Yc5szjMDMwIO8ZXmJUfKAE0SK3JlKkIlLFCNEUU03bVGuTmv5otI80bdPU1L5MbWtAUwUJWIEKChptKwZSiZaJgjw6MgIyMIw8zrxf5/5Y7iD0GvFx681dfz7mcM6cvb/9rbW+vYeKj4+Pj48XBLVarVarATQajUajAYiLi4uLiwMICwsLCwsDkMlkMpksO3vPnj179uxpaID/k6BtNpvNZgNQKBQKhYLnz5yRy+VyjgNwuVwuAIChoaEhcvvZsxERZWVlZRs3FhUVFRUVnTz5rCfwpCHieZ7neYDi4rGxsTGOW778zp07d3gewOv1egEAxGKxGACApmkaoLCwqampqaqqpqampqbm5Zef9QSemACiAIvFYrFYALZutVgsFo5bter27du3eX5SCSQYhmEA1q1raGhoOHKkvr6+vr5+165nPZHHJoD8YTZbrVYrwMDAwMDAAMCWLSMjIyMcl53d29vbez8RPp/PBwBAURQFsGZNbW1t7ddfNzY2NjY27t37rCf0mAR8/vn33wMACMKdO6gIg8FgMBgANm82mUwmjluzZjoRfr/fD0BSY/Xqmpqamo8+On/+/Pnz5/fvf9YTm2lQCLm5iKtXI+7cWVQEAEBRcXEKhUIBgN0CoKIiPDw8nOfPnImKioriOACWZVm8l6Im8cKFvLy8vB9/tNvtdrv9tddyc3Nzc3ORsv+luEfAwoWIOh3iiy8ibt++YQNOKiFBIpFIABISEhISEgAqKyMjIyN5vqFBq9Vq7ycCFUEUcvlyQUFBwYkTSMTWrVlZWVlZWVheHyWWLVu2bNkympbL5XK5nGWlUqlUKsXyDOByud1ut9vtcmEqCsJMv/deCvT1Id6+jVhfj3j8ODY6QdDrUfodHR0dHR0AGzb09fX1cdwLLxiNRuODa8SKFZWVlZWbN2Obra6+ePHixYsXkaqZRHJycnJyMsvSNE3T9KxZAQEBAQEBiYksy7Ism5iIRISFMQzDMIxE8pgKIEyqVFOVoNUiYkIA5OdjkohE8+bhlaSkpKSkJICTJ6Ojo6N5/tw5ogipVCqdJIIoorW1uLi4+NdfnU6n0+nMzc3IyMjIyLBaHzTAlJSUlJQUjQYnOnu2UqlUKpVRUWjM8Nspymr1+/1+v3/VKiRq1SqRSCQSiXbtKi8vLy8vv3z5IQrANQMYG5uqBKKM8nLExsZz53Ay167hlba2zs7OToD163t7e3s5LjOzu7u7m+cB0F8AeDwez+QLly49cuTIkX/9CxVx4UJzc3Nzc7Na/aABSiQSiUTCMDhRjvP5fD6fj+O8Xq/X61WrUfq1tZWVBw7Y7W+/feLEiRM+3+LF+PTXX+fn5+fn58tkDyGABCHi7t2pRPT3I5aUIF669NtvSERbG17588+enp4egPx8o9Fo5LgVKwgR2F4niRAEQQBYtKi0tLQ0NVWlUqlUqkuX9Hq9Xq8PCyMjwaJJUSh1kQhXFnXk9wuCw+FwOBxe7/j4+Pj4OM9TVHT0+Dg+a7MBoL+Jjj516tSpU6fs9hkSMJ0IiwXRaEQcGED87jvEK1eam5EIvZ4QYTQajQDr1hkMBgPHpaV1dXV13U/E1BoxZ05paWnpvHlY3JqaWlpaWlpadDqUuFyO0lepUNJSqcfj8Xg8FGW14vcRAwfg85FlIxVpqoF7JAJIkGpNiOjtnaqIr75C1Ov/+GMqEdevm0wm06Qi0tMNBoOB5wEcDofjfiKwNsTFHT58+HB8PKZGU1NaWlpaWtpzz+HKR0WRFMCVFwSceGzs0NDQ0NCQ0wkwNma14reOjiLdVmtw8BMSQIJksdn8n4n44gvEzk6sDX5/Rwde6erCzdTGjf39/f0cl5FBiLDbUZhut9uN7/B4AObNKykpKYmMxOp//HhMTExMTMzSpbjyNI1E6HQo8Z07OzpOn3a7w8JGRwXB4wGwWMxmpxMrEM+TFH5wiGdGAAliZIi4iEJE94hsb0dcuHBwEAAgMFChwP/T9MTExARARgZFUZRE8s47Pp/Px/PbtsnlcrlEMukskYi4uLa2tjaptLd3wYIFC1JTccIeDxa/rVtbW0+fdruVSqtVrfb5ABwOp5OmATIyVq4UiS5fxpT5+GOz2Ww2m2/ceEoEkCA14mFELFmCayCXh4fj/wMC0GovXy4SiUQSyVtvORwOB89v3076OMldVEhqql6v10skv/+u1Wq1ycnHjh07ZrOxLM8LgteLxY5lAXJycnIY5ttvxWKxWCw2mdrb29vb2x9uyenHI4AEIYCcGBACCH7yCeL77//yCwBAcHBwsNfr9dI0yw4PDw8DFBYKgiBw3Pz5KNrr10NDQ0M5rrg4JiYmpqeHZUNCQkL8/kOHDhxwOGbPBgBQKrGXiEToOx0OPLjxeBYvxraYlTXTGVBPRsD0QOsDEBGBGBuLOGcO4gcfICqVb7wBAEDTSiUaGmJsDh5kGIYRBL2+ri40lKI0msWLExPxKY6bfIvb7XYzDMDu3bt3u1zXrmFxLCw8evTo0aNHOztnOuIZFsGZBtZ3AKwAk0aqqwvxww8RrdaDBwEAvF6TCaW+d+/IyMhIT8+OHdnZJhNFyWQAN2/i3d3diKQUy2QAAQEBAWo1QHR0dHR0NEUlJiYmJiaS9808njIBJJxOxIkJRJIqpIuQrmG3Dw/f/5wgSCQ+nyAAtLa2trpcAILw119kPQmtggCwf//+/XK5wRAaGhoaGiqTRURERERELFr0qCN9zCL49wgMDAwMDKQoNCByOV6dNQuRODylkkwcMSQEtaHVJiXRNEBwsEyGGyXSE5RKjvN6AdRqkcjjAdiy5c03g4Lu3Pn007y8yMiwsNTUBQuCg5XK/n6bTaXKzNy0adOmTZuuXq2oqKioqHi4Ih5ZAVqtVqvVsiyeGoeE6HQ6nU4XGYmePSoKd2sk98lminh9sukiWZ2SEhgIAEBRDINbpr4+HHR3Nwr/559rawEAGGbOnP7+wcHsbJWqpyckxOkcH7daGQbA56OogIDc3PR0mtbp0FqXlNTV1dXV1S1f/tQUgFaVptGQzJqFm5K4OFxxrRb7dFgYfo6KIrpAZBjE+HjE11/HMhkYSLyaz4crTrZQ/f0mEwBARUVrK4DJhPdrNEFBXu/YGE2zLMuKxQARERzHcQAMo1IFBYnFOl1sLE1z3ODg6KhUmplZUFBQUFBw9WpZWVlZWdnfFTFjAnDicjluY2NicMKxsXjQodGgQSHV/4cfEPPzEfPyEJcsmT9fKgVQKMLDURXEELe3I6LpHh4eHvZ6J2sGTSMtMhnPm0wej0gkCDYbz2MxdLsBQkLwsJZl5XKOE4u1Wq1WLOa4W7dMJrH4+efXrl27du3atraqqqqqqiqyt3nkGkDaHJH09BV+6aXk5KAggLi4wsLMTACA5GS0QElJGg0AwxBvSM5smpstFoCffsJPAQFEIYhnziCS8jd3LlLCsgMDJpPNJhL5/RYLkgMwPg4QFIS7RoUCiYiPDw/3+xWKrq6hIbF45cqcnJycnJwbN6qrq6urq3t7H5EAMmxiiac7wldeMZsdDgClMjgYc9rjQadPjkVsNuwQjY23bgGQHQOR5vr1iMTD47OT3YQoYu5cvMKyXV0jIzabSOR09vaaTKgoiwWA4/D3jOBglpVKxeLZs1Uqjycw8MqVgQGvd9u29PT09PT09957RALIhEm/J9yPjiJiwQIQi7u7794FmDu3o8NsBmCYGzfQLfb03L2LO3YAgHffRST+gHR6Yq0JseS9fycC72DZ9nabzecTicbH9XqzGX/W6esDmJiw23ne4/nmm5YWl8to3Ldv3z6XKzj47NmzZ93ukZGn7ASfdlD3xkdOdDCdJh0mqfKvvoqo0SDSdGQkEoknGIODIyNm88KFMTEcFxio0wHs2LFjh1JpNj81H/DfjemKIO2UKIbsRZKSEKVS1ObIyJdf7toFEBWlUISGDg0B+P0ikc0GcOjQoUMul93+hJuhfypI7SEGivhHogxynRyKffYZdpvwcIsFyRkYuHIFAMDvF4T+foCbN2/enJh46puhfypItyCOc/px+PXrU4mbTiSJvr5/A/kBIyFs/4+3AAAAJXRFWHRjcmVhdGUtZGF0ZQAyMDExLTA2LTE0VDIwOjU4OjE0KzAwOjAweyqgiwAAACV0RVh0bW9kaWZ5LWRhdGUAMjAxMS0wNi0xNFQyMDo1ODoxNCswMDowMCSb1r8AAAAASUVORK5CYII%3D';
+		var moveCur='data:image/png;base64,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';
+		var textCur='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgEAYAAAAj6qa3AAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAgAAAAIACH+pydAAAC90lEQVRo3u2ZPU7jQBTH/47HHjtOHISUxB0XgAoKKJByA4qIQyAkuAASQuIESNyBAqihQ0rBBWiggBaFAuN44s84W8w+mWJXG0Sww5J/M4kVZ9783seMn4EfLqWoiXZ3l5cBIer1et0wAMdxHMcBWq1Wq9UCLMuyLAtI0zRNU6DbPTnp9Szrq+2qFAXg9PTuDrAsz/O8MARWVxcX05TzTmdpyTT5bxW38MIBkHzf9wEgDMMwDIEoiqIoAnRd13W9aGtKADAajUY0yk/lihU9IflZVVVVVfNR11X1W0bAwcHmZq0mxKS/bzQaDQAwDMMwDIAxxhgDsizLsmzyec/OdnbW1yef92/6dAR4nuf5fg6Cqjkt0Pdl1nue53keMB6Px+Nxfj9V/TCMojAEer3j425XCEqR4XA4HA7zlKGI+SiwLwPQ7/f7ALCx4Ti+zznnup4kgK4zputAltl2lgFBoGnvc14IIYQAXNd1XRdYWWk2NY1zxhiL4xzMaKSq7+8zTdM0TeD29vkZiKLSAUi/5iA455zMiiLpKSAvftJ/8vrra76gSqVSqVQARVEURck9T56mVKlWq9VqVc47jZoxtSJ4ff3wAEQRLZAUBEEASI8CeRHc3l5bAzinbfDq6v7+9TWKCMBgMBgMBnkKaZqmaVoOzLZt27ZnAID0B3B+/vIC/PsA0+nEMSBzHMg9TueAvb2Li8fHP/+PRAgEAXB42OmMRjNQBCddOCnLZAmkSKETYKPBudwfJtPR0c3N29vnT4yFnwM0jTE5ahqQ57RtMzaNkJ55AFQDCACFPu0aRavwo7DMeFn16bui5LvAfw9g1jQHULYBZWsOoGwDytYcQNkGlK05gLINKFuFA6B+EPUJqEM0rQ7PR1X4swABSJIkAYA4juM4BpJkPJZX/nMA1Acgf1NrTAhN+/zT/TcAQI880u95BLiuEK5bPIDC3g1ubS0sAEKQ52XvWL4bBIB2u91uNoFarVar1YD9/cvLp6fiXpHN9VP1C8XcgyYg8nXuAAAAJXRFWHRjcmVhdGUtZGF0ZQAyMDExLTA2LTE0VDIwOjU4OjQ1KzAwOjAwlb2lWwAAACV0RVh0bW9kaWZ5LWRhdGUAMjAxMS0wNi0xNFQyMDo1ODo0NSswMDowMMoM028AAAAASUVORK5CYII%3D';
+		var attackCur='data:image/png;base64,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%3D';
 	}
 	
 	var cursorStyle=document.createElement('style');
@@ -3770,6 +4842,7 @@ function searchObjects(){
 		}
 	}
 }
+
 // Get the html table of the object i in the reports list at the url uurl
 function getObject(divsIMG,array,uurl,i){
 	// alert(uurl+'   '+i);
@@ -3783,7 +4856,7 @@ function getObject(divsIMG,array,uurl,i){
 			var warningTip = document.createElement('div');
 			warningTip.setAttribute('id', 'object'+i);
 			// HTML table of the object (with good ' and " ...) 
-			var text = response.responseText.split('return escape(\'')[11].split('\')"><img')[0].replace(/\\'/g,'"');
+			var text = response.responseText.replace(/submenuitem_inactive"  onMouseOver="return/gi,'').split('return escape(\'')[11].split('\')"><img')[0].replace(/\\'/g,'"');
 			warningTip.setAttribute('style', 'opacity: 0.90; display: none; z-index: 502; position: absolute; top: '+(320+array[i]*22)+'px; left: 890px; background-color: black; color: rgb(192, 192, 192); font-weight: bold; text-align: left;');
 			warningTip.innerHTML = text;
 			document.getElementById('header_game').appendChild(warningTip);
@@ -3797,20 +4870,69 @@ function getObject(divsIMG,array,uurl,i){
 function saveGuildmatesIDs(){
     var mates = new Array();
 	var c=1;
-	if(document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td').length==5){
-		while(document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[0]){
-			// alert(document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[0].innerHTML);
-			if(document.getElementById('mainbox').getElementsByTagName('tr')[c]){
-				var mateID=document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[0].innerHTML.match(/&amp;p=(\d+)/i)[1];
-				var mateNAME=document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[0].innerHTML.match(/>([^<]+)</i)[1];
-				mates[c]=mateNAME+"<"+mateID;
-				c++;
+	//if(document.getElementById('mainbox').getElementsByTagName('tr')[c]){
+		if(document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td').length==5){
+			while(document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[0]){
+				if(document.getElementById('mainbox').getElementsByTagName('tr')[c]){
+					var mateID=document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[0].innerHTML.match(/&amp;p=(\d+)/i)[1];
+					var mateNAME=document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[0].innerHTML.match(/>([^<]+)</i)[1];
+					mates[c]=mateNAME+"<"+mateID;
+					c++;
+				}
 			}
+			Set_Cookie("GCAOguildMates",mates.join("#"),365);
 		}
-		Set_Cookie("GCAOguildMates",mates.join("#"),365);
-	}
+	//}
 }
 
+//################################################################################################################################
+//## MORE MEMBER STATS
+//################################################################################################################################
+function moreMemberStats(){
+	var c=1;
+	var trs=document.getElementById('mainbox').getElementsByTagName('tr').length-1;
+	var players=trs-2;
+	var totalLevel=0;
+	var totalHonor=0;
+	var stopPlaying=0;
+	var stopPlayingNames='';
+	var offlineNames='';
+	var onlineNames='';
+	var mateNAME='';
+	var online=0;
+	var offline=0;
+	while(c<=trs){
+		if(document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td').length==5){
+			var mateNAME=document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[0].innerHTML.match(/>([^<]+)</i)[1];
+			var level=document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[2].innerHTML;
+			var honor=document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[3].innerHTML.replace(/\./gi,'');
+			var status=document.getElementById('mainbox').getElementsByTagName('tr')[c].getElementsByTagName('td')[4].innerHTML;
+			if(honor.match('color')){honor=honor.match(/>([^<]+)</i)[1];}
+			if(status.match('>-<')){
+				stopPlaying++;
+				var comma=', ';
+				if(stopPlaying==1){comma='';}
+				stopPlayingNames+=comma+mateNAME;
+			}
+			if(status.match('color:Green') || status.match('color:#406000')){
+				online++;
+				var comma=', ';
+				if(online==1){comma='';}
+				onlineNames+=comma+mateNAME;
+			}else{
+				offline++;
+				var comma=', ';
+				if(offline==1){comma='';}
+				offlineNames+=comma+mateNAME;
+			}
+			totalLevel+=level*1;
+			totalHonor+=honor*1;
+		}
+		c++;
+	}
+	averageLevel=totalLevel*1/players*1;
+	document.getElementById('mainbox').getElementsByTagName('tr')[trs].getElementsByTagName('th')[0].innerHTML+='<br/><br/>Stats <a style="float:right;" onclick="document.getElementById(\'LongNotSeen\').setAttribute(\'style\',\'width:80px;\');this.style.display=\'none\';document.getElementById(\'Name1\').style.display=\'block\';document.getElementById(\'Name2\').style.display=\'block\';document.getElementById(\'Name3\').style.display=\'block\';">(Show player Names)</a><table><tr><td>Total Honor</td><td>:</td><td>'+dottedNumber(totalHonor*1)+'</td></tr><tr><td>Average Level</td><td>:</td><td>'+roundNumber(averageLevel)+'<td></tr><tr><td>Online players</td><td>:</td><td>'+online+'</td><td> </td><td id="Name1" style="display:none;color:green;">('+onlineNames+')</td></tr><tr><td>Offline players</td><td>:</td><td>'+offline+'</td><td> </td><td id="Name2" style="display:none;color:red;">('+offlineNames+')</td></tr><tr><td id="LongNotSeen">Long time not seen players</td><td>:</td><td>'+stopPlaying+'</td><td> </td><td id="Name3" style="display:none;color:#BF2000;">('+stopPlayingNames+')</td></tr></table>';
+}
 
 //################################################################################################################################
 //## EXPIRED PACKAGES
@@ -3872,6 +4994,92 @@ function expiredPackages(diffHourMin){
 }
 
 //################################################################################################################################
+//## GENERATE IMAGE
+//################################################################################################################################
+function generateImage(){
+	if(!document.location.href.match(/doll=[3-6]/i)){
+		var code=document.getElementById('content').innerHTML;
+		var name=code.match(/class="playername_achievement">([^<]+)</i)[1];
+		var level=document.getElementById('char_level').innerHTML;
+		var score=document.getElementById('header_values_ressources').getElementsByTagName('div')[5].innerHTML;
+		code=document.getElementById('icon_highscore').getAttribute('onmouseover');
+		var honor=code.match(/nowrap..>([^<]+)<.td>/gi)[2].replace('nowrap\\\'>','').replace('</td>','');
+		var fame=code.match(/nowrap..>([^<]+)<.td>/gi)[4].replace('nowrap\\\'>','').replace('</td>','');
+		code='http://www.epeiratiko.webou.net/gca/signatures/signature_generator.php?&n='+name+'&l='+level+'&h='+score+'&t='+honor+'&f='+fame+'&s=s'+GCAO_server+'-'+GCAO_lang+'&i=1';
+		var imageDiv = document.createElement('div');
+		imageDiv.setAttribute('class','contentItem');
+		
+		if(navigator.userAgent.toLowerCase().match(/chrome/i)){
+			imageDiv.innerHTML = '<h3>Generate Signature Image</h3><div class="contentItem_content">Click the "Generate" button to generate an image with your stats!'+
+			'<br><br><center id="imageBox"><input class="button2" type="button" value="Generate" onclick="this.style.display=\'none\';document.getElementById(\'SaveOnline\').style.display=\'block\';var image=document.createElement(\'img\');image.setAttribute(\'src\',\''+code+'\');document.getElementById(\'imgHere\').appendChild(image);">'+
+			'<input type="hidden" id="code" value="'+code+'"> '+
+			'<form target="_blank" method="post" action="http://www.imageshack.us/transload.php" style="display:none;" id="SaveOnline">'+
+			'<input type="hidden" value="'+code+'" name="url">'+
+			'<input type="submit" value="Save online" class="button1">'+
+			'</form>'+
+			'<br/>'+
+			'<span id="imgHere"></span>'+
+			'</center>'+
+			'</div>';
+			document.getElementById('content').appendChild(imageDiv);
+		}else{
+			imageDiv.innerHTML = '<h3>Generate Signature Image</h3><div class="contentItem_content">Click the "Generate" button to generate an image with your stats!'+
+			'<br><br><center id="imageBox"><input class="button2" type="button" value="Generate" onclick="this.style.display=\'none\';document.getElementById(\'SaveOnline\').style.display=\'block\';var image=document.createElement(\'img\');image.setAttribute(\'src\',\''+code+'\');document.getElementById(\'imageBox\').appendChild(image);">'+
+			'<input type="hidden" id="code" value="'+code+'"> '+
+			'<input type="submit" id="SaveOnline" value="Save online" class="button1" style="display:none;">'+
+			'<span id="GenResults" style="display:none;"></span><br/>'+
+			'</center>'+
+			'</div>';
+			document.getElementById('content').appendChild(imageDiv);
+			document.getElementById("SaveOnline").addEventListener("click", saveImageOnline, false);
+		}
+	}
+}
+
+function saveImageOnline(){
+	document.getElementById('GenResults').innerHTML='<b>Uploading image to server...</b><br/>';
+	document.getElementById('SaveOnline').style.display='none';
+	document.getElementById('GenResults').style.display='block';
+	var code=document.getElementById('code').value;
+	var givedata='url='+encodeURIComponent(code);
+	GM_xmlhttpRequest
+	({
+		method: 'POST',
+		url: 'http://www.imageshack.us/transload.php',
+		headers: {
+			'Host': 'imageshack.us',
+			'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; el; rv:1.9.2.12) Gecko/20101026 Firefox/3.6.12',
+			'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+			'Accept-Language': 'el-gr,el;q=0.8,en-us;q=0.5,en;q=0.3',
+			'Accept-Encoding': 'gzip,deflate',
+			'Accept-Charset': 'ISO-8859-7,utf-8;q=0.7,*;q=0.7',
+			'Keep-Alive': '115',
+			'Connection': 'keep-alive',
+			'Referer': 'http://www.imageshack.us/',
+			'Content-Type': 'application/x-www-form-urlencoded',
+		},
+		data : givedata,
+		onload: function(response){
+			document.getElementById('GenResults').innerHTML='<b>Searching for url...</b><br/>';
+			if(response.responseText.match(/onDoubleClick..return false...readonly..readonly..class..readonly..value..([^"]+)/i)){
+				var url=response.responseText.match(/onDoubleClick..return false...readonly..readonly..class..readonly..value..([^"]+)/i)[1];
+				document.getElementById('GenResults').innerHTML='<b>Image url: <font color="green">'+url+'</font></b><br/>';
+			}else{
+				document.getElementById('GenResults').innerHTML='<b><font color="red">Image not found!</font></b><br/>';
+			}
+		}
+	});
+}
+
+//################################################################################################################################
+//## ARENA CHANGES
+//################################################################################################################################
+function arenaChanges(){
+	var clearButton = '<div id="Clear" style="background-image: url(' + img_clear + ');background-position: 0px 0px;position:absolute;margin-top:-24px;margin-left:335px;width:22px;height:22px;" onmouseover="document.getElementById(\'Clear\').setAttribute(\'style\',\'background-image: url(' + img_clear + ');background-position: 22px 0px;position:absolute;margin-top:-24px;margin-left:335px;width:22px;height:22px;\')" onmouseout="document.getElementById(\'Clear\').setAttribute(\'style\',\'background-image: url(' + img_clear + ');background-position: 0px 0px;position:absolute;margin-top:-24px;margin-left:335px;width:22px;height:22px;\')" onclick="document.getElementById(\'ujn\').value=\'\'" title="Clear"></div>';
+	document.getElementById('ujn').parentNode.innerHTML+=clearButton;
+}
+
+//################################################################################################################################
 //## OPTIONS / ΡΥΘΜΙΣΕΙΣ
 //################################################################################################################################
 function settings(){
@@ -3881,8 +5089,6 @@ function settings(){
 	settingsDiv.innerHTML = '<div class="title_box"><div class="title_inner" id="title">'+L_GCASettings+'</div> </div>'+
 	'<div class="title2_box"><div class="title2_inner"><span id="Settings">'+
 	'<b>- '+L_HeaderSettings+':</b><br>'+
-	'<input type="checkbox" name="lb" id="GCAO_s1">'+L_DisplayLife+'<br>'+
-	'<input type="checkbox" name="rb" id="GCAO_s32" style="margin-left:20px;">'+L_DisplayLifePercent+'<br>'+
 	'<input type="checkbox" name="bu" id="GCAO_s2">'+L_DisplayLinkButtons+'<br>'+
 	'<input type="checkbox" name="au" id="GCAO_s3">'+L_DisplayAuctionStatus+'<br>'+
 	'<input type="checkbox" name="sa" id="GCAO_s19" style="margin-left:20px;">'+L_DisplayMerchantStatus+'<br>'+
@@ -3899,10 +5105,10 @@ function settings(){
 	'<input type="checkbox" name="il" id="GCAO_s8">'+L_DisplayItemList+'<br>'+
 	'<input type="checkbox" name="ea" id="GCAO_s28">'+L_ExpandAuctionTable3+'<br>'+
 	'<input type="checkbox" name="hg" id="GCAO_s39">'+L_HideGoldInAuction+'<br>'+
-	'<br><b>- '+L_SimulatorSettings+':</b><br>'+
+	'<span  style="display:none;"><br><b>- '+L_SimulatorSettings+':</b><br>'+
 	'<input type="checkbox" name="si" id="GCAO_s11">'+L_enSimulator+'<br>'+
 	'<font style="margin-left:20px;">'+L_setFightNum+'</font>: <input type="int" name="sf" id="GCAO_sf" value="1000" maxlength="5" size="3"> ('+L_maximum+' 20.000)<br>'+
-	'<br><b>- '+L_guildSettings+':</b><br>'+
+	'</span><br><b>- '+L_guildSettings+':</b><br>'+
 	'<input type="checkbox" name="st" id="GCAO_s18">'+L_guildStoreInfo+'<br>'+
 	'<input type="checkbox" name="gg" id="GCAO_s20">'+L_moreGuildStats+'<br>'+
 	'<input type="checkbox" name="sc" id="GCAO_s40">'+L_guildSafeChanges+'<br>'+
@@ -3932,9 +5138,13 @@ function settings(){
 	'<input type="checkbox" name="hi" id="GCAO_s13">'+L_enHighlight+'<br>'+
 	'<input type="checkbox" name="lp" id="GCAO_s42">'+L_foodBackColor+'<br>'+
 	'<input type="checkbox" name="fi" id="GCAO_s14">'+L_enStyleFixes+'<br>'+
+	'<input type="checkbox" name="nm" id="GCAO_s32">'+L_showNewMessages+'<br>'+
 	'<font style="margin-left:5px;">'+L_customCursor+': <select name="cu" id="GCAO_cu"><option value="0" id="cu_0">Default</option><option value="1" id="cu_1">WoW</option><option value="2" id="cu_2">Oxygen Black</option><option value="3" id="cu_3">Oxygen White</option><option value="4" id="cu_4">Sword</option></select></font><br>'+
 	'<br><b>- '+L_speedSettings+':</b><br>'+
-	'<input type="checkbox" name="sp" id="GCAO_s15">'+L_stopPulling+'<br><b style="margin-left:20px;">'+L_willStop+'</b>:<br><font style="margin-left:20px;">Life Bar, Simulator, new quest alert, new forum message alert, weapon down alert</font>'+
+	'<input type="checkbox" name="sp" id="GCAO_s15">'+L_stopPulling+'<br><b style="margin-left:20px;">'+L_willStop+'</b>:<br><font style="margin-left:20px;">Simulator, new quest alert, new forum message alert, weapon down alert</font><br>'+
+	'<br><b>- '+L_bugSettings+':</b><br>'+
+	'<input type="checkbox" name="sb" id="GCAO_s45">'+L_showBugReports+'<br>'+
+	'<input type="checkbox" name="rs" id="GCAO_s1">'+L_autoReportBugs+'<br>'+
 	''+
 	'<br><br><input class="button2" value="'+L_Save+'" type="button" id="saveGCAOstats"/>' +
 	'<input style="margin-left:44px;" type="button" class="button1" onclick="document.getElementById(\'title\').innerHTML=\''+L_aboutTitle+'\';document.getElementById(\'Settings\').style.display=\'none\';document.getElementById(\'AboutUs\').style.display=\'block\';" value="'+L_AboutUs+'"/>'+
@@ -3943,8 +5153,8 @@ function settings(){
 	'<b>- '+L_descriptionTitle+':</b>'+
 	'<br>'+L_description+
 	'<br><br><b>- '+L_Programmers+':</b><br> &bull; GreatApo<br> &bull; DarkThanos<br> &bull; djor'+
-	'<br><br><b>- '+L_Translators+':</b><br> &bull; [English] GreatApo<br> &bull; [Greek] GreatApo & DarkThanos<br> &bull; [French] djor'+
-	'<br><br><b>- '+L_Hostpage+':</b> <a href="http://www.epiratiko.webs.com/crazyaddons.htm" target="_blank">www.epiratiko.webs.com</a>'+
+	'<br><br><b>- '+L_Translators+':</b><br> &bull; [English] GreatApo<br> &bull; [Greek] GreatApo & DarkThanos<br> &bull; [French] djor<br> &bull; [Latvian] redpepper007 <br> &bull; [German] Flaminius (s1), chrome (s3) and terror.G. (s3) <br> &bull; [Dutch] Homerus <br> &bull; [Hungarian] h2o <br> &bull; [Danish] Patrick Randrup Klζbel'+
+	'<br><br><b>- '+L_Hostpage+':</b> <a href="http://www.epeiratiko.webou.net/index.php?s=gca" target="_blank">www.epeiratiko.webou.net</a>'+
 	'<br><br><b>- '+L_ContactUs+':</b>'+
 	'<br> '+L_Contact1+
 	'<br> '+L_Contact2+
@@ -3968,13 +5178,12 @@ function settings(){
 	'<br><center><form border="0" action="https://www.paypal.com/cgi-bin/webscr" method="post">'+
 	'<input type="hidden" name="cmd" value="_s-xclick">'+
 	'<input type="hidden" name="hosted_button_id" value="NLTXXPMHCVLYC">'+
-	'<input type="image" style="border:0px solid black;width:150px;" src="http://i617.photobucket.com/albums/tt260/goldisever/Apo/donate-button.png" name="submit" alt="PayPal - The safer, easier way to pay online!">'+
+	'<input type="image" style="border:0px solid black;" src="http://i617.photobucket.com/albums/tt260/goldisever/epeiratiko/donate.jpg" name="submit" alt="PayPal - The safer, easier way to pay online!">'+
 	'<img alt="" border="0" src="https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_US/i/scr/pixel.gif" width="1" height="1">'+
-	'</form></center></p>'+
+	'</form></center><br/>We also accept <a target="_blank" href="https://coupon.gameforge.com/">Gameforge Coupons</a> :P</p>'+
 	'</div></div>';
 	document.getElementById('content').appendChild(settingsDiv);
 	
-	if(GM_getValue('lb', true) == true){document.getElementById('GCAO_s1').checked=true;}
 	if(GM_getValue('bu', true) == true){document.getElementById('GCAO_s2').checked=true;}
 	if(GM_getValue('au', true) == true){document.getElementById('GCAO_s3').checked=true;}
 	if(GM_getValue('af', true) == true){document.getElementById('GCAO_s4').checked=true;}
@@ -4006,7 +5215,6 @@ function settings(){
 	if(GM_getValue('fm', false) == true){document.getElementById('GCAO_s29').checked=true;}
 	if(GM_getValue('nq', false) == true){document.getElementById('GCAO_s30').checked=true;}
 	if(GM_getValue('wd', true) == true){document.getElementById('GCAO_s31').checked=true;}
-	if(GM_getValue('rb', false) == true){document.getElementById('GCAO_s32').checked=true;}
 	if(GM_getValue('rr', false) == true){document.getElementById('GCAO_s33').checked=true;}
 	if(GM_getValue('bb', false) == true){document.getElementById('GCAO_s34').checked=true;}
 	if(GM_getValue('at', false) == true){document.getElementById('GCAO_s35').checked=true;}
@@ -4019,6 +5227,9 @@ function settings(){
 	if(GM_getValue('lp', true) == true){document.getElementById('GCAO_s42').checked=true;}
 	if(GM_getValue('kt', false) == true){document.getElementById('GCAO_s43').checked=true;}
 	if(GM_getValue('pa', false) == true){document.getElementById('GCAO_s44').checked=true;}
+	if(GM_getValue('sb', false) == true){document.getElementById('GCAO_s45').checked=true;}
+	if(GM_getValue('rs', true) == true){document.getElementById('GCAO_s1').checked=true;}
+	if(GM_getValue('nm', true) == true){document.getElementById('GCAO_s32').checked=true;}
 	
 	document.getElementById('cu_'+GM_getValue('cu', 0)).setAttribute('selected','selected');
 }
@@ -4059,12 +5270,13 @@ function saveMePlease(){
 	
 	var s="&sf="+numberOfFights;
 	s+="&cu="+document.getElementById('GCAO_cu').value;
-	for(i=1;i<45;i++){
+	for(i=1;i<46;i++){
 		var x=document.getElementById('GCAO_s'+i);
 		s+="&"+x.name+"="+x.checked;
 	}
 	window.location=GCAO_siteurl+'mod=settings&sh='+GCAO_secureCode+'&GCAO=SaveMePlease'+s;
 }
+
 //################################################################################################################################
 //## LAST TIME ATTACKED COUNTER
 //################################################################################################################################
@@ -4303,8 +5515,7 @@ function seeSimulator(){
 		var Africa_6='Caravane';var Africa_6_1='L&#8217; Espion';var Africa_6_2='Garde de caravane';var Africa_6_3='Garde d&#8217; élite ';var Africa_6_4='Marchand d&#8217; esclave';
 		var Africa_7='Oasis Mesoai';var Africa_7_1='Éléphant';var Africa_7_2='Guépard';var Africa_7_3='Lion démoniaque';var Africa_7_4='Éléphant démoniaque ';
 		var Africa_8='Falaise des sacrifices';var Africa_8_1='Antilope maudite';var Africa_8_2='Araignée géante';var Africa_8_3='Chaman';var Africa_8_4='Grand Chaman';
-	}
-	else if(GCAO_lang=='gr'){
+	}else if(GCAO_lang=='gr'){
 		var text='Μόλις μπεις στο δωμάτιο, βλέπεις τον djor, έναν από τους αρχαίους Γάλλους προγραμματιστές, που δουλεύει πάνω σε ένα νέο είδος εικονικών μαχών και εκπαιδεύσεων.<br>Κοντά του βρίσκεται ένας super υπολογιστής έτοιμος να δημιουργήσει ολόγράμμα οποιουδείποτε τέρατος ή μονομάχου  εσύ θές, ετσι ώστε να προσωμοιώσει μια μάχη με εσένα και να προβάλει τα αποτελέσματα... <br><br>Είσαι έτοιμος για μάχη;';
 		var Skill='Ικανότητα';
 		var Agility='Επιδεξιότητα';
@@ -4341,8 +5552,125 @@ function seeSimulator(){
 		var Africa_6='Καραβάνι';var Africa_6_1='Κατάσκοπος';var Africa_6_2='Φύλακας καραβαν...';var Africa_6_3='Επίλεκτος φύλακ... ';var Africa_6_4='Δουλέμπορος';
 		var Africa_7='Όαση Mesoai';var Africa_7_1='Ελέφαντας';var Africa_7_2='Τσιτάχ';var Africa_7_3='Δαιμονικό λιοντάρι';var Africa_7_4='Δαιμονικός ελέφ...';
 		var Africa_8='Άλτης λόφων';var Africa_8_1='Καταραμένη αντι...';var Africa_8_2='Γιγάντια αράχνη';var Africa_8_3='Σαμάνος';var Africa_8_4='Αρχισαμάνος';
-	}
-	else{
+	}else if(GCAO_lang=='de'){
+		var text='Als Du den Raum betrittst, erblickst Du djor, einen der uralten französischen Programmierer, der an einer neuen Art virtueller Kämpfe und Trainings arbeitet.<br>In seiner unmittelbaren Nähe steht ein Supercomputer, der auf Wunsch Hologramme eines jeden Monsters oder anderen Spielers darzustellen vermag, um einen Kampf mit Dir zu simulieren und die Ergebnisse anzuzeigen...<br><br>Bist Du bereit, zu kämpfen?';
+		var Skill='Geschicklichkeit';
+		var Agility='Beweglichkeit';
+		var Charisma='Charisma';
+		var Armour='Rüstung';
+		var Damage='Schaden';
+		var ChanceForCriticalDamage='Chance für kritischen Schaden';
+		var ChanceToBlockAHit='Chance einen Schlag zu blocken';
+		var ChanceForCriticalDamage='Chance kritische Treffer zu vermeiden';
+
+		var Italy='Italien';
+		var Italy_1='Düsterwald';var Italy_1_1='Ratte';var Italy_1_2='Luchs';var Italy_1_3='Wolf';var Italy_1_4='Bär';
+		var Italy_2='Piratenhafen';var Italy_2_1='Entlaufener Sklave';var Italy_2_2='Korrupter Soldat';var Italy_2_3='Mörder';var Italy_2_4='Kapitän';
+		var Italy_3='Nebelgebirge';var Italy_3_1='Flüchtiger Rekrut';var Italy_3_2='Harpie';var Italy_3_3='Cerberus';var Italy_3_4='Medusa';
+		var Italy_4='Wolfshöhle';var Italy_4_1='Wildschwein';var Italy_4_2='Wolfsrudel';var Italy_4_3='Alpha-Wolf';var Italy_4_4='Werwolf';
+		var Italy_5='Antiker Tempel';var Italy_5_1='Kultisten-Wache';var Italy_5_2='Werratte';var Italy_5_3='Minotaurus';var Italy_5_4='Minotauren-Chef';
+		var Italy_6='Barbarendorf';var Italy_6_1='Barbar';var Italy_6_2='Barbarenkrieger';var Italy_6_3='Berserker';var Italy_6_4='Barbarenhäuptling';
+		var Italy_7='Banditencamp';var Italy_7_1='Abtrünniger Soldat';var Italy_7_2='Abtrünniger Söldner';var Italy_7_3='Meuchelmörder';var Italy_7_4='Banditen-Chef';
+
+		var Germany='Germanien';
+		var Germany_1='Höhlentempel';var Germany_1_1='Legionär';var Germany_1_2='Myrmidone';var Germany_1_3='Centurio';var Germany_1_4='Seelenloser';
+		var Germany_2='Der grüne Wald';var Germany_2_1='Riesenwildschwein';var Germany_2_2='Sumpfmonster';var Germany_2_3='Sumpfgeist';var Germany_2_4='Werbär';
+		var Germany_3='Verfluchtes Dorf';var Germany_3_1='Hunne';var Germany_3_2='Uralter';var Germany_3_3='Nachzehrer';var Germany_3_4='Abscheulichkeit';
+		var Germany_4='Totenhügel';var Germany_4_1='Skelettkrieger';var Germany_4_2='Skelettberserker';var Germany_4_3='Lich';var Germany_4_4='Nekromantenfürst';
+		var Germany_5='Wandalendorf';var Germany_5_1='Wandalenkrieger';var Germany_5_2='Jarl';var Germany_5_3='Finsterer Streiter';var Germany_5_4='Todesritter';
+		var Germany_6='Mine';var Germany_6_1='Wächter';var Germany_6_2='Draug';var Germany_6_3='Steingolem';var Germany_6_4='Tatzelwurm';
+		var Germany_7='Teutonenlager';var Germany_7_1='Wilder';var Germany_7_2='Teutonenheld';var Germany_7_3='Teutonenherr';var Germany_7_4='Seidr';
+		var Germany_8='Berg Koman';var Germany_8_1='Höllischer Springbock';var Germany_8_2='Säbelzahntiger';var Germany_8_3='Drachenwelpe';var Germany_8_4='Drache';
+		
+		var Africa='Afrika';
+		var Africa_1='Voodootempel';var Africa_1_1='Kobra';var Africa_1_2='Riesenskorpion';
+		var Africa_1_3='Erwachte Mumie';var Africa_1_4='Seth-Priester';
+		var Africa_2='Brücke';var Africa_2_1='Steuereintreiber';var Africa_2_2='Menschenfresser';var Africa_2_3='Stammeskrieger';var Africa_2_4='Knochenschamane';
+		var Africa_3='Bluthöhle';var Africa_3_1='Blutwolf';var Africa_3_2='Riesenkäfer';var Africa_3_3='Feuertänzer';var Africa_3_4='Feuerdämon';
+		var Africa_4='Verlorener Hafen';var Africa_4_1='Krokodil';var Africa_4_2='Untoter Träger';var Africa_4_3='Riesenwasserschlange';var Africa_4_4='Mokele Mbembe';
+		var Africa_5='Umpoktastamm';var Africa_5_1='Stammeskrieger';var Africa_5_2='Stammeszauberer';var Africa_5_3='Geisterkrieger';var Africa_5_4='Seth-Hohepriester';
+		var Africa_6='Karawame';var Africa_6_1='Scout';var Africa_6_2='Karawanen-Wächter';var Africa_6_3='Elite-Wächter';var Africa_6_4='Sklavenhändler';
+		var Africa_7='Mesoai-Oase';var Africa_7_1='Elefant';var Africa_7_2='Gepard';var Africa_7_3='Dämonen-Löwe';var Africa_7_4='Elefantendämon';
+		var Africa_8='Klippspringer';var Africa_8_1='Verfluchte Antilope';var Africa_8_2='Riesenspinne';var Africa_8_3='Schamane';var Africa_8_4='Hoher Schamane';
+	}else if(GCAO_lang=='nl'){
+		var text='Als je een ruimte binnentreed, zie je djor een oude franse programmeur, hij werkt aan een nieuwe manier van virtueel vechten en trainen.<br>In zijn buurt staat een supercomputer die klaar is om een hologram te maken van ieder monster of tegenstander die jij maar wilt, zodat jij  gevechten kan simuleren en je de resultaten kan zien....<br><br>Ben je klaar om te vechten?';
+		var Skill='Vaardigheid';
+		var Agility='Snelheid';
+		var Charisma='Charisma';
+		var Armour='Bescherming';
+		var Damage='Schade';
+		var ChanceForCriticalDamage='Kans voor kritieke schade';
+		var ChanceToBlockAHit='Blokkeer waarde';
+		var ChanceForCriticalDamage='Kans om gevaarlijke slagen te ontwijken';
+
+		var Italy='Italy';
+		var Italy_1='Donkere woud';var Italy_1_1='Rat';var Italy_1_2='Lynx';var Italy_1_3='Wolf';var Italy_1_4='Beer';
+		var Italy_2='Piratenhaven';var Italy_2_1='Gevluchte Slaaf';var Italy_2_2='Corrupte Soldaat';var Italy_2_3='Sluipmoordenaar';var Italy_2_4='Kapitein ';
+		var Italy_3='Mistige Bergen';var Italy_3_1='Ontwijkende Rekruut';var Italy_3_2='Harpy';var Italy_3_3='Cerberus';var Italy_3_4='Medusa';
+		var Italy_4='Wolvengrot';var Italy_4_1='Wild Zwijn';var Italy_4_2='Roedel Wolven';var Italy_4_3='Alfawolf';var Italy_4_4='Weerwolf';
+		var Italy_5='Oude Tempel';var Italy_5_1='Sekte Wachter';var Italy_5_2='Weerrat';var Italy_5_3='Minotaurus';var Italy_5_4='Minotaurus Baas';
+		var Italy_6='Barbaren Dorp';var Italy_6_1='Barbaar';var Italy_6_2='Barbaren Krijger';var Italy_6_3='Woesteling';var Italy_6_4='Barbaren Baas';
+		var Italy_7='Bandietenkamp';var Italy_7_1='Afvallige Soldaat';var Italy_7_2='Afvallige Huurling';var Italy_7_3='Sluipmoordenaar';var Italy_7_4='Bandieten Baas';
+
+		var Germany='Germania';
+		var Germany_1='Grottentempel';var Germany_1_1='Legionair';var Germany_1_2='Myrmidon';var Germany_1_3='Centurion';var Germany_1_4='Zielloos';
+		var Germany_2='Het groene woud';var Germany_2_1='Reuze Wild Zwijn';var Germany_2_2='Moeras Heer';var Germany_2_3='Moeras Geest';var Germany_2_4='Weerbeer';
+		var Germany_3='Vervloekt Dorp';var Germany_3_1='Hun';var Germany_3_2='Aloude';var Germany_3_3='Nachzehrer';var Germany_3_4='Abominatie';
+		var Germany_4='Dodenheuvel';var Germany_4_1='Skelet Strijder';var Germany_4_2='Skelet Woesteling';var Germany_4_3='Lich';var Germany_4_4='Dodenbezweerder Prins';
+		var Germany_5='Vandalendorp';var Germany_5_1='Vandaal Krijger';var Germany_5_2='Jarl';var Germany_5_3='Duistere Vechter';var Germany_5_4='Ridder des Doods';
+		var Germany_6='Mijn';var Germany_6_1='Bewaker';var Germany_6_2='Draug';var Germany_6_3='Stenen Golem';var Germany_6_4='Tatzelworm';
+		var Germany_7='Teutonen Kamp';var Germany_7_1='Barbaar';var Germany_7_2='Held der Teutonen';var Germany_7_3='Heer der Teutonen';var Germany_7_4='Seidr';
+		var Germany_8='Koman Berg';var Germany_8_1='Demonische Springbok';var Germany_8_2='Sabeltandtijger';var Germany_8_3='Draken Welp';var Germany_8_4='Draak';
+
+		var Africa='Africa';
+		var Africa_1='Voodoo Tempel';var Africa_1_1='Cobra';var Africa_1_2='Reuzen Schorpioen';var Africa_1_3='Ontwaakte Mummy';var Africa_1_4='Priester van Seth';
+		var Africa_2='Brug';var Africa_2_1='Publicanus';var Africa_2_2='Kannibaal';var Africa_2_3='Stam Krijger';var Africa_2_4='Botten Sjamaan';
+		var Africa_3='Bloed Grot';var Africa_3_1='Bloedwolf';var Africa_3_2='Reuze Kever';var Africa_3_3='Vuurdanser';var Africa_3_4='Vuurdemon';
+		var Africa_4='Verloren Haven';var Africa_4_1='Krokodil';var Africa_4_2='Ondode Drager';var Africa_4_3='Reuze Waterslang';var Africa_4_4='Mokele Mbembe';
+		var Africa_5='Umpokta Stam';var Africa_5_1='Stam krijger';var Africa_5_2='Stam Magiër';var Africa_5_3='Geest Krijger';var Africa_5_4='Hoge Priester van Seth';
+		var Africa_6='Karavaan';var Africa_6_1='Spion';var Africa_6_2='Karavaan Bewaker';var Africa_6_3='Elite Bewaker';var Africa_6_4='Slavenhandelaar';
+		var Africa_7='Mesoai-Oase';var Africa_7_1='Olifant';var Africa_7_2='Cheetah';var Africa_7_3='Demonische Leeuw';var Africa_7_4='Demonische Olifant';
+		var Africa_8='Klifspringer';var Africa_8_1='Vervloekte Antilope';var Africa_8_2='reuze Spin';var Africa_8_3='Sjamaan';var Africa_8_4='Hoge Sjamaan';
+	}else if(GCAO_lang=='hu'){
+		var text='Mikor a szobába lépsz megpillantod djor-t, egyikét az ősi francia programozóknak, aki újabb virtuális gyakorló, ésharci szimulátoron dolgozik.<br>A közelében egy hatalmas szuperszámítógép foglalja a helyet, mely kész rá, hogy megjelenítsen bármilyen szörnyet, vagy játékost, amivel így bátran összemérheted az erődet. A harc végén pedig láthatod a csata statisztikáit. <br><br>Készen állsz a harcra?';
+		var Skill='képzettség';
+		var Agility='fürgeség';
+		var Charisma='karizma';
+		var Armour='páncél';
+		var Damage='sebzés';
+		var ChanceForCriticalDamage='Kritikus ütés esélye';
+		var ChanceToBlockAHit='Kritikus ütés blokkolásának esélye';
+		var ChanceForCriticalDamage='Kritikus ütés elkerülésének esélye';
+
+		var Italy='Olaszország';
+		var Italy_1='Sötét erdő';var Italy_1_1='Patkány';var Italy_1_2='Hiúz';var Italy_1_3='Farkas';var Italy_1_4='Medve';
+		var Italy_2='Kalóz kikötő';var Italy_2_1='Szökött rabszolga';var Italy_2_2='Korrupt katona';var Italy_2_3='Bérgyilkos';var Italy_2_4='Kapitány';
+		var Italy_3='Ködös hegyek';var Italy_3_1='Eltűnt újonc';var Italy_3_2='Hárpia';var Italy_3_3='Cerberus';var Italy_3_4='Medúza';
+		var Italy_4='Farkas barlang';var Italy_4_1='Vaddisznó';var Italy_4_2='Farkas falka';var Italy_4_3='Alfa farkas';var Italy_4_4='Vérfarkas';
+		var Italy_5='Ősi templom';var Italy_5_1='Kultusz őr';var Italy_5_2='Vérpatkány';var Italy_5_3='Minotaur';var Italy_5_4='Minotaurusz vezér';
+		var Italy_6='Barbár falu';var Italy_6_1='Barbár';var Italy_6_2='Barbár harcos';var Italy_6_3='Viking harcos';var Italy_6_4='Barbár főnök';
+		var Italy_7='Bandita tábor';var Italy_7_1='Hűtlen katona';var Italy_7_2='Hűtlen zsoldos';var Italy_7_3='Bérgyilkos';var Italy_7_4='Bandita vezér';
+
+		var Germany='Germánia';
+		var Germany_1='Barlang templom';var Germany_1_1='Légionárius';var Germany_1_2='Myrmidon';var Germany_1_3='Centurió';var Germany_1_4='Lelketlen';
+		var Germany_2='A zöld erdő';var Germany_2_1='Óriás vaddisznó';var Germany_2_2='Mocsári szörny';var Germany_2_3='Mocsári szellem';var Germany_2_4='Vérmedve';
+		var Germany_3='Elátkozott falu';var Germany_3_1='Hun';var Germany_3_2='Ősi';var Germany_3_3='Vámpír';var Germany_3_4='Undor';
+		var Germany_4='A halál hegye';var Germany_4_1='Csontváz harcos';var Germany_4_2='Dühödt csontvázharcos';var Germany_4_3='Lich';var Germany_4_4='Nekromanta herceg';
+		var Germany_5='Vandál falu';var Germany_5_1='Vandal harcos';var Germany_5_2='Jarl';var Germany_5_3='Gazember';var Germany_5_4='Halál lovag';
+		var Germany_6='Bánya';var Germany_6_1='Őr';var Germany_6_2='Draug';var Germany_6_3='Kő gólem';var Germany_6_4='Karmos féreg';
+		var Germany_7='Teuton tábor';var Germany_7_1='Barbár';var Germany_7_2='Teuton hős';var Germany_7_3='Teuton uralkodó';var Germany_7_4='Seidr';
+		var Germany_8='Koman hegység';var Germany_8_1='Pokoli gazella';var Germany_8_2='Kardfogú tigris';var Germany_8_3='Sárkánykölyök';var Germany_8_4='Sárkány';
+
+		var Africa='Afrika';
+		var Africa_1='Voodoo templom';var Africa_1_1='Kobra';var Africa_1_2='Óriás skorpió';var Africa_1_3='Életre kelt múmia';var Africa_1_4='Seth papja';
+		var Africa_2='Híd';var Africa_2_1='Adószedő';var Africa_2_2='Emberevő';var Africa_2_3='Törzsi harcos';var Africa_2_4='Csont sámán';
+		var Africa_3='Véres barlang';var Africa_3_1='Vérfarkas';var Africa_3_2='Óriás bogár';var Africa_3_3='Tűztáncos';var Africa_3_4='Tűzdémon';
+		var Africa_4='Elveszett kikötő';var Africa_4_1='Krokodil';var Africa_4_2='Éloholt hordár';var Africa_4_3='Óriás vízisikló';var Africa_4_4='Mokele Mbembe';
+		var Africa_5='Umpokta törzs';var Africa_5_1='Törzsi harcos';var Africa_5_2='Törzsi varázsló';var Africa_5_3='Szellemharcos';var Africa_5_4='Seth főpapja';
+		var Africa_6='Karaván';var Africa_6_1='Kém';var Africa_6_2='Karaván őr';var Africa_6_3='Elit őr';var Africa_6_4='Rabszolga kereskedő';
+		var Africa_7='Mesoai-Oázis';var Africa_7_1='Elefánt';var Africa_7_2='Gepárd';var Africa_7_3='Demon oroszlán';var Africa_7_4='Demon Elefánt';
+		var Africa_8='Sziklaugró';var Africa_8_1='Elátkozott antilop';var Africa_8_2='Óriás pók';var Africa_8_3='Sámán';var Africa_8_4='Fősámán';
+	}else{
 		var text='When you enter in the room, you see djor, one of the ancient French programmers, working over a new type of virtual fighting and training.<br>Near to him, there is a big super computer ready to create a hologram of any monster or any other player you want, in order to simulate a fight with you and display the results... <br><br>Are you ready to fight?';
 		var Skill='Skill';
 		var Agility='Agility';
@@ -4783,18 +6111,14 @@ function getPlayersIdFromPlayersName(){
 //################################################################################################################################
 //## Add raided gold in the war camp member reports list
 //################################################################################################################################
-
 function warCampMemberGold(){
 	var p = document.evaluate(".//p[@class='buildingDesc']",document.getElementById('content'),null,XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,null);
-	p.snapshotItem(0).innerHTML += '<br/><br/><input id="launchRaidedGold" type="button" class="button2" value="Trouver l\'or" style="position:absolute;left:500px;top:399px;"><input id="hasBeenLaunched" type="hidden" value="0">   ';
-	
+	p.snapshotItem(0).innerHTML += '<br/><br/><input id="launchRaidedGold" type="button" class="button2" value="'+L_findGold+'" style="position:absolute;left:500px;top:399px;"><input id="hasBeenLaunched" type="hidden" value="0">   ';
 	
 	// the bar
 	var bar = document.createElement('div');
-	if(document.getElementById('banner_top') && document.getElementById('banner_event'))
-		var top = 401-25;
-	else
-		var top = 401;
+	if(!document.getElementById('banner_top')){var top = 401-25;}
+	else{var top = 401;}
 	bar.innerHTML = '<div class="cooldown_bar" style="left:630px;top:'+top+'px;cursor:pointer;"><div id="pageBar" style="width: 0%;" class="cooldown_bar_fill cooldown_bar_fill_progress"></div><div class="cooldown_bar_text" id="cooldown_bar_fill_page">0</div></div>';
 	p.snapshotItem(0).innerHTML += bar.innerHTML;
 	
@@ -4802,7 +6126,6 @@ function warCampMemberGold(){
 }
 	
 function seeRaidedGold(){
-
 	if(document.getElementById('hasBeenLaunched').value == 0){
 		document.getElementById('hasBeenLaunched').value = 1;
 
@@ -4810,8 +6133,8 @@ function seeRaidedGold(){
 		var dates = document.evaluate("(.//th[@class='warcamp_member_report_date'])|(.//td[@class='warcamp_member_report_date'])",document.getElementById('content'),null,XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,null);
 
 		for(var i =0;i<dates.snapshotLength;i++){
-			dates.snapshotItem(i).style.width="100px";
-			dates.snapshotItem(i).style.minWidth="100px";
+			dates.snapshotItem(i).style.width="170px";
+			dates.snapshotItem(i).style.minWidth="170px";
 		}	
 		
 		var trs = document.evaluate(".//div[@class='report_statistic']/table/tbody/tr",document.getElementById('content'),null,XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,null);
@@ -4829,8 +6152,7 @@ function seeRaidedGold(){
 		searchRaidedGold(divs,trs,row,goldArray,counter);
 	}
 }
-	
-	
+
 function isInTheGuild(str){
 	if(str.match(/color:(green|blue)/i))
 		return true;
@@ -4838,8 +6160,6 @@ function isInTheGuild(str){
 		return false;
 }
 
-
-	
 function searchRaidedGold(divs,trs,row,goldArray,counter){
 	if(row<trs.snapshotLength){
 		var tds = document.evaluate(".//td",trs.snapshotItem(row),null,XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,null);
@@ -4886,6 +6206,69 @@ function searchRaidedGold(divs,trs,row,goldArray,counter){
 	}
 }
 
+//################################################################################################################################
+//## IMPROVING GUILD WAR MEMBERS STYLE
+//################################################################################################################################
+function warCampMemberStyle(){
+	var code=document.getElementById('content').getElementsByTagName('table')[0].innerHTML;
+	code=code.replace(/t=2&amp;sh=................................">[^<]+<\/a>/gi,'t=2&sh='+GCAO_secureCode+'" style="text-decoration:none;"/>GO&rArr;</a>');
+	code=code.replace(/Sun,/gi,'<font color="red"><b>Sun</b></font>,').replace(/Mon,/gi,'<font color="#660000"><b>Mon</b></font>,').replace(/Tue,/gi,'<font color="#006600"><b>Tue</b></font>,').replace(/Wed,/gi,'<font color="orange"><b>Wed</b></font>,').replace(/Thu,/gi,'<font color="#666666"><b>Thu</b></font>,').replace(/Fri,/gi,'<font color="purple"><b>Fri</b></font>,').replace(/Sat,/gi,'<font color="#003399"><b>Sat</b></font>,');
+	document.getElementById('content').getElementsByTagName('table')[0].innerHTML=code;
+	document.getElementById('content').getElementsByTagName('div')[3].setAttribute('style','margin-left:-14px;margin-right:-10px;margin-top:40px;clear:both;');
+	document.getElementById('content').getElementsByTagName('th')[0].setAttribute('style','width:170px;');
+}
+
+//################################################################################################################################
+//## IMPROVING GUILD WAR ICONS (USING ICONS OF QUESTS)
+//################################################################################################################################
+function betterGuildWarIcons(){
+	document.getElementById('content').innerHTML = document.getElementById('content').innerHTML.replace(/guild\/combat\/lose\.gif/gi,'ui/quest/button_cancel.jpg" width="20"');
+	document.getElementById('content').innerHTML = document.getElementById('content').innerHTML.replace(/guild\/combat\/win\.gif/gi,'ui/quest/button_finish.jpg" width="20"');
+	document.getElementById('content').innerHTML = document.getElementById('content').innerHTML.replace(/guild\/combat\/draw\.gif/gi,'ui/quest/button_accept.jpg" width="20"');
+}
+
+//################################################################################################################################
+//## SEE NEW MESSAGE
+//################################################################################################################################
+// Problem : it displays a [!] which shows you new messages (not totally ok), however it launches a xhr and visits the message page, so at the next visited page, there
+// will be no new messages, even if you didn't go at the message page... There is the same problem with expired packages, it visits package's page, so the count of new
+// package returns to 0... 
+function seeNewMessage(){
+	var divs = document.evaluate(".//a[@id='menue_messages']/div[@class='menue_new_count']",document.body,null,XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,null);
+	if(divs.snapshotLength==1){
+		var numberOfNewMessages = divs.snapshotItem(0).innerHTML.replace(/[^0-9]/gi,'');
+		//var numberOfNewMessages=2;
+		var messageUrl=document.getElementById('menue_messages').getAttribute('href').replace('index.php?','');
+		GM_xmlhttpRequest({
+			method: "GET",
+			url: GCAO_siteurl + messageUrl,
+			onload: function(response){
+				response.responseText=response.responseText.replace(/type="checkbox"/gi,'type="hidden"').replace(/width="30px"/gi,'width="0px"');
+				var messages = response.responseText.split(/<tr class="alt">/g);
+				document.getElementById('menue_messages').innerHTML+=' <img src="http://i617.photobucket.com/albums/tt260/goldisever/GCAO/exclamation.png" style="position:absolute;margin-left:-20px;margin-top:19px;opacity: 0.65;" onmouseover="if(document.getElementById(\'warningMessage\').style.display!=\'block\'){this.style.opacity=\'1\';document.getElementById(\'warningMessage\').style.display=\'block\';}else{this.style.opacity=\'0.65\';document.getElementById(\'warningMessage\').style.display=\'none\';}">';
+				var warningTip = document.createElement('div');
+				warningTip.setAttribute('id', 'warningMessage');
+				warningTip.setAttribute('style', 'opacity: 0.75;display:none;z-index:502;position:absolute;top:85px;left:255px;border:1px solid grey;background-color:black;color:#c0c0c0;font-weight:bold;line-height:24px;padding-left:5px;padding-right:5px;')
+				document.getElementById('header_game').appendChild(warningTip);
+					
+				var messagesToShow = "";
+				var i =1;
+				while((numberOfNewMessages>1)&&(i<26)){
+					messagesToShow += '<tr>'+messages[i];
+					numberOfNewMessages--;
+					numberOfNewMessages--;
+					i++;
+				}
+				
+				if(numberOfNewMessages==1){
+					messagesToShow += '<tr>'+messages[i].split('</tr>')[0]+'</tr>';
+				}
+				
+				warningTip.innerHTML += '<table>'+messagesToShow.replace(/<tr/g,'<tr style="text-align:left"')+'</table>';
+			}
+		});
+	}
+}
 
 //################################################################################################################################
 //## DEBUGER
@@ -4899,36 +6282,136 @@ function c(callback){
 }
 
 function DE(e){
-	var line=(e.lineNumber)-402;
-	if(!document.getElementById('ErrorBox')){
-		var img_error = 'data:image/gif;base64,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%3D';
-		
-		var ErrorBox=document.createElement('span');
-		ErrorBox.setAttribute('id', 'ErrorBox');
-		//ErrorBox.setAttribute('onclick', 'alert(\'Gladiatus Crazy Addon\\nPlease report this bug at apo59m@gmail.com:\\n\\n=========Bug=========\\n\'+document.getElementById(\'BugError\').innerHTML+\'\\nError Link :\'+document.location.href+\'\')');
-		ErrorBox.setAttribute('style', 'z-index:3001;position:absolute;top:4px;cursor:pointer;opacity:0.7;left:4px;background-color:white;border:2px solid black;color:black;');
-		ErrorBox.innerHTML='<table>'
-		+'<tr><td><img src="'+img_error+'"></td>'
-		+'<td><b>Gladiatus Crazy Addon</b>'
-		+'</td></tr></table>'
-		+'<table id="ErrorTable">'
-		+'<tr><td colspan="3"><hr/></td></tr>'
-		+'<tr><td><b>'+e.name+'</b></td><td>:</td><td>'+e.message+'</td></tr>'
-		+'<tr><td><b>Line</b></td><td>:</td><td>'+line+'</td></tr>'
-		+'</table>';
-		document.body.appendChild(ErrorBox);
-		//for (var i in e) alert(i + ' = ' + e[i]);
+	var line=(e.lineNumber)-75;//-75 for the script, -120 for the add-on
+	if(GM_getValue('sb', false) == true){
+		if(!document.getElementById('ErrorBox')){
+			var img_error = 'data:image/gif;base64,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%3D';
+			
+			var ErrorBox=document.createElement('span');
+			ErrorBox.setAttribute('id', 'ErrorBox');
+			ErrorBox.setAttribute('style', 'z-index:3001;position:absolute;top:4px;cursor:pointer;opacity:0.7;left:4px;background-color:white;border:2px solid black;color:black;');
+			ErrorBox.innerHTML='<table>'
+			+'<tr><td><img src="'+img_error+'"></td>'
+			+'<td><b>Gladiatus Crazy Addon</b>'
+			+'</td></tr></table>'
+			+'<table id="ErrorTable">'
+			+'<tr><td colspan="3"><hr/></td></tr>'
+			+'<tr><td><b>'+e.name+'</b></td><td>:</td><td>'+e.message+'</td></tr>'
+			+'<tr><td><b>Line</b></td><td>:</td><td>'+line+'</td></tr>'
+			+'<tr><td><b>Report</b></td><td>:</td><td id="reportStatus'+line+'">Reporting...</td></tr>'
+			+'</table>';
+			document.body.appendChild(ErrorBox);
+			//for (var i in e) alert(i + ' = ' + e[i]);
+		}else{
+			var ErrorTr=document.createElement('tr');
+			ErrorTr.setAttribute('style', 'border-top:1px solid black;');
+			ErrorTr.innerHTML='<td colspan="3"><hr/></td>';
+			document.getElementById('ErrorTable').appendChild(ErrorTr);
+			var ErrorTr=document.createElement('tr');
+			ErrorTr.setAttribute('style', 'border-top:1px solid black;');
+			ErrorTr.innerHTML='<td><b>'+e.name+'</b></td><td>:</td><td>'+e.message+'</td>';
+			document.getElementById('ErrorTable').appendChild(ErrorTr);
+			var ErrorTr=document.createElement('tr');
+			ErrorTr.innerHTML='<td><b>Line</b></td><td>:</td><td>'+line+'</td>';
+			document.getElementById('ErrorTable').appendChild(ErrorTr);
+			var ErrorTr=document.createElement('tr');
+			ErrorTr.innerHTML='<td><b>Report</b></td><td>:</td><td id="reportStatus'+line+'">Reporting...</td>';
+			document.getElementById('ErrorTable').appendChild(ErrorTr);
+		}
+	}
+	if(GM_getValue('rs', true) == true){
+		if(navigator.userAgent.toLowerCase().match(/chrome/i)){var browser='Chrome';}
+		else{var browser='Firefox';}
+		var reportedUrl=document.location.href.replace(/&/g,'|').replace('http://','').replace('/game/index.php?','|').replace('|sh='+GCAO_secureCode,'');
+		var code='&error='+e.name+'|'+e.message+'&line='+line+'_|_Version='+version+'_|_Browser='+browser+'&url='+reportedUrl;
+		code=code.replace(/ /gi,'_');
+		GM_xmlhttpRequest({
+			method: "GET",
+			url: 'http://www.epeiratiko.webou.net/gca/Bugs.txt',
+			onload: function(response){
+				if(!response.responseText.match('line:'+line)){
+					GM_xmlhttpRequest({
+						method: "GET",
+						url: 'http://www.epeiratiko.webou.net/gca/reportBug.php?'+code,
+						onload: function(response){
+							document.getElementById('reportStatus'+line+'').innerHTML='<font color="green">Bug was reported</font>';
+						}
+					});
+				}else{
+					if(document.getElementById('reportStatus'+line+'')){
+						document.getElementById('reportStatus'+line+'').innerHTML='<font color="green">Bug was already reported</font>';
+					}
+				}
+			}
+		});
 	}else{
-		var ErrorTr=document.createElement('tr');
-		ErrorTr.setAttribute('style', 'border-top:1px solid black;');
-		ErrorTr.innerHTML='<td colspan="3"><hr/></td>';
-		document.getElementById('ErrorTable').appendChild(ErrorTr);
-		var ErrorTr=document.createElement('tr');
-		ErrorTr.setAttribute('style', 'border-top:1px solid black;');
-		ErrorTr.innerHTML='<td><b>'+e.name+'</b></td><td>:</td><td>'+e.message+'</td>';
-		document.getElementById('ErrorTable').appendChild(ErrorTr);
-		var ErrorTr=document.createElement('tr');
-		ErrorTr.innerHTML='<td><b>Line</b></td><td>:</td><td>'+line+'</td>';
-		document.getElementById('ErrorTable').appendChild(ErrorTr);
+		if(document.getElementById('reportStatus'+line+'')){
+			document.getElementById('reportStatus'+line+'').innerHTML='<font color="red">Blocked</font>';
+		}
+	}
+}
+
+/**################################################################################################################################
+/**## Chrome Copiler DarkThanos' Method
+/**##############################################################################################################################**/
+if(navigator.userAgent.toLowerCase().match(/chrome/i)){
+	function GM_getValue(check_name , defaltValue){
+		var a_all_cookies = document.cookie.split( ';' );
+		var a_temp_cookie = '';
+		var cookie_name = '';
+		var cookie_value = '';
+		var b_cookie_found = false;
+
+		for ( i = 0; i < a_all_cookies.length; i++ )
+		{
+			a_temp_cookie = a_all_cookies[i].split( '=' );
+			cookie_name = a_temp_cookie[0].replace(/^\s+|\s+$/g, '');
+			if ( cookie_name == check_name )
+			{
+				b_cookie_found = true;
+				if ( a_temp_cookie.length > 1 ){cookie_value = unescape( a_temp_cookie[1].replace(/^\s+|\s+$/g, '') );}
+				if(cookie_value=='true'){cookie_value=true;}
+				else if(cookie_value=='false'){cookie_value=false;}
+				return cookie_value;
+				break;
+			}
+			a_temp_cookie = null;
+			cookie_name = '';
+		}
+		if ( !b_cookie_found ){return defaltValue;}
+	}
+
+	function GM_setValue( name, value, expires, path, domain, secure ){
+		var today = new Date();
+		today.setTime( today.getTime() );
+		if ( expires ){expires = expires * 1000 * 60 * 60 * 24;}
+		var expires_date = new Date( today.getTime() + (expires) );
+		document.cookie = name+"="+escape( value )+( ( expires ) ? ";expires=" + expires_date.toGMTString() : "" )+( ( path ) ? ";path=" + path : "" )+( ( domain ) ? ";domain=" + domain : "" )+( ( secure ) ? ";secure" : "" );
+	}
+
+	function GM_xmlhttpRequest(x){
+		var xmlhttp=false;
+		if (!xmlhttp && typeof XMLHttpRequest!='undefined'){
+			try {xmlhttp = new XMLHttpRequest();}
+			catch (e) {xmlhttp = false;}
+		}
+		var url=x.url;
+		if (xmlhttp){
+			xmlhttp.open(x.method, url,true);
+			xmlhttp.onreadystatechange=function() {
+			if (xmlhttp.readyState==4) {
+				x.onload(xmlhttp);
+			}
+		}
+		xmlhttp.send(null)
+		}
+	}
+
+	function GM_CrossServerxmlhttpRequest(x){
+		if(x.method.toLowerCase()=='post'){
+			chrome.extension.sendRequest({'action' : 'crossServerPost', 'url' : x.url, 'headers' : x.headers, 'data' : x.data}, x.onload);
+		}else{
+			chrome.extension.sendRequest({'action' : 'crossServerRequest', 'url' : x.url}, x.onload);
+		}
 	}
 }
