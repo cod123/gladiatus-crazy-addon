@@ -4510,6 +4510,30 @@ function Main(){
 			document.getElementById('footer_inner').getElementsByTagName('div')[0].innerHTML+=' (Run in '+(finish_run_time-start_run_time)+'ms)';
 		}
 	}
+	
+	//GoogleAnalitics
+	if(navigator.userAgent.toLowerCase().match(/chrome/i)){
+		var UA="UA-31451966-4";
+	}else if(navigator.userAgent.toLowerCase().match(/opera/i)){
+		var UA="UA-31451966-5";
+	}else{
+		var UA="UA-31451966-3";
+	}
+	
+	(function(){
+		var script=document.createElement('script');
+		script.setAttribute("type","text/javascript");
+		script.innerHTML=""+
+			"var _gaq = _gaq || [];"+
+			"_gaq.push(['_setAccount', '"+UA+"']);"+
+			"_gaq.push(['_trackPageview']);"+
+			"(function() {"+
+			"	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;"+
+			"	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';"+
+			"	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);"+
+			"})();";
+		document.getElementsByTagName("head")[0].appendChild(script);
+	})();
 }
 
 //################################################################################################################################
