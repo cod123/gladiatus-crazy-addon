@@ -4483,7 +4483,6 @@ function Main(){
 		GM_setValue('dayChecked',d.getDate());
 		c(checkForNews());
 		c(checkForNewVersion());
-		c(countUsers());
 	}else if(GM_getValue('newVersionAvailable', false)){
 		c(checkForNewVersion());
 	}
@@ -10197,33 +10196,6 @@ function makeTheNewVersionBanner(version){
 }
 
 //################################################################################################################################
-//## USER COUNTER
-//################################################################################################################################
-function countUsers(){
-	//Brisko ton browser
-	if(navigator.userAgent.toLowerCase().match(/chrome/i)){var browser='Chrome';}
-	else if(navigator.userAgent.toLowerCase().match(/opera/i)){var browser='Opera';}
-	else{var browser='Firefox';}
-	//Perno ton user
-	var anonymous='Anonymous_'+Math.floor(Math.random()*1001);
-	var user=GM_getValue('user'+GCAO_lang+GCAO_server, anonymous);
-	//Perno username
-	if(Get_Cookie('playerName')){
-		var username=Get_Cookie('playerName');
-	}else{
-		var username=anonymous;
-	}
-	//Report sto server
-	GM_xmlhttpRequest({
-		method: "GET",
-		url: 'http://apo.users.uth.gr/gca/users.php?user='+user+'&name='+GCAO_lang+'_'+GCAO_server+'_'+username+'&browser='+browser,
-		onload: function(response){
-			
-		}
-	});
-}
-
-//################################################################################################################################
 //## CANSEL ALL FROM MARKET
 //################################################################################################################################
 function cancelAll(){
@@ -10517,9 +10489,6 @@ function settings(){
 	
 	document.getElementById('cu_'+GM_getValue('cu', 0)).setAttribute('selected','selected');
 	document.getElementById('ct_'+GM_getValue('ctt', 0)).setAttribute('selected','selected');
-	
-	var user=document.getElementById('content').getElementsByTagName('input')[0].value.toLowerCase();
-	GM_setValue('user'+GCAO_lang+GCAO_server, user);
 }
 
 function saveSettings(){
