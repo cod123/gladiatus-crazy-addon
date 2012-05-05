@@ -10422,7 +10422,9 @@ function settings(){
 	'<input type="image" style="border:0px solid black;" src="'+img_donateButton+'" name="submit" alt="PayPal - The safer, easier way to pay online!">'+
 	'<img alt="" border="0" src="https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_US/i/scr/pixel.gif" width="1" height="1">'+
 	'</form></center><br/>We also accept <a target="_blank" href="https://coupon.gameforge.com/">Gameforge Coupons</a> :P</p>'+
-	'</div></div>';
+	'<br/><p><b>Like us on FaceBook</b><br/>'+
+	'<a style="text-decoration:none;color:black;" href="http://www.facebook.com/GladiatusCrazyAddOn" target="_blank">http://www.facebook.com/GladiatusCrazyAddOn</a>'+
+	'<iframe scrolling="no" style="border: medium none; overflow: hidden; height: 40px; width: 480px;" src="http://www.facebook.com/plugins/like.php?api_key=113869198637480&amp;channel_url=http%3A%2F%2Fstatic.ak.facebook.com%2Fconnect%2Fxd_arbiter.php%3Fversion%3D5%23cb%3Df20dc8ca581075%26origin%3Dhttp%253A%252F%252Fdevelopers.facebook.com%252Ff3b80e974e577b8%26domain%3Ddevelopers.facebook.com%26relation%3Dparent.parent&amp;extended_social_context=false&amp;font=tahoma&amp;href=http%3A%2F%2Fwww.facebook.com%2FGladiatusCrazyAddOn&amp;layout=standard&amp;locale=el_GR&amp;node_type=link&amp;sdk=joey&amp;send=false&amp;show_faces=false&amp;width=480"></iframe></p></div></div>';
 	document.getElementById('content').appendChild(settingsDiv);
 	
 	if(GM_getValue('bu', true) == true){document.getElementById('GCAO_s2').checked=true;}
