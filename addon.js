@@ -1,4 +1,4 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @name           Gladiatus Crazy AddOn New Server
 // @namespace      http://www.apo.users.uth.gr
 // @description    The craziest add-on for gladiatus ever!
@@ -6,7 +6,7 @@
 // @exclude        *board.gladiatus.*
 // ==/UserScript==
 //Copyright (C) 2010 - 2012, Apo59m, DarkThanos and djor
-
+//Test
 //################################################################################################################################
 //## GENERAL SCRIPT'S VALUES / ΓΕΝΙΚΕΣ ΜΕΤΑΒΛΗΤΕΣ ΤΟΥ SCRIPT
 //################################################################################################################################
@@ -4897,9 +4897,10 @@ function share_button(x){
 		//}else{
 			newElement.setAttribute('style','margin-'+GCAO_left+':-250px;margin-top:-68px; position: absolute; ');
 		//}
-		doc.getElementById('reportHeader').appendChild(newElement);
-		
-		document.getElementById("facebool1button").addEventListener("click", saveTextOnline, false);
+		if(doc.getElementById("reportHeader")){
+			doc.getElementById('reportHeader').appendChild(newElement);
+			document.getElementById("facebool1button").addEventListener("click", saveTextOnline, false);
+		}
 	}
 }
 
@@ -9531,7 +9532,7 @@ function extendedSearchButton(){
 		var newElement = document.createElement('a');
 		newElement.setAttribute('id', 'ItemSearch');
 		newElement.setAttribute('class', 'menuitem');
-		newElement.setAttribute('title', 'Chat');
+		newElement.setAttribute('title', 'Item Search');
 		newElement.setAttribute('href', GCAO_siteurl+'mod=highscore&submod=suche&extendedSearch=on&sh='+GCAO_secureCode);
 		newElement.innerHTML=L_itemSearch;
 		var targetElement=document.getElementById('mainmenu').getElementsByTagName('a')[2];
@@ -9561,7 +9562,11 @@ function extendedSearch(){
 	doc.getElementById('content').getElementsByTagName('form')[0].removeAttribute('method');
 	doc.getElementById('content').getElementsByTagName('form')[0].removeAttribute('action');
 	
-	doc.getElementById('content').getElementsByTagName('p')[1].innerHTML+=' * '+L_noteRenewMerchantsTime;
+	if(doc.getElementById('content').getElementsByTagName('p')[1]){
+		doc.getElementById('content').getElementsByTagName('p')[1].innerHTML+=' * '+L_noteRenewMerchantsTime;
+	}else{
+		doc.getElementById('content').getElementsByTagName('p')[0].innerHTML+=' * '+L_noteRenewMerchantsTime;
+	}
 	doc.getElementById('content').getElementsByTagName('tr')[0].getElementsByTagName('td')[1].innerHTML=L_merchantsItems+' *';
 	doc.getElementById('content').getElementsByTagName('tr')[1].getElementsByTagName('td')[1].innerHTML=L_auctionItems;
 	doc.getElementById('content').getElementsByTagName('tr')[2].setAttribute('style','display:none;');
