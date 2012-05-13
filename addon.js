@@ -6,7 +6,7 @@
 // @exclude        *board.gladiatus.*
 // ==/UserScript==
 //Copyright (C) 2010 - 2012, Apo59m, DarkThanos and djor
-//Test
+
 //################################################################################################################################
 //## GENERAL SCRIPT'S VALUES / ΓΕΝΙΚΕΣ ΜΕΤΑΒΛΗΤΕΣ ΤΟΥ SCRIPT
 //################################################################################################################################
@@ -4208,6 +4208,304 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_auctionItems='Вещи аукциона';
 		var L_itemName='Название вещи';
 		break;
+	case 'ee':
+		//shurtcut buttons
+		var L_guildMailTitle='Sõnum gildile';
+		var L_guildMedicTitle='Gildi meedik';
+		var L_guildMarketTitle='Gildi turg';
+		var L_guildStorageTitle='Gildi ladu';
+		var L_staticsTitle='Minu näitajad';
+		var L_guildSafeTitle='Gildi pank';
+		var L_guildWarTitle='Sõjameistri koda';
+		var L_guildJailTitle='Gildi vangla';
+		var L_guildLibraryTitle='Gildi raamatukogu';
+		//alert/message
+		var L_sure='Oled kindel ?';
+		var L_weaponAlert='Relv <font color="red">ei</font> ole kasutusel<font color="red">!</font>';
+		var L_newMail='Sul on <font color="yellow">uus</font> sõnum foorumis<font color="yellow">!</font>';
+		var L_Full='Täis';
+		var L_New='Uus';
+		var L_newsAlert='Üks <font color="yellow">uus</font> sõnum GCA uudistes<font color="yellow">!</font>';
+		var L_PackagesWillExpire='Pakid aeguvad';
+		var L_hours='tundi';
+		//custom player/guild image
+		var L_changePlayerImage='Muuda mängija pilti';
+		var L_Overfloated='Liiga suur maht';
+		var L_plImageWillBeLost='Mängija pilti ei salvestata ja pilt läheb kaotsi';
+		var L_plDecriptionWillBeCut='Mängija kirjeldust vähendatakse sobivaks';
+		var L_defImages='Näita vaikimisi pilte';
+		var L_imgMadeFrom='Piltide autor';
+		var L_changeGuildImage='Muuda Gildi logo';
+		var L_gImageWillBeLost='Gildi logo ei salvestata ja tehtud muudatused lähevad kaduma.';
+		var L_gDescrtipionWillBeCut='Gildi kirjeldust vähendatakse sobivaks';
+		//Training
+		var L_spent='kulutatud';
+		var L_SimOfTraining = 'Treeningu simulaator';
+		var L_Stat = 'Statistika';
+		var L_From = 'Alates';
+		var L_To = 'Kuni';
+		var L_Cost = 'Hind';
+		var L_TrainingCampLevel = 'Treeningväljaku tase';
+		var L_Reduction ='Allahindlus:';
+		var L_TotalCost = 'Summa kokku:';
+		var L_Calculate = 'Arvuta';
+		var L_TotalCostTitle = 'Aseta minu näitajad vasakusse tulpa';
+		var L_CalculateTitle = 'Arvuta kõikide näitajate koondsumma';
+		//simulators
+		var L_Simulator='Simulaator';
+		var L_arena='Areen';
+		var L_Battles='Lahingud';
+		var L_Won='Võitsid';
+		var L_Lost='Kaotasid';
+		var L_Draws='Viigis';
+		var L_Damage='Kahju';
+		var L_myAvDamage='Sinu keskmine kahju';
+		var L_hisAvDamage='Vastase keskmine kahju';
+		var L_Life='Elu';
+		var L_myRemLife='Sinu allesjäänud elud';
+		var L_hisRemLife='Vastase allesjäänud elud';
+		var L_trainingSim='Treeningu simulaator';
+		var L_playerA='Mängija A';
+		var L_playerB='Mängija B';
+		var L_selectMethod='Vali viis';
+		var L_selectEnemy='Vali vaenlane';
+		var L_byName='Mängija nime järgi';
+		var L_byID='Mängija ID järgi';
+		var L_go='Proovi!';
+		var L_winnigChance='Võiduvõimalus';
+		var L_PlayerAAvDamage='Mängija A keskmine kahju';
+		var L_PlayerBAvDamage='Mängija B keskmine kahju';
+		var L_Results='Tulemused';
+		var L_ClearAll='Puhasta väljad';
+		var L_playerNotFound='Mängijat ei leitud';
+		var L_searchData='Otsin andmeid...';
+		var L_noStats='Puudulikud näitajad';
+		var L_thisIsLocation='See on asukoht';
+		//Guild's storage info
+		var L_StorageInfo='Lao Info';
+		var L_itemNum='Esemete arv';
+		var L_TotalValue='Koguväärtus';
+		var L_currentLife='Praegused elud';
+		var L_lostLife='Kaotatud elud';
+		var L_healLife='Taasta elud';
+		var L_afterLife='Elud pärast ravi';
+		var L_findGold='Leia kulda';
+		//Auction
+		var L_bidNum='Pakutud esemed';
+		var L_Items='Esemed';
+		var L_selectItem='Vali ese';
+		var L_Type='Liik';
+		var L_selectType='Vali liik';
+		var L_Clear='Tühista';
+		var L_veryShort='Väga lühike';
+		var L_anunGuild='Kuuluta gildile';
+		var L_MessageWasSent='Sõnum on saadetud!';
+		var L_minDamage='Minimaalne suurim kahju';
+		var L_weaponsFound='Leitud relvad';
+		var L_improvementsFound='Leitud uuendused';
+		var L_itemsFound='Leitud esemed';
+		var L_select='Vali';
+		var L_hideGoldHere='Siin saad peita oma kulda';
+		var L_priceValue='Hind = Väärtus';
+		//Online Players
+		var L_OnlinePlayers='Online mängijad';
+		var L_guildPlayers='Online gildi liikmed';
+		var L_familyPlayers='Online perekonnaliikmed';
+		var L_noOnlinePlayer='Ühtegi mängijat pole sees';
+		var L_sentMessage='Saada sõnum';
+		//Packages
+		var L_gold='Kuld';
+		var L_Packages='Pakid';
+		var L_invItems='Seljakotis olevad esemed';
+		var L_packedValue='Pakitud esemete väärtus';
+		var L_invValue='Esemete väärtus seljakotis';
+		var L_total='Kokku';
+		var L_PackedGold='Pakitud kuld';
+		var L_totalGold='Kogu kuld';
+		var L_totalItemValue='Eseme koguväärtus';
+		//Chat
+		var L_Username='Kasutajanimi';
+		var L_Country='Riik';
+		var L_GuildChat='Gildi jutukas';
+		var L_CountryChat='Üleriigiline jutukas';
+		var L_GlobalChat='Globaalne jutukas';
+		//Other
+		var L_checkAll='Saada kõigile';
+		var L_ID='Mängija ID';
+		var L_ratioTitle='Toidu Ratio | Hinna Ratio';
+		var L_noGuildText='Sul ei ole aktiivset Gildi.<br>Kui on, siis palun mine <a href='+GCAO_siteurl+'mod=guild&sh='+GCAO_secureCode+' >siia</a> , et uuendada oma andmeid';
+		var L_ReadyFor_expedition="Oled valmis ekspeditsioonil ründama.";
+		var L_ReadyFor_dungeon="Oled valmis vangikoopas ründama.";
+		var L_ReadyFor_arena="Oled valmis areenil ründama.";
+		var L_ReadyFor_ct="Oled valmis Circus Turmas ründama.";
+		var L_Redirect_Q="Oled valmis sinna suunamiseks?";
+		//Settings
+		var L_GCASettings='Gladiatus Crazy Add On seaded';
+		var L_HeaderSettings='Päise seaded';
+		var L_DisplayLife='Kuva päises elud';
+		var L_DisplayLifePercent='Kuva elude punktid ja elude protsent (no mouseover)';
+		var L_DisplayLinkButtons='Kuva päises lingid';
+		var L_DisplayAuctionStatus='Kuva päises oksjoni aeg';
+		var L_DisplayMerchantStatus='Kuva päises kaupmeeste aeg';
+		var L_DisplayOnlinePlayersButton='Kuva päises "Online mängijad" nupp';
+		var L_DisplayLinkBox='Kuva Link Box lehe paremal pool';
+		var L_TimersSettings='Taimeri seaded';
+		var L_DisplayLastBeingAttacked='Kuva aeg viimasest rünnakust areenil';
+		var L_DisplayLastBeingAttacked2='Kuva aeg viimasest rünnakust Circus Turmas';
+		var L_AuctionSettings='Oksjoni seaded';
+		var L_FillAuctionPrices='Automaatsed hinnad oksjonil';
+		var L_ChangeItemsBgColor='Muuda esemete tausta (baseerub kvaliteedil) oksjonil';
+		var L_AuctionMoreItemsLavels='Rohkem esemete tasemeid oksjoni otsingu lahtris';
+		var L_DisplayItemNumAndBids='Kuva oksjonil olevate esemete arv ja pakutud esemete arv';
+		var L_DisplayItemList='Kuva esemete nimekiri oksjoni ja turu otsingu lahtris';
+		var L_ExpandAuctionTable3='Laienda oksjoni tabelit (3 eset igas reas)';
+		var L_SimulatorSettings='Simulaatori seaded';
+		var L_enSimulator='Kasuta PvP simulaatorit iga mängija profiilil';
+		var L_setFightNum='Määra simuleeritud rünnakute arv';
+		var L_maximum='maksimaalne';
+		var L_guildSettings='Gildi & Turu seaded';
+		var L_guildStoreInfo='Kuva infolahter gildi laos';
+		var L_moreGuildStats='Kuva rohkem andmeid gildi sõjameistri kojas esimese 10 vastasgildi kohta.';
+		var L_monsterSimulator='Kuva treeningu simulaator gildi treeningväljakul';
+		var L_gmailChanges='Luba gildi sõnumi muudatused';
+		var L_ratioOpt='Kuva "Ratio" väärtus (toit ja hind) igale esemele turul';
+		var L_enPriceRatio='Luba hinna "Ratio" väärtus (see ei ole väga täpne)';
+		var L_alertSettings='Veateate seaded';
+		var L_immedBuy='Küsi kinnitust oksjonilt eset koheselt välja ostes.';
+		var L_reduceTimeEx='Küsi kinnitust rubiinide eest ekspeditsioonil võitlemiseks.';
+		var L_questOpt='Teavita mind uue retke saadavusest või kuva allesjäänud aeg';
+		var L_forumMessageOpt='Teavita mind uuest sõnumist ([ ! ] sõnumi lingi kõrval)';
+		var L_weaponAlertOpt='Teavita mind kui relv ei ole kasutusel ([ ! ] Ülevaate lingi kõrval)';
+		var L_otherSettings='Ülejäänud seaded';
+		var L_msgchangesOpt='Luba sõnumi muudatused';
+		var L_enBBCODE='Luba BBCODE sõnumites';
+		var L_enChat='Luba jutukas (Gild, Üleriigiline ja Globaalne)';
+		var L_enRememberTabs='Mäleta viimati avatud seljakoti ja kaupmeeste riiuleid';
+		var L_enImages='Luba tavamängija/gildi pilti';
+		var L_disPackageCounters='Kuva pakkide loendur';
+		var L_disID='Kuva igal mängijal näitajate all mängija ID';
+		var L_disHeal='Kuva igal mängijal näitajatel all RAVI näitajad';
+		var L_disTrainingChages='Kuva põhinäitajad ja näitajate maksimaalsed muutused peale treeningut';
+		var L_enHighlight='Tõsta esile esemed mida saad kaupmeestelt osta';
+		var L_enStyleFixes='Rakenda stiili seaded';
+		var L_speedSettings='Kiiruse seaded';
+		var L_stopPulling='Ära tõmba infot lehe laadimisel (valik aeglasele ühendusele)';
+		var L_willStop='See valik <font color="red"><b>peatab</b></font>';
+		var L_customCursor='Vali põhiline kursor';
+		var L_Save='Salvesta';
+		var L_AboutUs='Meist';
+		var L_Settings='Seaded';
+		var L_donateTitle='Anneta Gladiatus Crazy Add On toetuseks';
+		var L_donateText='Täna ja aita meid annetades meie PayPal kontole. Meile annetades aitad jätkata Gladiatuse laienduse täiustamist, mis tähendab rohkem uuendusi, uusi võimalusi ja vähem pisivigu! Meie toetamiseks vajuta nupule ';
+		var L_description='Gladiatus Crazy Add On on tasuta laiendus, mis aitab sind Gladiatuses läbi igasuguste mänguga kaasnevate iseärasuste. See kasutab infot paremini mida mängu server sinu brauserile lubab. Toredat mängimist ja naudi oma võitlusi!';
+		var L_aboutTitle='Seoses Gladiatus Crazy Add On laiendusega';
+		var L_descriptionTitle='Kirjeldus';
+		var L_Programmers='Programmeerijad';
+		var L_Translators='TÕlkijad';
+		var L_Hostpage='Koduleht';
+		var L_ContactUs='Kontakt';
+		var L_Contact1='e-mail Apo59m@gmail.com või GreatApo@gmail.com';
+		var L_Contact2='Saada sõnum meie mängijatele Kreeka serveris (GreatApo s1 ja DarkThanos s2) või Prantsuse serveris (djor s?)';
+		var L_Contact3='või kolmes avatud foorumis <a href="http://board.gladiatus.gr/index.php?page=Thread&threadID=12835" target="_blank">Greek</a>, <a target="_blank" href="http://board.gladiatus.fr/index.php?page=Thread&amp;threadID=37368">French</a> ja <a target="_blank" href="http://board.gladiatus.us/index.php?page=Thread&amp;threadID=15543">USA</a> forum';
+		var L_thanksTo='Suured tänud';
+		var L_MonsterHunters='Koletiste näitajate/nimede kütid';
+		var L_ItemHunters='Esemete kütid';
+		var L_HideGoldInAuction='Värvi/Tõsta esile sisend kui saan müüa eseme kaupmehele sama hinnaga mis pakun oksjonil';
+		var L_HideGoldInAuction='Värvi/Tõsta esile sisend kui saan müüa eseme kaupmehele sama hinnaga mis pakun oksjonil';
+		var L_guildSafeChanges='Luba gildi turvalised muudatused';
+		var L_guildMedicChanges='Näita rohkem infot Villa Medic\'is';
+		var L_foodBackColor='Punane taustavärv toidule, mis annavad rohkem elupunkte kui vaja (ülevaates)';
+		var L_packageAlertOpt='Teavita mind kui pakid hakkavad aeguma (12 tundi varem)';
+		var L_bugSettings='Pisivigade seaded';
+		var L_showBugReports='Näita pisivigade raporteid';
+		var L_autoReportBugs='Raportid automaatselt serverile';
+		var L_showNewMessages='Näita uusi sõnumeid';
+		var L_MorePriceInfoInAuction='Näita rohkem hinnainfot';
+		var L_CheckAffordInAuction='Näita kas eset saab osta ( &#10003; / &#10007;)';
+		var L_allFilterAlert='Küsi kinnitust kui oksjoni otsingul "Eseme tüüp" on "Kõik"';
+		var L_BetterLife='Parem elude ülevaade';
+		var L_fightReminder='Rünnaku meeldetuletus';
+		//v2.6.0
+		var L_sentQuickMessageBox='Saada gildile kiirsõnum';
+		var L_send='Saada';
+		var L_merchants='Kaupmehed';	
+		var L_QuestsInfo='Ülesannete info';
+		var L_Takenquests='Võetud ülesanded';
+		var L_Completedquests='Lõpetatud ülesanded';
+		var L_Failedquests='Nurjunud ülesanded';
+		var L_InactiveQuests='Ootel ülesanded';
+		var L_Workquests='Tööülesanded';
+		var L_Itemsquests='Esemete ülesanded';
+		var L_Expeditionquests='Retke ülesanded';
+		var L_Dungeonquests='Vangikoopa ülesanded';
+		var L_Combatquests='Valikülesanded';
+		var L_Arenaquests='Areeni ülesanded';
+		var L_Turmaquests='Turma ülesanded';
+		var L_DisplayQuickMessageBox='Kuva gildi kiirsõnumi kast';
+		var L_DisplayDealerTimer='Kuva kaupmeeste taimer (kaupade uuendus)';
+		var L_titleGenerate='Genereeri signatuurpilt';
+		var L_clickToGenerate='Vajuta "Genereeri" nuppu, et genereerida pilti sinu näitajatega!';
+		var L_generate='Genereeri';
+		var L_saveOnline='Salvesta online';
+		var L_uploadingImage='Pildi üleslaadimine serverisse';
+		var L_searchUrl='Otsin urli';
+		var L_imageUrl='Pildi url';
+		var L_imageNotFound='Pilti ei leitud!';
+		var L_calculateGuildUpgradeTitle='Arvesta välja kulla kogus igale mängijale baseerudes tasemetele';
+		var L_Include='Kaasa';
+		var L_FixedGold='Kinnitatud kuld';
+		var L_GoldPerPlayer='Kulda iga mängija kohta';
+		var L_TargetGold='Vajaminev kuld';
+		var L_GoldInBank='Kuld gildi pangas';
+		var L_notCalculated='Mittearvestatud';
+		var L_Difference='Vahe';
+		var L_Attacks='Rünnakud';
+		var L_Defences='Kaitsed';
+		var L_Friendly='Sõbralikud';
+		var L_GoldLimit='Kulla limiit';
+		//v2.7.0
+		var L_guildLife='Gildi liikmete elud';
+		var L_addAll='+ Kõik';
+		var L_donateAll='Anneta kõik';
+		var L_visiteYourGuildsMemberPage='Gildi sõnumi saatmiseks pead esmalt salvestama gildi liikmete ID-d.\n Kas soovid seda teha kohe?';
+		var L_Done='Valmis!';
+		var L_ManageMercenaries='Majanda palgasõduritega';
+		var L_name='Nimi';
+		var L_protect='Kaitse';
+		var L_leave='Passiivne';
+		var L_selected='Vali';
+		var L_itemsAreNotSaved='Esemete andmed ei ole salvestatud sellele tegelasele\nPead esmalt selle mängija profiili külastama.';
+		var L_mercenariesAreNotSaved='Palgasõdurite andmed ei ole salvestatud\nPead esmalt külastama vangikoopa peameest';
+		var L_changeAuctionCompareItems='Muuda oksjoni valikute seadeid, baseerudes valitud tegelaskujule.';
+		var L_notWearingAnItem='Ei kaasa eset';
+		var L_notWearingAMercenary='Ei kaasa palgasõdurit';
+		var L_setNumOfGuild='Gildide arv';
+		//v2.8.0
+		var L_playersGold='Minu kuld';
+		var L_time='Aeg'
+		var L_expedition='Ekspeditsioon';
+		var L_turma='Turma';
+		var L_dungeon='Vangikoobas';
+		var L_titleSettings='Lehe pealkirja seaded';
+		var L_enableTitle='Luba lehe algne pealkiri';
+		var L_showLogoTitle='Näita "Gladiatus" pealkirjas';
+		var L_showServerTitle='Samuti näita serverit ja riiki';
+		var L_customTitleType='Vali mida pealkiri veel näitab'
+		var L_enableTitlePoints='Kuva ekspeditsiooni/vangikoopa punktid aja kõrval';
+		var L_cancelAll='Tühista kõik';
+		var L_numberOfMyItems='Minu esemete arv';
+		var L_seeThisReport='Näita raportit';
+		var L_TopBar='Lehte alla kerides kuva päis';
+		//v2.9.0
+		var L_titleImages = 'Pildi seaded';
+		var L_showCustomsTitle = 'Näita vaikimisi pilti, mitte kuvandit';
+		var L_collectGold='Korja kuld';
+		var L_itemSearch='Esemete otsing';
+		var L_noteRenewMerchantsTime='Kui kaupmeeste aeg on lõppenud tulevad uued kaubad';
+		var L_merchantsItems='Kaupmeeste esemed';
+		var L_auctionItems='Oksjoni esemed';
+		var L_itemName='Eseme nimi';
+		break;
 	default:
 		//Shurtcut Buttons
 		var L_guildMailTitle='Write guild message';
@@ -5343,7 +5641,7 @@ function reportPlayerImage(){
 								doc.getElementById('PlayerImage1').setAttribute('style','background-image: url(\''+img_Player1+'\'); width: 168px; height: 194px; margin-left: auto; margin-right: auto;background-repeat:no-repeat;-moz-background-size: 100% 100%;-o-background-size: 100% 100%;-webkit-background-size: 100% 100%;background-size: 100% 100%;');
 								doc.getElementById('PlayerImage1').setAttribute('class','avatar');
 								
-								var lim = doc.getElementById('attackerAvatar1').getElementsByTagName('div').length;
+								var lim = doc.getElementById('attackerAvatar1').getElementsByTagName('div').length-1;
 								for(var i=0; i<=lim; i++){
 									if(doc.getElementById('attackerAvatar1').getElementsByTagName('div')[i].getAttribute('class')=='avatar avatar_costume_part'){
 										doc.getElementById('attackerAvatar1').getElementsByTagName('div')[i].setAttribute('class','avatar avatar_costume_part1');
@@ -5377,7 +5675,7 @@ function reportPlayerImage(){
 								doc.getElementById('PlayerImage11').setAttribute('style','background-image: url(\''+img_Player11+'\'); width: 168px; height: 194px; margin-left: auto; margin-right: auto;background-repeat:no-repeat;-moz-background-size: 100% 100%;-o-background-size: 100% 100%;-webkit-background-size: 100% 100%;background-size: 100% 100%;');
 								doc.getElementById('PlayerImage11').setAttribute('class','avatar');
 								
-								var lim = doc.getElementById('defenderAvatar11').getElementsByTagName('div').length;
+								var lim = doc.getElementById('defenderAvatar11').getElementsByTagName('div').length-1;
 								for(var i=0; i<=lim; i++){
 									if(doc.getElementById('defenderAvatar11').getElementsByTagName('div')[i].getAttribute('class')=='avatar avatar_costume_part'){
 										doc.getElementById('defenderAvatar11').getElementsByTagName('div')[i].setAttribute('class','avatar avatar_costume_part11');
@@ -7131,6 +7429,13 @@ function itemList(){
 		var foodList = 'n[Яблоко]|n[Бананы]|n[Хлеб]|n[Булочка]|n[Сыр]|n[Цыпленок]|n[Рыба]|n[Целительное зелье]|n[Вырезка]|n[Стейк]';
 		var tempImpList = 'n[Бутылки силы]c[Синий]|n[Бутылки сообразительности]c[желтый]|n[Бутылки ловкости]c[Зеленый]|n[Бутылки выносливости]c[Оранжевый]|n[Бутылки харизмы]c[Фиолетовый]|n[Бутылки интеллекта]c[Красный]|n[Боярышник]|n[Таежный корень]';
 		var impList = 'n[Синий порошок]c[Синий]|n[Чистящая губка]|n[Зеленый порошок]c[Зеленый]|n[Жернов]|n[Оранжевый порошок]c[Оранжевый]|n[Защитное снаряжение]|n[Красный порошок]c[Красный]|n[Фиолетовый порошок]c[Фиолетовый]|n[Желтый порошок]c[Желтый]';
+	}
+	else if(GCAO_lang=='ee'){
+		var prefixList = 'n[Adendathieli]|n[Amelia]|n[Amovieli]|n[Anchoroni]|n[Appiuse]|n[Asaysethi]|n[Asendaci]|n[Ashitilli]|n[Bacia]|n[Barbekuusi]|n[Deemonitapja]|n[Berry]|n[Bilgi]|n[Calodieni]c[#0D960D]|n[Chabdyni]|n[Chalini]|n[Chealothi]|n[Cheggovi]|n[Chucki]|n[Ciallani]|n[Cisieni]|n[Dairuse]|n[Decimuse]|n[Denovi]|n[Dexteruse]|n[Doitremi]|n[Doomeniki]|n[Elrarangi]|n[Elvilmandeli]|n[Elyweni]|n[Evatovi]|n[Fernabasti]|n[Fitschis]|n[Frabose]|n[Frickoy]|n[Frienta]|n[Fustrieli]|n[Gadrieweni]|n[Gaiuse]c[#E303E0]|n[Galarandi]|n[Gidra]|n[Gonaki]|n[Granki]|n[Roomaja]|n[Heudoi]|n[Heuhoi]|n[Ibiwani]|n[Ichoruse]c[#E303E0]|n[Ismaeli]|n[Isundeli]|n[Jenniferi]|n[Kedyssise]|n[Kerrana]|n[Korksi]|n[Kosmonase]|n[Leandronimuse]|n[Liloelsi]|n[Lothay]|n[Luciuse]c[#E303E0]|n[Lulu]|n[Lurtschara]|n[Mandaluse]|n[Maniuse]|n[Marcuse]|n[Mateuse]c[#E303E0]|n[Medonise]|n[Melanchaetase]|n[Melaneose]|n[Mermereuse]|n[Mimase]|n[Monychusta]|n[Kuu Purustaja]|n[Narithi]|n[Opiehnza]c[#E303E0]|n[Orleldi]|n[Peragose]|n[Phalangeni]|n[Poirini]|n[Purmanni]|n[Rakresti]|n[Rayoli]|n[Redose]|n[Reinkese]|n[Ronalda]|n[Rynighti]|n[Sentarioni]|n[Serviuse]|n[Sextuse]|n[Shiva]|n[Skiteruse]|n[Solitanise]|n[Sphingensi]|n[Spuriuse]|n[Stoybaeri]|n[Sugose]|n[Talithi]c[#0046FF]|n[Tania]|n[Tantuse]c[#E303E0]|n[Thorsteni]|n[Tinothieli]|n[Tituse]|n[Trafani]c[#0046FF5)]|n[Tûnêséi]|n[Umbro]|n[Umfeta]|n[Umilaweni]|n[Urido]|n[Urothieni]|n[Vuthieli]|n[Watzmanni]|n[Xenphalmesi]|n[Xuse]|n[Yasi]|n[Zeindra]c[#0D960D]|n[Zickezacki]|n[Zimbri]|n[Zombersi]';
+		var suffixList = 'n[Põrgu]|n[Paradiisi]';
+		var foodList = 'n[Õun]|n[Banaan]|n[Leib]|n[Liharull]|n[Juust]|n[Chicken]|n[Kala]|n[Ravim]|n[Lihakints]|n[Lihalõik]';
+		var tempImpList = 'n[Jõu pudel]c[blue]|n[Võimekuse pudel]c[yellow]|n[Väleduse pudel]c[green]|n[Ülesehituse pudel]c[orange]|n[Karisma pudel]c[purple]|n[Intelligentsuse pudel]c[red]|n[Viirpuu]|n[Taigajuur]';
+		var impList = 'n[Sinine pulber]c[blue]|n[Puhastav käsn]|n[Roheline pulber]c[green]|n[Käiakivi]|n[Oranž pulber]c[orange]|n[Kaitsevarustus]|n[Punane pulber]c[red]|n[Violetne pulber]c[purple]|n[Kollane pulber]c[yellow]';
 	}
 	else{
 		var prefixList = 'n[Adendathiels]|n[Amelias]|n[Amoviels]|n[Anchorons]|n[Appius]|n[Asayseths]|n[Asendacs]|n[Ashitills]|n[Bacias]|n[Barbekuus]|n[Beasthammers]|n[Berrys]|n[Bilgs]|n[Calódiens]c[#0D960D]|n[Chabdyns]|n[Chalinis]|n[Chealoths]|n[Cheggovs]|n[Chucks]|n[Ciallans]|n[Cisiens]|n[Dairus]|n[Decimus]|n[Denovs]|n[Dexterus]|n[Doitrems]|n[Doomeniks]|n[Elrarangs]|n[Elvilmandels]|n[Elywens]|n[Evotavs]|n[Fernabasts]|n[Fitschis]|n[Frabos]|n[Frickoys]|n[Frientas]|n[Fustriels]|n[Gadriewens]|n[Gaius]c[#E303E0]|n[Galarands]|n[Gidras]|n[Gonaks]|n[Granks]|n[Grasscrawlers]|n[Heudois]|n[Heuhois]|n[Ibiwans]|n[Ichorus]c[#E303E0]|n[Ismaels]|n[Isundels]|n[Jennifers]|n[Kedyssis]|n[Kerrannas]|n[Korks]|n[Kosmonas]|n[Leandronimus]|n[Liloels]|n[Lothays]|n[Lucius]c[#E303E0]|n[Lulus]|n[Lurtscharas]|n[Mandalus]|n[Manius]|n[Marcus]|n[Mateus]c[#E303E0]|n[Medonis]|n[Melanchaetas]|n[Melaneos]|n[Mermereus]|n[Mimas]|n[Monychustas]|n[Mooncruchers]|n[Nariths]|n[Opiehnzas]c[#E303E0]|n[Orlelds]|n[Peragos]|n[Phalangens]|n[Poirins]|n[Purmanns]|n[Rakrests]|n[Rayols]|n[Redos]|n[Reinkes]|n[Ronaldas]|n[Rynightes]|n[Sentarions]|n[Servius]|n[Sextus]|n[Shivas]|n[Skiterus]|n[Solitanis]|n[Sphingens]|n[Spurius]|n[Stoybaers]|n[Sugos]|n[Táliths]c[#0046FF]|n[Tanias]|n[Tantus]c[#E303E0]|n[Thorstens]|n[Tinothiels]|n[Titus]|n[Trafans]c[#0046FF5)]|n[Tûnêsés]|n[Umbros]|n[Umfetas]|n[Umilawens]|n[Uridos]|n[Uróthiens]|n[Vuthiels]|n[Watzmanns]|n[Xenphlames]|n[Xus]|n[Yas]|n[Zeindras]c[#0D960D]|n[Zickezackes]|n[Zimbris]|n[Zombers]';
@@ -10704,7 +11009,7 @@ function settings(){
 	'<b>- '+L_descriptionTitle+':</b>'+
 	'<br>'+L_description+
 	'<br><br><b>- '+L_Programmers+':</b><br> &bull; GreatApo<br> &bull; DarkThanos<br> &bull; djor'+
-	'<br><br><b>- '+L_Translators+':</b><br> &bull; [English] GreatApo<br> &bull; [Greek] GreatApo & DarkThanos<br> &bull; [French] djor<br> &bull; [Latvian] redpepper007 <br> &bull; [German] Flaminius (s1), chrome (s3), terror.G. (s3) and Benschi86 <br> &bull; [Dutch] Homerus <br> &bull; [Hungarian] h2o <br> &bull; [Danish] Patrick Randrup Klζbel <br> &bull; [Bulgarian] Jivko Ianev <br> &bull; [Italian] tiberius8 <br> &bull; [Polish] Cysiek <br> &bull; [Persian] PersiaPrince <br>  &bull; [Portuguese] Brutuz <br>  &bull; [Czech] WiLLsTeiN'+
+	'<br><br><b>- '+L_Translators+':</b><br> &bull; [English] GreatApo<br> &bull; [Greek] GreatApo & DarkThanos<br> &bull; [French] djor<br> &bull; [Latvian] redpepper007 <br> &bull; [German] Flaminius (s1), chrome (s3), terror.G. (s3) and Benschi86 <br> &bull; [Dutch] Homerus <br> &bull; [Hungarian] h2o <br> &bull; [Danish] Patrick Randrup Klζbel <br> &bull; [Bulgarian] Jivko Ianev <br> &bull; [Italian] tiberius8 <br> &bull; [Polish] Cysiek <br> &bull; [Persian] PersiaPrince <br>  &bull; [Portuguese] Brutuz <br>  &bull; [Czech] WiLLsTeiN <br>  &bull; [Russian] Мелкий <br>  &bull; [Estonian] Cougar'+
 	'<br><br><b>- '+L_Hostpage+':</b> <a href="http://apo.users.uth.gr/index.php?s=gca" target="_blank">apo.users.uth.gr</a>'+
 	'<br><br><b>- '+L_ContactUs+':</b>'+
 	'<br> '+L_Contact1+
@@ -11454,6 +11759,43 @@ function seeSimulator(){
 		var Africa_6='Керван';var Africa_6_1='Шпионин';var Africa_6_2='Охрана на Кервана';var Africa_6_3='Елитна Охрана';var Africa_6_4='Търговец на роби';
 		var Africa_7='Оазиса Месоай';var Africa_7_1='Слон';var Africa_7_2='Леопард';var Africa_7_3='Лъв демон';var Africa_7_4='Слон демон';
 		var Africa_8='Планината на Антилопите';var Africa_8_1='Прокълната антилопа';var Africa_8_2='Гигантски паяк';var Africa_8_3='Шаман';var Africa_8_4='High Shaman';
+	}
+	else if(GCAO_lang=='ee'){
+		var text='Ruumi sisenedes näed Djori, üht iidset Prantsuse programmeerijat, kes töötab välja uut tüüpi virtuaalvõitlust ja –treeningut. <br>Tema lähedal on suur superarvuti, valmis looma hologrammi mis tahes monstrumile või mängijale, stimuleerimaks võitlust sinuga ning tulemuste kuvamiseks...  <br><br>Kas oled võitluseks valmis?';
+		var Skill='Oskus';
+		var Agility='Väledus';
+		var Charisma='Karisma';
+		var Armour='Rüü';
+		var Damage='Kahju';
+		var ChanceForCriticalDamage='Kriitilise löögi võimalus';
+		var ChanceToBlockAHit='Löögi blokeerimise võimalus';
+		var ChanceForCriticalDamage='Kriitilistest löökidest hoidumise võimalus';
+		var Italy='Itaalia';
+		var Italy_1='Sünged metsad';var Italy_1_1='Rott';var Italy_1_2='Ilves';var Italy_1_3='Hunt';var Italy_1_4='Karu';
+		var Italy_2='Piraatide sadam';var Italy_2_1='Põgenenud ori';var Italy_2_2='Korrumpeerunud sõdur';var Italy_2_3='Mõrtsukas ';var Italy_2_4='Kapten ';
+		var Italy_3='Udused mäed';var Italy_3_1='Tabamatu ohvitser';var Italy_3_2='Harpüia';var Italy_3_3='Kerberos';var Italy_3_4='Meduusa';
+		var Italy_4='Huntide koobas';var Italy_4_1='Metssiga';var Italy_4_2='Huntide kari';var Italy_4_3='Alfahunt';var Italy_4_4='Libahunt';
+		var Italy_5='Iidne tempel';var Italy_5_1='Kultuse valvur';var Italy_5_2='Libarott';var Italy_5_3='Minotauros';var Italy_5_4='Minotauroste pealik';
+		var Italy_6='Barbarite küla';var Italy_6_1='Barbar';var Italy_6_2='Barbarsõbalane';var Italy_6_3='Berserk';var Italy_6_4='Barbarite pealik';
+		var Italy_7='Bandiitide laager';var Italy_7_1='Põgenev sõdur';var Italy_7_2='Tabamatu palgasõdur';var Italy_7_3='Tapja';var Italy_7_4='Bandiitide pealik';
+		var Germany='Germaania';
+		var Germany_1='Templikoobas';var Germany_1_1='Leegionär';var Germany_1_2='Käsilane';var Germany_1_3='Centurion';var Germany_1_4='Hingetu';
+		var Germany_2='Roheline mets';var Germany_2_1='Hiiglaslik metssiga';var Germany_2_2='Soolord';var Germany_2_3='Soovaim';var Germany_2_4='Libakaru';
+		var Germany_3='Neetud küla';var Germany_3_1='Hunn';var Germany_3_2='Iidne';var Germany_3_3='Nachzehrer';var Germany_3_4='Jälkus';
+		var Germany_4='Surmamägi';var Germany_4_1='Skelettsõjamees';var Germany_4_2='Skelettberserk';var Germany_4_3='Lich';var Germany_4_4='Surnumanajate prints';
+		var Germany_5='Vandaalide küla';var Germany_5_1='Vandaalsõjamees';var Germany_5_2='Jari';var Germany_5_3='Tume sõdalane';var Germany_5_4='Surmarüütel';
+		var Germany_6='Kaevandus';var Germany_6_1='Valvur';var Germany_6_2='Draug';var Germany_6_3='Kivigolem';var Germany_6_4='Tatzelwurm';
+		var Germany_7='Teutoonide laager';var Germany_7_1='Barbar';var Germany_7_2='Teutoonide kangelane';var Germany_7_3='Teutoonide isand';var Germany_7_4='Seidr';
+		var Germany_8='Komani mägi';var Germany_8_1='Põrgukits';var Germany_8_2='Mõõkhambuline tiiger';var Germany_8_3='Noor draakon';var Germany_8_4='Draakon';
+		var Africa='Aafrika';
+		var Africa_1='Voodoo Tempel';var Africa_1_1='Kobra';var Africa_1_2='Hiigelskorpion';var Africa_1_3='Äratatud muumia';var Africa_1_4='Sethi Preester';
+		var Africa_2='Sild';var Africa_2_1='Maksukoguja';var Africa_2_2='Inimsööja';var Africa_2_3='Hõimusõdalane';var Africa_2_4='Skelettshamaan';
+		var Africa_3='Verekoobas';var Africa_3_1='Verehunt';var Africa_3_2='Hiiglaslik mardikas';var Africa_3_3='Tuletantsija';var Africa_3_4='Tuledeemon';
+		var Africa_4='Kadunud sadam';var Africa_4_1='Krokodill';var Africa_4_2='Ebasurnud hoidja';var Africa_4_3='Hiiglaslik veemadu';var Africa_4_4='Mokele Mbembe';
+		var Africa_5='Umpokta Hõim';var Africa_5_1='Hõimusõdalane';var Africa_5_2='Hõimumaag';var Africa_5_3='Hingesõdalane';var Africa_5_4='Sethi ülempreester';
+		var Africa_6='Karavan';var Africa_6_1='Spioon';var Africa_6_2='Karavani valvur';var Africa_6_3='Eliitvalvur';var Africa_6_4='Orjakaupmees';
+		var Africa_7='Mesoai Oaas';var Africa_7_1='Elevant';var Africa_7_2='Puuma';var Africa_7_3='Deemonlik lõvi';var Africa_7_4='Deemonlik elevant';
+		var Africa_8='Hüppekalju';var Africa_8_1='Neetud antiloop';var Africa_8_2='Hiigelämblik';var Africa_8_3='Shamaan';var Africa_8_4='Meisterlik Shamaan';
 	}
 	else{
 		var text='When you enter in the room, you see djor, one of the ancient French programmers, working over a new type of virtual fighting and training.<br>Near to him, there is a big super computer ready to create a hologram of any monster or any other player you want, in order to simulate a fight with you and display the results... <br><br>Are you ready to fight?';
