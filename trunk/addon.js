@@ -6267,7 +6267,7 @@ function displayProp(nbr1,nbr2){
 //## SIMULATOR / ΠΡΟΣΟΜΙΩΤΗΣ
 //################################################################################################################################
 function simulator(){
-	if(!document.getElementById('ticker1') && document.getElementById('content').getElementsByTagName('td')[3]){
+	if(document.getElementById('content').getElementsByTagName('td')[3]){
 		if(Get_Cookie('simstats')){
 			var code=Get_Cookie('simstats');
 		}else{
