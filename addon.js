@@ -4874,8 +4874,8 @@ function Main(){
 		c(AuctionStatus());
 	if(GM_getValue('sp', false) == false)
 		c(GetOverviewStats());
-	if(GM_getValue('ch', true) == true)
-		c(Chat());
+	//if(GM_getValue('ch', true) == true)
+	//	c(Chat());
 	if(GM_getValue('pi', true) == true)
 		c(RedirectPlayerImage());
 	if(GM_getValue('op', true) == true && GCAO_mod!='inventory'){
@@ -10890,7 +10890,7 @@ function settings(){
 	'<br><b>- '+L_otherSettings+':</b><br>'+
 	'<input type="checkbox" name="ms" id="GCAO_s9">'+L_msgchangesOpt+'<br>'+
 	'<input style="margin-'+GCAO_left+':20px;" type="checkbox" name="bb" id="GCAO_s34">'+L_enBBCODE+'<br>'+
-	'<input type="checkbox" name="ch" id="GCAO_s36">'+L_enChat+'<br>'+
+	'<span style="display:none;"><input type="checkbox" name="ch" id="GCAO_s36">'+L_enChat+'<br></span>'+
 	'<input type="checkbox" name="rt" id="GCAO_s37">'+L_enRememberTabs+'<br>'+
 	'<input type="checkbox" name="dc" id="GCAO_s24">'+L_disPackageCounters+'<br>'+
 	'<input type="checkbox" name="id" id="GCAO_s21">'+L_disID+'<br>'+
@@ -12283,11 +12283,13 @@ function topScrollStatsBar(){
 		document.getElementById('icon_expeditionpoints').setAttribute('onclick','document.location.href=\''+GCAO_siteurl.replace('index.php?','')+link+'\';');
 		document.getElementById('expeditionpoints_value').setAttribute('onclick','document.location.href=\''+GCAO_siteurl.replace('index.php?','')+link+'\';');
 		
-		var link=document.getElementById('cooldown_bar_dungeon').getElementsByTagName('a')[0].getAttribute('href');
-		document.getElementById('icon_dungeonpoints').setAttribute('style','z-index:9001;position:fixed;top:-1px;margin-left:100px;cursor:pointer;');
-		document.getElementById('dungeonpoints_value').setAttribute('style','z-index:9001;position:fixed;top:-2px;margin-left:128px;cursor:pointer;');
-		document.getElementById('icon_dungeonpoints').setAttribute('onclick','document.location.href=\''+GCAO_siteurl.replace('index.php?','')+link+'\';');
-		document.getElementById('dungeonpoints_value').setAttribute('onclick','document.location.href=\''+GCAO_siteurl.replace('index.php?','')+link+'\';');
+		if(document.getElementById('cooldown_bar_dungeon').getElementsByTagName('a')){
+			var link=document.getElementById('cooldown_bar_dungeon').getElementsByTagName('a')[0].getAttribute('href');
+			document.getElementById('icon_dungeonpoints').setAttribute('style','z-index:9001;position:fixed;top:-1px;margin-left:100px;cursor:pointer;');
+			document.getElementById('dungeonpoints_value').setAttribute('style','z-index:9001;position:fixed;top:-2px;margin-left:128px;cursor:pointer;');
+			document.getElementById('icon_dungeonpoints').setAttribute('onclick','document.location.href=\''+GCAO_siteurl.replace('index.php?','')+link+'\';');
+			document.getElementById('dungeonpoints_value').setAttribute('onclick','document.location.href=\''+GCAO_siteurl.replace('index.php?','')+link+'\';');
+		}
 		
 		document.getElementById('header_values_ressources').setAttribute('style','padding-top:18px;');
 		document.getElementById('header_values_general').setAttribute('style','padding-top:18px;');
