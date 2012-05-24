@@ -69,6 +69,8 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 	
 	if(GCAO_lang=='de' && GCAO_server=='201'){
 		GCAO_lang='eng';
+	}else if(GCAO_lang=='ar'){
+		GCAO_lang='es';
 	}
 	
 	switch(GCAO_lang){
@@ -4507,11 +4509,12 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_itemName='Eseme nimi';
 		break;
 	case 'es':
+		//Shortcut Buttons
 		var L_guildMailTitle='Escribir circular';
 		var L_guildMedicTitle='Ir a la villa medica';
 		var L_guildMarketTitle='Ir al mercado interno';
 		var L_guildStorageTitle='Ir al deposito';
-		var L_staticsTitle='Estadisticas';
+		var L_staticsTitle='Mis stats';
 		var L_guildSafeTitle='Ir al banco';
 		var L_guildWarTitle='Ir a Hall maestros de la guerra';
 		var L_guildJailTitle='Ir a Negotium X';
@@ -4548,7 +4551,7 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_Calculate = 'Calcular';
 		var L_TotalCostTitle = 'Poner mis stats en la columna de la izquierda';
 		var L_CalculateTitle = 'Calcular el costo de todos los stats';
-		//simulator
+		//Simulators
 		var L_Simulator='Simulador';
 		var L_arena='ARENA';
 		var L_Battles='Batallas';
@@ -4596,14 +4599,14 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_Clear='Borrar';
 		var L_veryShort='Muy corto';
 		var L_anunGuild='Anunciar a la alianza';
-		var L_MessageWasSent='Mesaje enviado!';
-		var L_minDamage='Minomo Max-Dmg';
+		var L_MessageWasSent='Mensaje enviado!';
+		var L_minDamage='Minimo Max-Dmg';
 		var L_weaponsFound='Armas encontradas';
 		var L_improvementsFound='Mejoras encotradas';
 		var L_itemsFound='Items encontrados';
 		var L_select='Seleccionar';
 		var L_hideGoldHere='Permite empaquetar oro';
-		var L_priceValue='Price = Valor';
+		var L_priceValue='Precio = Valor';
 		//Online Players
 		var L_OnlinePlayers='Jugadores Online';
 		var L_guildPlayers='Alianza Online';
@@ -4635,7 +4638,7 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_ReadyFor_dungeon="Ya estas listo para la mazmorra.";
 		var L_ReadyFor_arena="Ya estas listo para la arena.";
 		var L_ReadyFor_ct="Ya estas listo para el circo turma.";
-		var L_Redirect_Q="¿Quieres ser redirigido alli?";
+		var L_Redirect_Q="¿Quieres ser redirigido alli?";	
 		//Settings
 		var L_GCASettings='Configuracion Gladiatus Crazy Add On';
 		var L_HeaderSettings='Config. Cabezera';
@@ -4707,8 +4710,8 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_thanksTo='Muchas gracias';
 		var L_MonsterHunters='Monstruos stats/nombre cazadores';
 		var L_ItemHunters='Buscador de items';
-		var L_HideGoldInAuction='Color/Highlight the input if I can sell the item to the merchant at the same price than the bid';
-		var L_HideGoldInAuction='Color/Highlight the input if I can sell the item to the merchant at the same price than the bid';
+		var L_HideGoldInAuction='Color / Resalte la entrada si puedo vender el artículo al comerciante, al mismo precio que la oferta';
+		var L_HideGoldInAuction='Color / Resalte la entrada si puedo vender el artículo al comerciante, al mismo precio que la oferta';
 		var L_guildSafeChanges='Activar los cambios de seguridad de la alianza';
 		var L_guildMedicChanges='Ver más información en la villa medica';
 		var L_foodBackColor='Fondo rojo para los alimentos que dan más puntos de vida de los que necesitas (en inventario)';
@@ -4793,7 +4796,7 @@ if(document.location.href.match(/gladiatus\.(\w+)/)){
 		var L_numberOfMyItems='Cantidad de mis items';
 		var L_seeThisReport='Vea este informe';
 		var L_TopBar='Mostrar la barra superior cuando se desplaza hacia abajo';
-		//v2.9.0
+		//v1.9.0
 		var L_titleImages = 'Configuracion de imagen';
 		var L_showCustomsTitle = 'Si un cliente existente, mostrar el disfraz y no la imagen';
 		var L_collectGold='Juntar oro';
@@ -7731,6 +7734,13 @@ function itemList(){
 		var foodList = 'n[Õun]|n[Banaan]|n[Leib]|n[Liharull]|n[Juust]|n[Chicken]|n[Kala]|n[Ravim]|n[Lihakints]|n[Lihalõik]';
 		var tempImpList = 'n[Jõu pudel]c[blue]|n[Võimekuse pudel]c[yellow]|n[Väleduse pudel]c[green]|n[Ülesehituse pudel]c[orange]|n[Karisma pudel]c[purple]|n[Intelligentsuse pudel]c[red]|n[Viirpuu]|n[Taigajuur]';
 		var impList = 'n[Sinine pulber]c[blue]|n[Puhastav käsn]|n[Roheline pulber]c[green]|n[Käiakivi]|n[Oranž pulber]c[orange]|n[Kaitsevarustus]|n[Punane pulber]c[red]|n[Violetne pulber]c[purple]|n[Kollane pulber]c[yellow]';
+	}
+	else if(GCAO_lang=='es'){
+		var prefixList = 'n[Adendathiels]|n[Amelias]|n[Amoviels]|n[Anchorons]|n[Appius]|n[Asayseths]|n[Asendacs]|n[Ashitills]|n[Bacias]|n[Barbekuus]|n[Beasthammers]|n[Berrys]|n[Bilgs]|n[Calódiens]c[#0D960D]|n[Chabdyns]|n[Chalinis]|n[Chealoths]|n[Cheggovs]|n[Chucks]|n[Ciallans]|n[Cisiens]|n[Dairus]|n[Decimus]|n[Denovs]|n[Dexterus]|n[Doitrems]|n[Doomeniks]|n[Elrarangs]|n[Elvilmandels]|n[Elywens]|n[Evotavs]|n[Fernabasts]|n[Fitschis]|n[Frabos]|n[Frickoys]|n[Frientas]|n[Fustriels]|n[Gadriewens]|n[Gaius]c[#E303E0]|n[Galarands]|n[Gidras]|n[Gonaks]|n[Granks]|n[Grasscrawlers]|n[Heudois]|n[Heuhois]|n[Ibiwans]|n[Ichorus]c[#E303E0]|n[Ismaels]|n[Isundels]|n[Jennifers]|n[Kedyssis]|n[Kerrannas]|n[Korks]|n[Kosmonas]|n[Leandronimus]|n[Liloels]|n[Lothays]|n[Lucius]c[#E303E0]|n[Lulus]|n[Lurtscharas]|n[Mandalus]|n[Manius]|n[Marcus]|n[Mateus]c[#E303E0]|n[Medonis]|n[Melanchaetas]|n[Melaneos]|n[Mermereus]|n[Mimas]|n[Monychustas]|n[Mooncruchers]|n[Nariths]|n[Opiehnzas]c[#E303E0]|n[Orlelds]|n[Peragos]|n[Phalangens]|n[Poirins]|n[Purmanns]|n[Rakrests]|n[Rayols]|n[Redos]|n[Reinkes]|n[Ronaldas]|n[Rynightes]|n[Sentarions]|n[Servius]|n[Sextus]|n[Shivas]|n[Skiterus]|n[Solitanis]|n[Sphingens]|n[Spurius]|n[Stoybaers]|n[Sugos]|n[Táliths]c[#0046FF]|n[Tanias]|n[Tantus]c[#E303E0]|n[Thorstens]|n[Tinothiels]|n[Titus]|n[Trafans]c[#0046FF5)]|n[Tûnêsés]|n[Umbros]|n[Umfetas]|n[Umilawens]|n[Uridos]|n[Uróthiens]|n[Vuthiels]|n[Watzmanns]|n[Xenphlames]|n[Xus]|n[Yas]|n[Zeindras]c[#0D960D]|n[Zickezackes]|n[Zimbris]|n[Zombers]';
+		var suffixList = 'n[de la presteza]|n[del brillo]|n[del miedo]|n[de la gloria]|n[de gracia]|n[de la rapidez]|n[de la normalidad]|n[de la colina]|n[del mar]|n[de la delicadeza]|n[del cielo]|n[del sufrimiento]|n[del dolor]|n[del infierno]|n[de la utilidad]';
+		var foodList = 'n[Manzana]|n[Bananas]|n[Queso]|n[Rollos de pan]|n[Pescado]|n[Pan]|n[Pedazo de carne]|n[Bife]|n[Pollo]|n[Poción de salud]n[Torta]';
+		var tempImpList = 'n[Frasco de fuerza]c[blue]|n[Frasco de la aptitud]c[yellow]|n[Frasco de la agilidad]c[green]|n[Frasco de la constitución]c[orange]|n[Frasco de carisma]c[purple]|n[Frasco de inteligencia]c[red]|n[Espino]|n[Raíz de taiga]|n[Hojas de Ginkgo]';
+		var impList = 'n[Esponja de detergente]n[Polvos azules]c[blue]||n[Polvos verdes]c[green]|n[Piedra de amolar]|n[Polvos naranja]c[orange]|n[Equipo protector]|n[Polvora Roja]c[red]|n[Polvos violetas]c[purple]|n[Polvos amarillos]c[yellow]';
 	}
 	else{
 		var prefixList = 'n[Adendathiels]|n[Amelias]|n[Amoviels]|n[Anchorons]|n[Appius]|n[Asayseths]|n[Asendacs]|n[Ashitills]|n[Bacias]|n[Barbekuus]|n[Beasthammers]|n[Berrys]|n[Bilgs]|n[Calódiens]c[#0D960D]|n[Chabdyns]|n[Chalinis]|n[Chealoths]|n[Cheggovs]|n[Chucks]|n[Ciallans]|n[Cisiens]|n[Dairus]|n[Decimus]|n[Denovs]|n[Dexterus]|n[Doitrems]|n[Doomeniks]|n[Elrarangs]|n[Elvilmandels]|n[Elywens]|n[Evotavs]|n[Fernabasts]|n[Fitschis]|n[Frabos]|n[Frickoys]|n[Frientas]|n[Fustriels]|n[Gadriewens]|n[Gaius]c[#E303E0]|n[Galarands]|n[Gidras]|n[Gonaks]|n[Granks]|n[Grasscrawlers]|n[Heudois]|n[Heuhois]|n[Ibiwans]|n[Ichorus]c[#E303E0]|n[Ismaels]|n[Isundels]|n[Jennifers]|n[Kedyssis]|n[Kerrannas]|n[Korks]|n[Kosmonas]|n[Leandronimus]|n[Liloels]|n[Lothays]|n[Lucius]c[#E303E0]|n[Lulus]|n[Lurtscharas]|n[Mandalus]|n[Manius]|n[Marcus]|n[Mateus]c[#E303E0]|n[Medonis]|n[Melanchaetas]|n[Melaneos]|n[Mermereus]|n[Mimas]|n[Monychustas]|n[Mooncruchers]|n[Nariths]|n[Opiehnzas]c[#E303E0]|n[Orlelds]|n[Peragos]|n[Phalangens]|n[Poirins]|n[Purmanns]|n[Rakrests]|n[Rayols]|n[Redos]|n[Reinkes]|n[Ronaldas]|n[Rynightes]|n[Sentarions]|n[Servius]|n[Sextus]|n[Shivas]|n[Skiterus]|n[Solitanis]|n[Sphingens]|n[Spurius]|n[Stoybaers]|n[Sugos]|n[Táliths]c[#0046FF]|n[Tanias]|n[Tantus]c[#E303E0]|n[Thorstens]|n[Tinothiels]|n[Titus]|n[Trafans]c[#0046FF5)]|n[Tûnêsés]|n[Umbros]|n[Umfetas]|n[Umilawens]|n[Uridos]|n[Uróthiens]|n[Vuthiels]|n[Watzmanns]|n[Xenphlames]|n[Xus]|n[Yas]|n[Zeindras]c[#0D960D]|n[Zickezackes]|n[Zimbris]|n[Zombers]';
@@ -11998,6 +12008,43 @@ function seeSimulator(){
 		var Africa_6='Karavan';var Africa_6_1='Spioon';var Africa_6_2='Karavani valvur';var Africa_6_3='Eliitvalvur';var Africa_6_4='Orjakaupmees';
 		var Africa_7='Mesoai Oaas';var Africa_7_1='Elevant';var Africa_7_2='Puuma';var Africa_7_3='Deemonlik lõvi';var Africa_7_4='Deemonlik elevant';
 		var Africa_8='Hüppekalju';var Africa_8_1='Neetud antiloop';var Africa_8_2='Hiigelämblik';var Africa_8_3='Shamaan';var Africa_8_4='Meisterlik Shamaan';
+	}
+	else if(GCAO_lang=='es'){
+		var text='When you enter in the room, you see djor, one of the ancient French programmers, working over a new type of virtual fighting and training.<br>Near to him, there is a big super computer ready to create a hologram of any monster or any other player you want, in order to simulate a fight with you and display the results... <br><br>Are you ready to fight?';
+		var Skill='Habilidad';
+		var Agility='Agilidad';
+		var Charisma='Carisma';
+		var Armour='Armadura';
+		var Damage='Daño';
+		var ChanceForCriticalDamage='Posibilidad de daño critico';
+		var ChanceToBlockAHit='Posibilidad de bloquer golpe';
+		var ChanceForCriticalDamage='Posibilidad de bloquer golpes criticos';
+		var Italy='Italia';
+		var Italy_1='Bosque Sombrío';var Italy_1_1='Rata';var Italy_1_2='Lince';var Italy_1_3='Lobo';var Italy_1_4='Oso';
+		var Italy_2='Puerto Pirata';var Italy_2_1='Esclavo Fugitivo';var Italy_2_2='Soldado Corrupto';var Italy_2_3='Asesino';var Italy_2_4='Capitán';
+		var Italy_3='Montañas Nubladas';var Italy_3_1='Recluta Fugitivo';var Italy_3_2='Arpía';var Italy_3_3='Cerbero';var Italy_3_4='Medusa';
+		var Italy_4='Cueva del Lobo';var Italy_4_1='Jabalí';var Italy_4_2='Manada de Lobos';var Italy_4_3='El Lobo Alfa';var Italy_4_4='Hombre Lobo';
+		var Italy_5='Templo Antiguo';var Italy_5_1='Guardia Culturista';var Italy_5_2='Hombre Rata';var Italy_5_3='Minotauro';var Italy_5_4='Minotauro jefe';
+		var Italy_6='Pueblo Bárbaro';var Italy_6_1='Barbaro';var Italy_6_2='Guerrero Barbaro';var Italy_6_3='Berserker';var Italy_6_4='Barbaro Jefe';
+		var Italy_7='Campamento Bandido';var Italy_7_1='Soldado Renegado(1)';var Italy_7_2='Soldado Renegado(1)';var Italy_7_3='Sicario';var Italy_7_4='Bandido Jefe';
+		var Germany='Germania';
+		var Germany_1='La Cueva-Templo';var Germany_1_1='Legionario';var Germany_1_2='Myrmidon';var Germany_1_3='Centurion';var Germany_1_4='Deslmado';
+		var Germany_2='El Bosque Verde';var Germany_2_1='Giant Wild Boar';var Germany_2_2='Swamp Lord';var Germany_2_3='Swamp Spirit';var Germany_2_4='Werebear';
+		var Germany_3='La Aldea Maldita';var Germany_3_1='Huno';var Germany_3_2='Ancestral';var Germany_3_3='Nachzehrer';var Germany_3_4='Abomination';
+		var Germany_4='La Colina Mortal';var Germany_4_1='Esqueleto Guerrero';var Germany_4_2='Esqueleto Berserker';var Germany_4_3='Lich';var Germany_4_4='Principe Nigromante';
+		var Germany_5='Poblado Vándalo';var Germany_5_1='Guerrero Vándalo';var Germany_5_2='Jarl';var Germany_5_3='Competidor Malvado';var Germany_5_4='Caballero de la Muerte';
+		var Germany_6='Mina';var Germany_6_1='Guardián';var Germany_6_2='Draug';var Germany_6_3='Golem de Piedra';var Germany_6_4='Serpiente Dragón';
+		var Germany_7='Campamento Teutón';var Germany_7_1='Bárbaro';var Germany_7_2='Héroe Teutón';var Germany_7_3='Señor Teutón';var Germany_7_4='Seidr';
+		var Germany_8='Montaña Rasgada';var Germany_8_1='Gacela Saltarina Infernal';var Germany_8_2='Tigre Dientes de Sable';var Germany_8_3='Cría de Dragon';var Germany_8_4='Dragon';
+		var Africa='Africa';
+		var Africa_1='El Tempo Vudù';var Africa_1_1='Cobra';var Africa_1_2='Escorpión Gigante';var Africa_1_3='Momia Despierta';var Africa_1_4='Sacerdote Seth';
+		var Africa_2='El Puente';var Africa_2_1='Tax Collector';var Africa_2_2='Man Eater';var Africa_2_3='Tribal Warrior';var Africa_2_4='Bone Shaman';
+		var Africa_3='La Cueva de Sangre';var Africa_3_1='Lobo Sangriento';var Africa_3_2='Escarabajo Gigante';var Africa_3_3='Danzador del Fuego';var Africa_3_4='Demonio de Fuego';
+		var Africa_4='El Puerto Perdido';var Africa_4_1='Cocodrilo';var Africa_4_2='Portador Zombie';var Africa_4_3='Serpiente Gigante';var Africa_4_4='Mokele Mbembé';
+		var Africa_5='La Tribu Umpokta';var Africa_5_1='Tribal Warrior';var Africa_5_2='Tribal Magician';var Africa_5_3='Spirit Warrior';var Africa_5_4='Seth High Priest';
+		var Africa_6='Caravana';var Africa_6_1='Spy';var Africa_6_2='Caravan Guard';var Africa_6_3='Elite Guard';var Africa_6_4='Slave Merchant';
+		var Africa_7='El Oasis Mesoai';var Africa_7_1='Elephant';var Africa_7_2='Cheetah';var Africa_7_3='Demon Lion';var Africa_7_4='Demon Elephant';
+		var Africa_8='El Desfiladero';var Africa_8_1='Cursed Antelope';var Africa_8_2='Giant Spider';var Africa_8_3='Shaman';var Africa_8_4='High Shaman';
 	}
 	else{
 		var text='When you enter in the room, you see djor, one of the ancient French programmers, working over a new type of virtual fighting and training.<br>Near to him, there is a big super computer ready to create a hologram of any monster or any other player you want, in order to simulate a fight with you and display the results... <br><br>Are you ready to fight?';

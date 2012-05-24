@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+    <Description about="urn:mozilla:install-manifest">
+        <em:type>2</em:type>
+        <em:id>{7fb9a47c-8237-47dd-a247-bf2cb7f07e2a}</em:id>
+        <em:name>Gladiatus Crazy AddOn</em:name>
+        <em:version>2.9.1BETA2</em:version>
+        <em:creator>GreatApo &amp; DarkThanos</em:creator>
+        <em:description>The craziest add-on for gladiatus ever!</em:description>
+        <em:homepageURL>http://www.apo.users.uth.gr</em:homepageURL>
+        <em:developer>GreatApo</em:developer>
+        <em:developer>Darkthanos</em:developer>
+        <em:developer>Djor</em:developer>
+        <em:contributor>[Latvian translator] redpepper007</em:contributor>
+        <em:contributor>[German translator] Flaminius (s1)</em:contributor>
+        <em:contributor>[German translator] chrome (s3)</em:contributor>
+        <em:contributor>[German translator] terror.G. (s3)</em:contributor>
+        <em:contributor>[Dutch translator] Homerus</em:contributor>
+        <em:contributor>[Hungarian translator] h2o</em:contributor>
+        <em:contributor>[Danish translator] Patrick Randrup Klζbel</em:contributor>
+        <em:contributor>[Bulgarian translator] Jivko Ianev</em:contributor>
+        <em:contributor>[Italian translator] tiberius8</em:contributor>
+        <em:contributor>[Polish translator] Cysiek</em:contributor>
+        <em:contributor>[Persian translator] PersiaPrince</em:contributor>
+        <em:contributor>[Portuguese translator] Brutuz</em:contributor>
+        <em:contributor>[Czech translator] WiLLsTeiN</em:contributor>
+        <em:contributor>[Russian translator] Мелкий</em:contributor>
+        <em:contributor>[Estonian translator] Cougar</em:contributor>
+        <em:contributor>[Spanish translator] elcoso</em:contributor>
+        <em:contributor>[Monster hunter] maximus48 (FR)</em:contributor>
+        <em:contributor>[Monster hunter] snow (FR)</em:contributor>
+        <em:contributor>[Monster hunter] Zafistus (FR)</em:contributor>
+        <em:contributor>[Monster hunter] pendu (FR)</em:contributor>
+        <em:contributor>[Monster hunter] Nls_01 (FR)</em:contributor>
+        <em:contributor>[Monster hunter] The-Achille (FR)</em:contributor>
+        <em:contributor>[Monster hunter] Jinsu (FR)</em:contributor>
+        <em:contributor>[Monster hunter] Rincevent (FR)</em:contributor>
+        <em:contributor>[Monster hunter] @roi-guerrier@ (FR)</em:contributor>
+        <em:contributor>[Monster hunter] Neox (FR)</em:contributor>
+        <em:contributor>[Monster hunter] naruto12121998 (FR)</em:contributor>
+        <em:contributor>[Monster hunter] chupadu84 (FR)</em:contributor>
+        <em:contributor>[Monster hunter] tituslegrand (FR)</em:contributor>
+        <em:contributor>[Monster hunter] Spli (FR)</em:contributor>
+        <em:contributor>[Monster hunter] stxr (GR)</em:contributor>
+        <em:contributor>[Monster hunter] imbri (US)</em:contributor>
+        <em:contributor>[Monster hunter] brich21 (US)</em:contributor>
+        <em:contributor>[Monster hunter] cody6052 (US)</em:contributor>
+        <em:contributor>[Monster hunter] Baleful (US)</em:contributor>
+        <em:contributor>[Item hunter] gstefan (GR)</em:contributor>
+        <em:contributor>[Item hunter] Despistado(S)</em:contributor>
+        <em:contributor>[Senior analyst] Belle</em:contributor>
+        <em:targetApplication>
+            <Description>
+                <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+                <em:minVersion>2.0</em:minVersion>
+                <em:maxVersion>15.0a1</em:maxVersion>
+            </Description>
+        </em:targetApplication>
+        <em:targetApplication>
+            <Description>
+                <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
+                <em:minVersion>2.1</em:minVersion>
+                <em:maxVersion>2.8a1</em:maxVersion>
+            </Description>
+        </em:targetApplication>
+        <em:targetApplication>
+            <Description>
+                <em:id>{a23983c0-fd0e-11dc-95ff-0800200c9a66}</em:id>
+                <em:minVersion>2.0</em:minVersion>
+                <em:maxVersion>15.0a1</em:maxVersion>
+            </Description>
+        </em:targetApplication>
+        <em:targetApplication>
+            <Description>
+                <em:id>{aa3c5121-dab2-40e2-81ca-7ea25febc110}</em:id>
+                <em:minVersion>2.0</em:minVersion>
+                <em:maxVersion>15.0a1</em:maxVersion>
+            </Description>
+        </em:targetApplication>
+    </Description>
+</RDF>
